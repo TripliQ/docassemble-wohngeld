@@ -11,7 +11,7 @@ attachment:
       - "antragsteller_familienname": Tobias
       - "antragsteller_vorname": Falsch
       - "antragsteller_geburtsdatum": something
-      - "antragsteller_telefon": something
+      - "antragsteller_telefon": 111
       - "antragsteller_email": something
       - "antragsteller_persoenliche_verhaeltnisse.antragsteller_persoenliche_verhaeltnisse": No
       - "antragsteller_persoenliche_verhaeltnisse": 4
