@@ -1,0 +1,34 @@
+---
+mandatory: True
+question: Here is your document.
+event: some_event
+attachment:
+  - name: mbl32-4anlage_1
+    filename: mbl32-4anlage_1
+    pdf template file: mbl32-4anlage_1.pdf
+    fields:
+      - "antragsart.antragsart": No
+      - "antragsteller_familienname": Vemmer
+      - "antragsteller_vorname": Felix
+      - "antragsteller_geburtsdatum": something
+      - "antragsteller_telefon": something
+      - "antragsteller_email": something
+      - "antragsteller_persoenliche_verhaeltnisse.antragsteller_persoenliche_verhaeltnisse": No
+      - "antragsteller_persoenliche_verhaeltnisse": 4
+      - "wohnung_postleitzahl": something
+      - "wohnung_ort": something
+      - "wohnung_strasse": something
+      - "wohnung_hausnummer": something
+      - "wohnung_etage": something
+      - "wohnung_wohnungsnummer": something
+      - "antragsteller_kreditinstitut_name": something
+      - "antragsteller_bankleitzahl": something
+      - "antragsteller_kontonummer": something
+      - "antragsteller_kontoinhaber": something
+      - "antragsteller_kontoinhaber.antragsteller_kontoinhaber": No
+      - "antragsteller_zahlungsempfaenger": something
+      - "mittelpunkt_lebensbeziehungen": something
+      - "mittelpunkt_lebensbeziehungen.mittelpunkt_lebensbeziehungen": No
+      - "mittelpunkt_lebensbeziehungen_extra": something
+      - "antragsteller_wohnverhaeltnisse": something
+---
