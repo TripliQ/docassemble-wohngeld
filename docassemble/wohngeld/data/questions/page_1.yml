@@ -8,8 +8,8 @@ attachment:
     pdf template file: mbl32-4anlage_1.pdf
     fields:
       - "antragsart.antragsart": No
-      - "antragsteller_familienname": Vemmer
-      - "antragsteller_vorname": Felix
+      - "antragsteller_familienname": Tobias
+      - "antragsteller_vorname": Falsch
       - "antragsteller_geburtsdatum": something
       - "antragsteller_telefon": something
       - "antragsteller_email": something
