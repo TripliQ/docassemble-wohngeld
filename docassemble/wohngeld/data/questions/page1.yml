@@ -22,6 +22,8 @@ fields:
     datatype: text
   - Vorname: antragsteller_vorname
     datatype: text
+  - Geburtsname: antragsteller_geburtsname
+    datatype: text
   - Geburtsdatum: antragsteller_geburtsdatum
     datatype: date
   - Telefonnummer: antragsteller_telefon
