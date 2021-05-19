@@ -1,0 +1,211 @@
+question: |
+  Um welche Art von Antrag handelt es sich?
+field: antragsart
+choices:
+  - Erstantrag
+  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR)
+  - Erhöhungsantrag (bei Änderungen im laufenden BWZR)
+---
+question: |
+  Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
+subquestion: |
+  Sie dürfen diese Angabe aber auch überspringen.
+fields:
+  - Wohngeldnummer: antragsteller_wohngeldnummer
+    datatype: number
+    required: False
+---
+question: |
+  Wie lauten Ihre Kontaktdetails?
+fields:
+  - Nachname: antragsteller_familienname
+    datatype: text
+  - Vorname: antragsteller_vorname
+    datatype: text
+  - Geburtsdatum: antragsteller_geburtsdatum
+    datatype: date
+  - Telefonnummer: antragsteller_telefon
+    datatype: text
+  - Email-Adresse: antragsteller_email
+    datatype: text
+  - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
+    choices:
+      - Arbeiter(in)
+      - Selbständige(r)
+      - Rentner(in)
+      - Auszubildende(r)
+      - Angestellte(r)
+      - Arbeitslose(r)
+      - sonst. Nichterwerbstätige(r)
+      - Student(in)
+      - Beamter(in)
+      - Pensionär(in)
+---
+question: |
+  Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
+fields:
+  - Straße: wohnung_strasse
+    datatype: text
+  - Hausnummer: wohnung_hausnummer
+    datatype: text
+  - PLZ: wohnung_postleitzahl
+    datatype: number
+  - Ort: wohnung_ort
+    datatype: text
+  - Etage: wohnung_etage
+    datatype: number
+  - Wohnungsnummer: wohnung_wohnungsnummer
+    datatype: number
+---
+question: |
+  Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
+fields:
+  - Name des Kreditinstituts: antragsteller_kreditinstitut_name
+    datatype: text
+  - Bankleitzahl: antragsteller_bankleitzahl
+    datatype: text
+  - Kontonummer: antragsteller_kontonummer
+    datatype: number
+---
+question: |
+  Sind Sie Kontoinhaber?
+yesno: gleicher_kontoinhaber
+---
+question: |
+  Wer ist Kontoinhaber?
+field: antragsteller_kontoinhaber
+choices:
+  - Ehepartner(in) oder ein anderes Haushaltsmitglied
+  - Vermieter(in)
+  - Bei Heimbewohnern - Sozialhilfeträger
+---
+question: |
+  Name und Anschrift des Kontoinhabers:
+fields:
+  - Zahlungsempfänger: zahlungsempfaenger
+    datatype: text
+---
+question: |
+  Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
+  Personen, die den Wohnraum bewohnen den Mittelpunkt der 
+  Lebensbeziehungen?
+subquestion: |
+  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als     
+  haushaltsangehörige Person anzusehen ist!
+yesno: mittelpunkt_lebensbeziehungen
+---
+question: |
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im 
+  Haushalt?
+fields:
+  - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
+    datatype: text  
+---
+question: |
+  Sie sind in Ihrer Wohnung...
+fields:
+  - Wohnverhältnis: antragsteller_wohnverhaeltnisse
+    choices:
+      - Hauptmieter(in)
+      - Untermieter(in)
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus
+      - Heimbewohner(in)
+---
+question: |
+  Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
+fields:
+  - Nachname: vermieter_familienname
+    datatype: text
+  - Vorname: vermieter_vorname
+    datatype: text
+  - Sraße: vermieter_strasse
+    datatype: text
+  - Hausnummer: vermieter_hausnummer
+    datatype: text
+  - PLZ: vermieter_postleitzahl
+    datatype: number
+  - Wohnort: vermieter_ort
+    datatype: text
+  - Telefonnummer: vermieter_telefon
+    datatype: text
+    required: False
+---
+question: |
+  Wie hoch ist die monatliche Warmmiete Ihres Wohnraums?
+subquestion: |
+  Bitte laden Sie unten die Angaben des Vermieters zum Wohnraum oder ggf. der Untervermietung hoch. Ein Nachweis über die Höhe der Miete muss enthalten sein.
+fields:
+  - Warmmiete: warmmiete
+    datatype: money
+  - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
+    datatype: file
+---
+question: |
+  Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
+yesno: untervermietung_und_mitnutzung
+---
+question: |
+  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte fügen Sie die Anlage "Untervermietung" bei.
+fields:
+  - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
+    datatype: file
+---
+question: |
+  Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung, für die Sie Wohngeld beantragen?
+fields:
+  - Einzugsdatum: datum_einzug
+    datatype: date
+---
+question: |
+  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
+yesno: gewerbliche_nutzung
+---
+question: |
+  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte geben Sie an, um wie viel Quadratmeter es sich bei der gewerblichen/beruflichen Nutzung handelt.
+fields:
+  - Quadratmeter: gewerbliche_nutzung_qm
+    datatype: number
+---
+question: |
+  Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
+yesno: zuschuesse
+---
+question: |
+  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
+yesno: zuschuesse_antrag
+---
+question: |
+  Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
+fields:
+  - Anlage: zuschuesse_anlage
+    datatype: file
+---
+mandatory: True
+code: |
+  antragsart
+  antragsteller_wohngeldnummer
+  antragsteller_familienname
+  wohnung_strasse
+  antragsteller_kreditinstitut_name
+  gleicher_kontoinhaber
+  if gleicher_kontoinhaber == False:
+    antragsteller_kontoinhaber
+    zahlungsempfaenger
+  mittelpunkt_lebensbeziehungen
+  if mittelpunkt_lebensbeziehungen == False:
+    mittelpunkt_lebensbeziehungen_extra
+  antragsteller_wohnverhaeltnisse
+  vermieter_familienname
+  warmmiete
+  untervermietung_und_mitnutzung
+  if untervermietung_und_mitnutzung:
+    untervermietung_und_mitnutzung_anlage
+  datum_einzug
+  gewerbliche_nutzung
+  if gewerbliche_nutzung:
+    gewerbliche_nutzung_qm
+  zuschuesse
+  if zuschuesse == False:
+    zuschuesse_antrag
+  if zuschuesse == True or zuschuesse_antrag == True:
+    zuschuesse_anlage
