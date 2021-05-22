@@ -2,9 +2,9 @@ question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
 choices:
-  - Erstantrag
-  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR)
-  - Erhöhungsantrag (bei Änderungen im laufenden BWZR)
+  - Erstantrag: 1
+  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
+  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
 ---
 question: |
   Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
@@ -32,16 +32,16 @@ fields:
     datatype: text
   - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
     choices:
-      - Arbeiter(in)
-      - Selbständige(r)
-      - Rentner(in)
-      - Auszubildende(r)
-      - Angestellte(r)
-      - Arbeitslose(r)
-      - sonst. Nichterwerbstätige(r)
-      - Student(in)
-      - Beamter(in)
-      - Pensionär(in)
+      - Arbeiter(in): 1
+      - Selbständige(r): 7
+      - Rentner(in): 2
+      - Auszubildende(r): 8
+      - Angestellte(r): 3
+      - Arbeitslose(r): 4
+      - sonst. Nichterwerbstätige(r): 9
+      - Student(in): 5
+      - Beamter(in): 6
+      - Pensionär(in): 10
 ---
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
@@ -77,9 +77,9 @@ question: |
   Wer ist Kontoinhaber?
 field: antragsteller_kontoinhaber
 choices:
-  - Ehepartner(in) oder ein anderes Haushaltsmitglied
-  - Vermieter(in)
-  - Bei Heimbewohnern - Sozialhilfeträger
+  - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
+  - Vermieter(in): 3
+  - Bei Heimbewohnern - Sozialhilfeträger: 4
 ---
 question: |
   Name und Anschrift des Kontoinhabers:
@@ -183,31 +183,51 @@ fields:
     datatype: file
 ---
 mandatory: True
-code: |
-  antragsart
-  antragsteller_wohngeldnummer
-  antragsteller_familienname
-  wohnung_strasse
-  antragsteller_kreditinstitut_name
-  gleicher_kontoinhaber
-  if gleicher_kontoinhaber == False:
-    antragsteller_kontoinhaber
-    zahlungsempfaenger
-  mittelpunkt_lebensbeziehungen
-  if mittelpunkt_lebensbeziehungen == False:
-    mittelpunkt_lebensbeziehungen_extra
-  antragsteller_wohnverhaeltnisse
-  vermieter_familienname
-  warmmiete
-  untervermietung_und_mitnutzung
-  if untervermietung_und_mitnutzung:
-    untervermietung_und_mitnutzung_anlage
-  datum_einzug
-  gewerbliche_nutzung
-  if gewerbliche_nutzung:
-    gewerbliche_nutzung_qm
-  zuschuesse
-  if zuschuesse == False:
-    zuschuesse_antrag
-  if zuschuesse == True or zuschuesse_antrag == True:
-    zuschuesse_anlage
+question: Hier ist Ihr Dokument
+event: some_event
+attachment:
+  - name: antrag_variablen_komplett (1)
+    filename: antrag_variablen_komplett (1)
+    pdf template file: antrag_variablen_komplett.pdf
+    fields:
+      - "antragsart": ${ antragsart }
+      - "antragsteller_wohngeldnummer": $ { antragsteller_wohngeldnummer }
+      - "antragsteller_familienname": ${ antragsteller_familienname }
+      - "antragsteller_vorname": ${ antragsteller_vorname }
+      - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }
+      - "antragsteller_telefon": ${antragsteller_telefon}
+      - "antragsteller_email": ${ antragsteller_email }
+      - "antragsteller_persoenliche_verhaeltnisse": ${ antragsteller_persoenliche_verhaeltnisse }
+      - "wohnung_postleitzahl": ${ wohnung_postleitzahl }
+      - "wohnung_ort": ${ wohnung_ort }
+      - "wohnung_strasse": ${ wohnung_strasse }
+      - "wohnung_hausnummer": ${ wohnung_hausnummer }
+      - "wohnung_etage": ${ wohnung_etage }
+      - "wohnung_wohnungsnummer": ${ wohnung_wohnungsnummer }
+      - "antragsteller_kreditinstitut_name": ${ antragsteller_kreditinstitut_name }
+      - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
+      - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
+      - "antragsteller_kontoinhaber": |
+          % if gleicher_kontoinhaber == True:
+          1
+          % else:
+          ${ antragsteller_kontoinhaber }
+          %endif:
+      - "zahlungsempfaenger": ${ zahlungsempfaenger }
+      - "mittelpunkt_lebensbeziehungen": etwas
+      - "mittelpunkt_lebensbeziehungen_extra": etwas
+      - "antragsteller_wohnverhaeltnisse": etwas
+      - "vermieter_familienname": etwas
+      - "vermieter_vorname": etwas
+      - "vermieter_strasse": etwas
+      - "vermieter_hausnummer": etwas
+      - "vermieter_postleitzahl": etwas
+      - "vermieter_ort": etwas
+      - "vermieter_telefon": etwas
+      - "warmmiete": etwas
+      - "datum_einzug": etwas
+      - "untervermietung_und_mitnutzung": etwas
+      - "gewerbliche_nutzung": etwas
+      - "gewerbliche_nutzung_qm": etwas
+      - "zuschuesse": etwas
+      - "zuschuesse_antrag": etwas
