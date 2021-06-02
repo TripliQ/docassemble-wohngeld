@@ -1,3 +1,9 @@
+# To-Do
+# 1 defaults eintrag
+# data types überprüen
+# input validation
+# letze if conditionals
+# terms und hints
 question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
@@ -28,6 +34,7 @@ fields:
     datatype: date
   - Telefonnummer: antragsteller_telefon
     datatype: text
+    # data type email
   - Email-Adresse: antragsteller_email
     datatype: text
   - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
@@ -43,6 +50,7 @@ fields:
       - Beamter(in): 6
       - Pensionär(in): 10
 ---
+# add defaults and change alter to hin to quickly go through
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
@@ -139,6 +147,7 @@ subquestion: |
 fields:
   - Warmmiete: warmmiete
     datatype: money
+    # check minimu maximum
   - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
     datatype: file
 ---
