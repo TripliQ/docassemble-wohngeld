@@ -216,21 +216,26 @@ attachment:
       - "antragsteller_kreditinstitut_name": ${ antragsteller_kreditinstitut_name }
       - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
       - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
-      - "gleicher_kontoinhaber": |
+      - "antragsteller_kontoinhaber": |
           % if gleicher_kontoinhaber == True:
           1
           % else:
           ${ antragsteller_kontoinhaber }
           % endif:
-      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
-      - "zahlungsempfaenger": ${ zahlungsempfaenger }
+      - "zahlungsempfaenger": |
+          % if gleicher_kontoinhaber == False:
+          ${ zahlungsempfaenger }
+          % endif:
       - "mittelpunkt_lebensbeziehungen": |
           % if mittelpunkt_lebensbeziehungen == True:
           2
           % else:
           1
           % endif:
-      - "mittelpunkt_lebensbeziehungen_extra": ${ mittelpunkt_lebensbeziehungen_extra }
+      - "mittelpunkt_lebensbeziehungen_extra": |
+          % if mittelpunkt_lebensbeziehungen == False:
+          ${ mittelpunkt_lebensbeziehungen_extra }
+          % endif:
       - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
       - "vermieter_familienname": ${ vermieter_familienname }
       - "vermieter_vorname": ${ vermieter_vorname }
@@ -247,13 +252,20 @@ attachment:
           % else:
           1
           % endif:
+      - "untervermietung_und_mitnutzung_anlage": |
+          % if untervermietung_und_mitnutzung == True:
+          ${ untervermietung_und_mitnutzung_anlage }
+          % endif:
       - "gewerbliche_nutzung": |
           % if gewerbliche_nutzung == True:
           2
           % else:
           1
           % endif:
-      - "gewerbliche_nutzung_qm": ${ gewerbliche_nutzung_qm }
+      - "gewerbliche_nutzung_qm": |
+          % if gewerbliche_nutzung == True:
+          ${ gewerbliche_nutzung_qm }
+          % endif:
       - "zuschuesse": |
           % if zuschuesse == True:
           2
@@ -265,4 +277,8 @@ attachment:
           2
           % else:
           1
+          % endif:
+      - "zuschuesse_anlage": |
+          % if zuschuesse_antrag == True or zuschuesse == True:
+          ${ zuschuesse_anlage }
           % endif:
