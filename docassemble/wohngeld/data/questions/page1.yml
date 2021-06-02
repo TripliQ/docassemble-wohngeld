@@ -89,19 +89,19 @@ fields:
 ---
 question: |
   Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
-  Personen, die den Wohnraum bewohnen den Mittelpunkt der 
+  Personen, die den Wohnraum bewohnen den Mittelpunkt der
   Lebensbeziehungen?
 subquestion: |
-  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als     
+  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als
   haushaltsangehörige Person anzusehen ist!
 yesno: mittelpunkt_lebensbeziehungen
 ---
 question: |
-  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im 
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im
   Haushalt?
 fields:
   - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
-    datatype: text  
+    datatype: text
 ---
 question: |
   Sie sind in Ihrer Wohnung...
