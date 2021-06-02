@@ -12,7 +12,7 @@ subquestion: |
   Sie dürfen diese Angabe aber auch überspringen.
 fields:
   - Wohngeldnummer: antragsteller_wohngeldnummer
-    datatype: number
+    datatype: text
     required: False
 ---
 question: |
@@ -51,13 +51,13 @@ fields:
   - Hausnummer: wohnung_hausnummer
     datatype: text
   - PLZ: wohnung_postleitzahl
-    datatype: number
+    datatype: text
   - Ort: wohnung_ort
     datatype: text
   - Etage: wohnung_etage
-    datatype: number
+    datatype: text
   - Wohnungsnummer: wohnung_wohnungsnummer
-    datatype: number
+    datatype: text
 ---
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
@@ -67,7 +67,7 @@ fields:
   - Bankleitzahl: antragsteller_bankleitzahl
     datatype: text
   - Kontonummer: antragsteller_kontonummer
-    datatype: number
+    datatype: text
 ---
 question: |
   Sind Sie Kontoinhaber?
@@ -108,10 +108,10 @@ question: |
 fields:
   - Wohnverhältnis: antragsteller_wohnverhaeltnisse
     choices:
-      - Hauptmieter(in)
-      - Untermieter(in)
-      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus
-      - Heimbewohner(in)
+      - Hauptmieter(in): 1
+      - Untermieter(in): 2
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
+      - Heimbewohner(in): 4
 ---
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
@@ -125,7 +125,7 @@ fields:
   - Hausnummer: vermieter_hausnummer
     datatype: text
   - PLZ: vermieter_postleitzahl
-    datatype: number
+    datatype: text
   - Wohnort: vermieter_ort
     datatype: text
   - Telefonnummer: vermieter_telefon
@@ -191,7 +191,7 @@ attachment:
     pdf template file: antrag_variablen_komplett.pdf
     fields:
       - "antragsart": ${ antragsart }
-      - "antragsteller_wohngeldnummer": $ { antragsteller_wohngeldnummer }
+      - "antragsteller_wohngeldnummer": ${ antragsteller_wohngeldnummer }
       - "antragsteller_familienname": ${ antragsteller_familienname }
       - "antragsteller_vorname": ${ antragsteller_vorname }
       - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }
@@ -207,27 +207,53 @@ attachment:
       - "antragsteller_kreditinstitut_name": ${ antragsteller_kreditinstitut_name }
       - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
       - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
-      - "antragsteller_kontoinhaber": |
+      - "gleicher_kontoinhaber": |
           % if gleicher_kontoinhaber == True:
           1
           % else:
           ${ antragsteller_kontoinhaber }
-          %endif:
+          % endif:
+      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
       - "zahlungsempfaenger": ${ zahlungsempfaenger }
-      - "mittelpunkt_lebensbeziehungen": etwas
-      - "mittelpunkt_lebensbeziehungen_extra": etwas
-      - "antragsteller_wohnverhaeltnisse": etwas
-      - "vermieter_familienname": etwas
-      - "vermieter_vorname": etwas
-      - "vermieter_strasse": etwas
-      - "vermieter_hausnummer": etwas
-      - "vermieter_postleitzahl": etwas
-      - "vermieter_ort": etwas
-      - "vermieter_telefon": etwas
-      - "warmmiete": etwas
-      - "datum_einzug": etwas
-      - "untervermietung_und_mitnutzung": etwas
-      - "gewerbliche_nutzung": etwas
-      - "gewerbliche_nutzung_qm": etwas
-      - "zuschuesse": etwas
-      - "zuschuesse_antrag": etwas
+      - "mittelpunkt_lebensbeziehungen": |
+          % if mittelpunkt_lebensbeziehungen == True:
+          2
+          % else:
+          1
+          % endif:
+      - "mittelpunkt_lebensbeziehungen_extra": ${ mittelpunkt_lebensbeziehungen_extra }
+      - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
+      - "vermieter_familienname": ${ vermieter_familienname }
+      - "vermieter_vorname": ${ vermieter_vorname }
+      - "vermieter_strasse": ${ vermieter_strasse }
+      - "vermieter_hausnummer": ${ vermieter_hausnummer }
+      - "vermieter_postleitzahl": ${ vermieter_postleitzahl }
+      - "vermieter_ort": ${ vermieter_ort }
+      - "vermieter_telefon": ${ vermieter_telefon }
+      - "warmmiete": ${ warmmiete }
+      - "datum_einzug": ${ datum_einzug }
+      - "untervermietung_und_mitnutzung": |
+          % if untervermietung_und_mitnutzung == True:
+          2
+          % else:
+          1
+          % endif:
+      - "gewerbliche_nutzung": |
+          % if gewerbliche_nutzung == True:
+          2
+          % else:
+          1
+          % endif:
+      - "gewerbliche_nutzung_qm": ${ gewerbliche_nutzung_qm }
+      - "zuschuesse": |
+          % if zuschuesse == True:
+          2
+          % else:
+          1
+          % endif:
+      - "zuschuesse_antrag": |
+          % if zuschuesse_antrag == True:
+          2
+          % else:
+          1
+          % endif:
