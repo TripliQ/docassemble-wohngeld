@@ -4,6 +4,32 @@
 # input validation
 # letze if conditionals
 # terms und hints
+sections:
+  - intro: Einführung
+  - about: 1) Persönliche Daten
+    subsections:
+      - allgemein: Allgemeines
+      - zahlungsdaten: Zahlungsdaten
+  - miete: 2) Miete und Bewohner
+    subsections:
+      - lebensverhaeltnisse: Lebensverhältnisse
+      - bewohnerangaben: Bewohnerangaben
+      - mietdaten: Mietmodalitäten
+  - zuschuesse: 3) Aktuelle & Zukünftige Zuschüsse und Leistungen
+  - zusammenfassung: Zusammenfassung
+---
+features:
+  navigation: True
+---
+mandatory: True
+question: |
+  Willkommen beim digitalen Wohngeldantrag NRW.
+subquestion: |
+  Wir leiten Dich in drei Schritten einfach und schnell zu Deinem Wohngeldantrag.
+  <br>
+  ${ static_image('welcome_screen.svg') }
+field: sees_nav_bar
+---
 question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
@@ -11,6 +37,7 @@ choices:
   - Erstantrag: 1
   - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
   - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
+section: allgemein
 ---
 question: |
   Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
@@ -69,6 +96,9 @@ fields:
 ---
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
+subquestion: |
+  <br>
+  ${ static_image('undraw_Credit_card_re_blml.svg') }
 fields:
   - Name des Kreditinstituts: antragsteller_kreditinstitut_name
     datatype: text
@@ -76,6 +106,7 @@ fields:
     datatype: text
   - Kontonummer: antragsteller_kontonummer
     datatype: text
+section: zahlungsdaten
 ---
 question: |
   Sind Sie Kontoinhaber?
@@ -103,6 +134,7 @@ subquestion: |
   Lesen Sie bitte im Merkblatt die Erläuterungen, wer als
   haushaltsangehörige Person anzusehen ist!
 yesno: mittelpunkt_lebensbeziehungen
+section: lebensverhaeltnisse
 ---
 question: |
   Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im
@@ -120,6 +152,7 @@ fields:
       - Untermieter(in): 2
       - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
       - Heimbewohner(in): 4
+section: mietdaten
 ---
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
@@ -180,6 +213,7 @@ fields:
 question: |
   Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
 yesno: zuschuesse
+section: zuschuesse
 ---
 question: |
   Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
@@ -192,6 +226,7 @@ fields:
     datatype: file
 ---
 mandatory: True
+section: zusammenfassung
 question: Hier ist Ihr Dokument
 event: some_event
 attachment:
@@ -273,12 +308,14 @@ attachment:
           1
           % endif:
       - "zuschuesse_antrag": |
-          % if zuschuesse_antrag == True:
-          2
-          % else:
-          1
+          % if zuschuesse == False:
+            % if zuschuesse_antrag == True:
+            2
+            % elif zuschuesse_antrag == False:
+            1
+            % endif:
           % endif:
       - "zuschuesse_anlage": |
-          % if zuschuesse_antrag == True or zuschuesse == True:
+          % if zuschuesse == True or zuschuesse_antrag == True:
           ${ zuschuesse_anlage }
           % endif:
