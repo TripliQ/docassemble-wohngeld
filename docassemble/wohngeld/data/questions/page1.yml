@@ -1,5 +1,5 @@
 # To-Do
-# 1 defaults eintrag
+# change defaults to hints
 # data types überprüen
 # input validation
 # letze if conditionals
@@ -46,24 +46,31 @@ subquestion: |
 fields:
   - Wohngeldnummer: antragsteller_wohngeldnummer
     datatype: text
+    default: 12345678901
     required: False
 ---
+# Frage 1
 question: |
   Wie lauten Ihre Kontaktdetails?
 fields:
   - Nachname: antragsteller_familienname
     datatype: text
+    default: Mustermann
   - Vorname: antragsteller_vorname
     datatype: text
+    default: Max
   - Geburtsname: antragsteller_geburtsname
     datatype: text
+    default: Mustermann
   - Geburtsdatum: antragsteller_geburtsdatum
     datatype: date
+    default: 01.01.2000
   - Telefonnummer: antragsteller_telefon
     datatype: text
-    # data type email
+    default: 0123456789
   - Email-Adresse: antragsteller_email
-    datatype: text
+    datatype: email
+    default: max@mustermann.de
   - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
     choices:
       - Arbeiter(in): 1
@@ -77,23 +84,31 @@ fields:
       - Beamter(in): 6
       - Pensionär(in): 10
 ---
-# add defaults and change alter to hin to quickly go through
+# Frage 2
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
   - Straße: wohnung_strasse
     datatype: text
+    default: Musterstraße
   - Hausnummer: wohnung_hausnummer
     datatype: text
+    default: 1
   - PLZ: wohnung_postleitzahl
     datatype: text
+    default: 12345
   - Ort: wohnung_ort
     datatype: text
+    default: Musterstadt
   - Etage: wohnung_etage
     datatype: text
+    default: 1
   - Wohnungsnummer: wohnung_wohnungsnummer
     datatype: text
+    default: 1
+    required: False
 ---
+# Frage 3
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
 subquestion: |
@@ -102,10 +117,13 @@ subquestion: |
 fields:
   - Name des Kreditinstituts: antragsteller_kreditinstitut_name
     datatype: text
+    default: Volksbank Musterstadt
   - Bankleitzahl: antragsteller_bankleitzahl
     datatype: text
+    default: 12345678
   - Kontonummer: antragsteller_kontonummer
     datatype: text
+    default: 1234567890
 section: zahlungsdaten
 ---
 question: |
@@ -125,7 +143,9 @@ question: |
 fields:
   - Zahlungsempfänger: zahlungsempfaenger
     datatype: text
+    default: Max Mustermann, Musterstraße 1, 12345 Musterstadt
 ---
+# Frage 4
 question: |
   Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
   Personen, die den Wohnraum bewohnen den Mittelpunkt der
@@ -142,7 +162,9 @@ question: |
 fields:
   - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
     datatype: text
+    default: Max Mustermann
 ---
+# Frage 5
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -154,36 +176,46 @@ fields:
       - Heimbewohner(in): 4
 section: mietdaten
 ---
+# Frage 6
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
   - Nachname: vermieter_familienname
     datatype: text
+    default: Mustermann
   - Vorname: vermieter_vorname
     datatype: text
+    default: Max
   - Sraße: vermieter_strasse
     datatype: text
+    default: Musterstraße
   - Hausnummer: vermieter_hausnummer
     datatype: text
+    default: 1
   - PLZ: vermieter_postleitzahl
     datatype: text
+    default: 12345
   - Wohnort: vermieter_ort
     datatype: text
+    default: Musterstadt
   - Telefonnummer: vermieter_telefon
     datatype: text
+    default: 0123456789
     required: False
 ---
 question: |
-  Wie hoch ist die monatliche Warmmiete Ihres Wohnraums?
+  Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
 subquestion: |
   Bitte laden Sie unten die Angaben des Vermieters zum Wohnraum oder ggf. der Untervermietung hoch. Ein Nachweis über die Höhe der Miete muss enthalten sein.
 fields:
   - Warmmiete: warmmiete
     datatype: money
+    default: 1234
     # check minimu maximum
   - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
     datatype: file
 ---
+# Frage 7
 question: |
   Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
 yesno: untervermietung_und_mitnutzung
@@ -199,6 +231,7 @@ question: |
 fields:
   - Einzugsdatum: datum_einzug
     datatype: date
+    default: 01.01.2000
 ---
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
@@ -209,7 +242,9 @@ question: |
 fields:
   - Quadratmeter: gewerbliche_nutzung_qm
     datatype: number
+    default: 123
 ---
+# Frage 8
 question: |
   Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
 yesno: zuschuesse
