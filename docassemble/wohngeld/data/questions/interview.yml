@@ -1,1 +1,17 @@
+include:
+  - questions.yml
+  - document.yml
 ---
+# main interview logik für Antragskriterien
+mandatory: True
+code: |
+  if not sozialleistungen:
+    if entscheidung == 'Zum Antrag':
+      final_document
+---
+question: |
+  Anspruch Fraglicch
+field: entscheidung
+buttons:
+  - Zum Antrag
+  - Exit
