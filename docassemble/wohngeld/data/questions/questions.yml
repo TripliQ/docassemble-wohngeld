@@ -1,0 +1,356 @@
+# To-Do
+# change defaults to hints
+# data types überprüen
+# input validation
+# letze if conditionals
+# terms und hints
+sections:
+  - intro: Einführung
+  - about: 1) Persönliche Daten
+    subsections:
+      - allgemein: Allgemeines
+      - zahlungsdaten: Zahlungsdaten
+  - miete: 2) Miete und Bewohner
+    subsections:
+      - lebensverhaeltnisse: Lebensverhältnisse
+      - bewohnerangaben: Bewohnerangaben
+      - mietdaten: Mietmodalitäten
+  - zuschuesse: 3) Aktuelle & Zukünftige Zuschüsse und Leistungen
+  - zusammenfassung: Zusammenfassung
+---
+features:
+  navigation: True
+---
+mandatory: True
+question: |
+  Willkommen beim digitalen Wohngeldantrag NRW.
+subquestion: |
+  Wir leiten Dich in drei Schritten einfach und schnell zu Deinem Wohngeldantrag.
+  <br>
+  ${ static_image('welcome_screen.svg') }
+field: sees_nav_bar
+---
+question: |
+  Um welche Art von Antrag handelt es sich?
+field: antragsart
+choices:
+  - Erstantrag: 1
+  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
+  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
+section: allgemein
+---
+question: |
+  Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
+subquestion: |
+  Sie dürfen diese Angabe aber auch überspringen.
+fields:
+  - Wohngeldnummer: antragsteller_wohngeldnummer
+    datatype: text
+    default: 12345678901
+    required: False
+---
+# Frage 1
+question: |
+  Wie lauten Ihre Kontaktdetails?
+fields:
+  - Nachname: antragsteller_familienname
+    datatype: text
+    default: Mustermann
+  - Vorname: antragsteller_vorname
+    datatype: text
+    default: Max
+  - Geburtsname: antragsteller_geburtsname
+    datatype: text
+    default: Mustermann
+  - Geburtsdatum: antragsteller_geburtsdatum
+    datatype: date
+    default: 01.01.2000
+  - Telefonnummer: antragsteller_telefon
+    datatype: text
+    default: 0123456789
+  - Email-Adresse: antragsteller_email
+    datatype: email
+    default: max@mustermann.de
+  - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
+    choices:
+      - Arbeiter(in): 1
+      - Selbständige(r): 7
+      - Rentner(in): 2
+      - Auszubildende(r): 8
+      - Angestellte(r): 3
+      - Arbeitslose(r): 4
+      - sonst. Nichterwerbstätige(r): 9
+      - Student(in): 5
+      - Beamter(in): 6
+      - Pensionär(in): 10
+---
+# Frage 2
+question: |
+  Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
+fields:
+  - Straße: wohnung_strasse
+    datatype: text
+    default: Musterstraße
+  - Hausnummer: wohnung_hausnummer
+    datatype: text
+    default: 1
+  - PLZ: wohnung_postleitzahl
+    datatype: text
+    default: 12345
+  - Ort: wohnung_ort
+    datatype: text
+    default: Musterstadt
+  - Etage: wohnung_etage
+    datatype: text
+    default: 1
+  - Wohnungsnummer: wohnung_wohnungsnummer
+    datatype: text
+    default: 1
+    required: False
+---
+# Frage 3
+question: |
+  Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
+subquestion: |
+  <br>
+  ${ static_image('undraw_Credit_card_re_blml.svg') }
+fields:
+  - Name des Kreditinstituts: antragsteller_kreditinstitut_name
+    datatype: text
+    default: Volksbank Musterstadt
+  - Bankleitzahl: antragsteller_bankleitzahl
+    datatype: text
+    default: 12345678
+  - Kontonummer: antragsteller_kontonummer
+    datatype: text
+    default: 1234567890
+section: zahlungsdaten
+---
+question: |
+  Sind Sie Kontoinhaber?
+yesno: gleicher_kontoinhaber
+---
+question: |
+  Wer ist Kontoinhaber?
+field: antragsteller_kontoinhaber
+choices:
+  - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
+  - Vermieter(in): 3
+  - Bei Heimbewohnern - Sozialhilfeträger: 4
+---
+question: |
+  Name und Anschrift des Kontoinhabers:
+fields:
+  - Zahlungsempfänger: zahlungsempfaenger
+    datatype: text
+    default: Max Mustermann, Musterstraße 1, 12345 Musterstadt
+---
+# Frage 4
+question: |
+  Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
+  Personen, die den Wohnraum bewohnen den Mittelpunkt der
+  Lebensbeziehungen?
+subquestion: |
+  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als
+  haushaltsangehörige Person anzusehen ist!
+yesno: mittelpunkt_lebensbeziehungen
+section: lebensverhaeltnisse
+---
+question: |
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im
+  Haushalt?
+fields:
+  - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
+    datatype: text
+    default: Max Mustermann
+---
+# Frage 5
+question: |
+  Sie sind in Ihrer Wohnung...
+fields:
+  - Wohnverhältnis: antragsteller_wohnverhaeltnisse
+    choices:
+      - Hauptmieter(in): 1
+      - Untermieter(in): 2
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
+      - Heimbewohner(in): 4
+section: mietdaten
+---
+# Frage 6
+question: |
+  Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
+fields:
+  - Nachname: vermieter_familienname
+    datatype: text
+    default: Mustermann
+  - Vorname: vermieter_vorname
+    datatype: text
+    default: Max
+  - Sraße: vermieter_strasse
+    datatype: text
+    default: Musterstraße
+  - Hausnummer: vermieter_hausnummer
+    datatype: text
+    default: 1
+  - PLZ: vermieter_postleitzahl
+    datatype: text
+    default: 12345
+  - Wohnort: vermieter_ort
+    datatype: text
+    default: Musterstadt
+  - Telefonnummer: vermieter_telefon
+    datatype: text
+    default: 0123456789
+    required: False
+---
+question: |
+  Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
+subquestion: |
+  Bitte laden Sie unten die Angaben des Vermieters zum Wohnraum oder ggf. der Untervermietung hoch. Ein Nachweis über die Höhe der Miete muss enthalten sein.
+fields:
+  - Warmmiete: warmmiete
+    datatype: money
+    default: 1234
+    # check minimu maximum
+  - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
+    datatype: file
+---
+# Frage 7
+question: |
+  Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
+yesno: untervermietung_und_mitnutzung
+---
+question: |
+  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte fügen Sie die Anlage "Untervermietung" bei.
+fields:
+  - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
+    datatype: file
+---
+question: |
+  Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung, für die Sie Wohngeld beantragen?
+fields:
+  - Einzugsdatum: datum_einzug
+    datatype: date
+    default: 01.01.2000
+---
+question: |
+  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
+yesno: gewerbliche_nutzung
+---
+question: |
+  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte geben Sie an, um wie viel Quadratmeter es sich bei der gewerblichen/beruflichen Nutzung handelt.
+fields:
+  - Quadratmeter: gewerbliche_nutzung_qm
+    datatype: number
+    default: 123
+---
+# Frage 8
+question: |
+  Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
+yesno: zuschuesse
+section: zuschuesse
+---
+question: |
+  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
+yesno: zuschuesse_antrag
+---
+question: |
+  Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
+fields:
+  - Anlage: zuschuesse_anlage
+    datatype: file
+---
+mandatory: True
+section: zusammenfassung
+question: Hier ist Ihr Dokument
+event: some_event
+attachment:
+  - name: antrag_variablen_komplett (1)
+    filename: antrag_variablen_komplett (1)
+    pdf template file: antrag_variablen_komplett.pdf
+    fields:
+      - "antragsart": ${ antragsart }
+      - "antragsteller_wohngeldnummer": ${ antragsteller_wohngeldnummer }
+      - "antragsteller_familienname": ${ antragsteller_familienname }
+      - "antragsteller_vorname": ${ antragsteller_vorname }
+      - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }
+      - "antragsteller_telefon": ${antragsteller_telefon}
+      - "antragsteller_email": ${ antragsteller_email }
+      - "antragsteller_persoenliche_verhaeltnisse": ${ antragsteller_persoenliche_verhaeltnisse }
+      - "wohnung_postleitzahl": ${ wohnung_postleitzahl }
+      - "wohnung_ort": ${ wohnung_ort }
+      - "wohnung_strasse": ${ wohnung_strasse }
+      - "wohnung_hausnummer": ${ wohnung_hausnummer }
+      - "wohnung_etage": ${ wohnung_etage }
+      - "wohnung_wohnungsnummer": ${ wohnung_wohnungsnummer }
+      - "antragsteller_kreditinstitut_name": ${ antragsteller_kreditinstitut_name }
+      - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
+      - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
+      - "antragsteller_kontoinhaber": |
+          % if gleicher_kontoinhaber == True:
+          1
+          % else:
+          ${ antragsteller_kontoinhaber }
+          % endif:
+      - "zahlungsempfaenger": |
+          % if gleicher_kontoinhaber == False:
+          ${ zahlungsempfaenger }
+          % endif:
+      - "mittelpunkt_lebensbeziehungen": |
+          % if mittelpunkt_lebensbeziehungen == True:
+          2
+          % else:
+          1
+          % endif:
+      - "mittelpunkt_lebensbeziehungen_extra": |
+          % if mittelpunkt_lebensbeziehungen == False:
+          ${ mittelpunkt_lebensbeziehungen_extra }
+          % endif:
+      - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
+      - "vermieter_familienname": ${ vermieter_familienname }
+      - "vermieter_vorname": ${ vermieter_vorname }
+      - "vermieter_strasse": ${ vermieter_strasse }
+      - "vermieter_hausnummer": ${ vermieter_hausnummer }
+      - "vermieter_postleitzahl": ${ vermieter_postleitzahl }
+      - "vermieter_ort": ${ vermieter_ort }
+      - "vermieter_telefon": ${ vermieter_telefon }
+      - "warmmiete": ${ warmmiete }
+      - "datum_einzug": ${ datum_einzug }
+      - "untervermietung_und_mitnutzung": |
+          % if untervermietung_und_mitnutzung == True:
+          2
+          % else:
+          1
+          % endif:
+      - "untervermietung_und_mitnutzung_anlage": |
+          % if untervermietung_und_mitnutzung == True:
+          ${ untervermietung_und_mitnutzung_anlage }
+          % endif:
+      - "gewerbliche_nutzung": |
+          % if gewerbliche_nutzung == True:
+          2
+          % else:
+          1
+          % endif:
+      - "gewerbliche_nutzung_qm": |
+          % if gewerbliche_nutzung == True:
+          ${ gewerbliche_nutzung_qm }
+          % endif:
+      - "zuschuesse": |
+          % if zuschuesse == True:
+          2
+          % else:
+          1
+          % endif:
+      - "zuschuesse_antrag": |
+          % if zuschuesse == False:
+            % if zuschuesse_antrag == True:
+            2
+            % elif zuschuesse_antrag == False:
+            1
+            % endif:
+          % endif:
+      - "zuschuesse_anlage": |
+          % if zuschuesse == True or zuschuesse_antrag == True:
+          ${ zuschuesse_anlage }
+          % endif:
