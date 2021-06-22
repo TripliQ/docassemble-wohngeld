@@ -30,7 +30,8 @@ code: |
   person[i].einnahmen_datum
   person[i].einnahmen_grund
   person[i].kindergeld_yesno
-  person[i].kindergeld_name 
+  person[i].kindergeld_vorname
+  person[i].kindergeld_nachname
 
 ---
 # To-Do suggestions
@@ -320,7 +321,9 @@ question: |
 fields:
   - ' ': person[i].kindergeld_yesno
     datatype: yesnoradio
-  - Wer ist kindergeldberechtigt?: person[i].kindergeld_name
+  - Vorname des/der Kindergeldberechtigten: person[i].kindergeld_vorname
+    show if: person[i].kindergeld_yesno
+  - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
 question: |

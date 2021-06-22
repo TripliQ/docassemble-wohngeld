@@ -136,13 +136,10 @@ attachment:
           % if person[2].einnahmen_yesno == True:
           ${ person[2].einnahmen_datum }
           % endif
-      - "einnahmen_grund": |
+      - "einnahmen1_grund": |
           % if person[2].einnahmen_yesno == True:
-          ${ person[2].einnahmen_grund }
+          Zu ${ antragsteller_familienname } ${ antragsteller_vorname }: ${ person[2].einnahmen_grund }
           % endif
-
-          # problem
-
       - "antragsteller_wkosten_jahresbetrag": |
           % if person[2].wkkosten_yesno and person[2].kosten_art == 'Nur Werbungskosten':
           ${ person[2].wkosten_jahresbetrag }
@@ -238,9 +235,13 @@ attachment:
           % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno:
           2
           % endif
-      - "kindergeld_name": |
-          % if person[0].kindergeld_yesno == True or person[1].kindergeld_yesno == True:
-          ${ person[0].kindergeld_name }
+      - "kindergeld1_vorname": |
+          % if person[0].kindergeld_yesno:
+          ${ person[0].kindergeld_vorname }
+          % endif
+      - "kindergeld1_name": |
+          % if person[0].kindergeld_yesno:
+          ${ person[0].kindergeld_nachname }
           % endif
       - "person2_bruttoeinkuenfte": |
           % if andere_personen_yesno == True and person[0].transferleistungen == 'Nein':
@@ -277,6 +278,10 @@ attachment:
       - "einnahmen2_datum": |
           % if andere_personen_yesno == True and person[0].einnahmen_yesno == True:
           ${ person[0].einnahmen_datum }
+          % endif
+      - "einnahmen2_grund": |
+          % if andere_personen_yesno and person[0].einnahmen_yesno:
+          Zu ${ person[0].familienname } ${ person[0].vorname }: ${ person[0].einnahmen_grund }
           % endif
       - "person2_wkosten_jahresbetrag": |        
           % if andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Nur Werbungskosten':
@@ -360,6 +365,14 @@ attachment:
           % elif andere_personen_yesno == True and andere_personen == '2' and person[1].vpverhaeltnis_yesno == False: 
           kein Verhältnis
           % endif         
+      - "kindergeld2_vorname": |
+          % if person[1].kindergeld_yesno:
+          ${ person[1].kindergeld_vorname }
+          % endif
+      - "kindergeld2_name": |
+          % if person[1].kindergeld_yesno:
+          ${ person[1].kindergeld_nachname }
+          % endif
       - "person3_bruttoeinkuenfte": |
           % if andere_personen_yesno == True and andere_personen == '2' and person[1].transferleistungen == 'Nein':
           ${ person[1].bruttoeinkuenfte }
@@ -395,6 +408,10 @@ attachment:
       - "einnahmen3_datum": |
           % if andere_personen_yesno == True and person[1].einnahmen_yesno == True:
           ${ person[1].einnahmen_datum }
+          % endif
+      - "einnahmen3_grund": |
+          % if andere_personen_yesno and person[1].einnahmen_yesno:
+          Zu ${ person[1].familienname } ${ person[1].vorname }: ${ person[1].einnahmen_grund }
           % endif
       - "person3_wkosten_jahresbetrag": |
           % if andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Nur Werbungskosten':
