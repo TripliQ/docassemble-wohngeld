@@ -19,10 +19,12 @@ code: |
   person[i].kpversicherung
   person[i].rlversicherung
   person[i].bruttoeinkuenfte
-  person[i].bruttoeinkuenfte_summe
+  person[i].bruttoeinkuenfte_monatlich_hoehe
+  person[i].jzahlungen_hoehe 
   person[i].wkkosten_yesno
   person[i].kosten_art
-  person[i].kosten_jahresbetrag
+  person[i].wkosten_jahresbetrag
+  person[i].kkosten_jahresbetrag
   person[i].continue_field
   person[i].continue_person
   person[i].transferleistungen
@@ -520,17 +522,17 @@ question: |
   Name und Anschrift des Kontoinhabers:
 fields:
   - Vorname: zahlungsempfaenger_vorname
-    default: Dagobert
+    default: Max
   - Nachname: zahlungsempfaenger_familienname
-    default: Duck
+    default: Mustermann
   - Straße: zahlungsempfaenger_strasse
-    default: Zum Geldspeicher
+    default: Musterstraße
   - Hausnummer: zahlungsempfaenger_hausnummer
     default: 1
   - Postleihzahl: zahlungsempfaenger_postleihzahl
-    default: 95126
+    default: 12345
   - Ort: zahlungsempfaenger_ort
-    default: Entenhausen
+    default: Musterstadt
 ---
 # Frage 4
 question: |

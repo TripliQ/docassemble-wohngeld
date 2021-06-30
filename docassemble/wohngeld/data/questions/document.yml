@@ -178,75 +178,59 @@ attachment:
       - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
       - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }
       - "person2_familienname": |
-          % if andere_personen_yesno == True and person[0].continue_field == True:
+          % if andere_personen_yesno and person[0].continue_field:
           ${ person[0].familienname }
           % endif
       - "person2_geburtsname": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].geburtsname }
           % endif
       - "person2_vorname": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].vorname }
           % endif
       - "person2_geschlecht": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].geschlecht }
           % endif
       - "person2_geburtsdatum": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].geburtsdatum }
           % endif
       - "person2_geburtsort": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].geburtsort }
           % endif
       - "person2_familienstand": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].familienstand }
           % endif
       - "person2_ausgeuebte_taetigkeit": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].ausgeuebte_taetigkeit }
           % endif
       - "person2_staatsangehoerigkeit": |
-          % if andere_personen_yesno == True:
+          % if andere_personen_yesno:
           ${ person[0].staatsangehoerigkeit }
           % endif
       - "person2_vpverhaeltnis": |
-          % if andere_personen_yesno == True and person[0].vpverhaeltnis_yesno == True:
+          % if andere_personen_yesno and person[0].vpverhaeltnis_yesno:
           ${ person[0].vpverhaeltnis }
-          % elif andere_personen_yesno == True and person[0].vpverhaeltnis_yesno == False: 
+          % elif andere_personen_yesno and person[0].vpverhaeltnis_yesno == False: 
           kein Verhältnis
           % endif
-      - "kindergeld": |
-          % if person[0].kindergeld_yesno == True or person[1].kindergeld_yesno == True:
-          2
-          % else:
-          1
-          % endif  
-      - "kindergeld_anzahl": |
-          % if person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
-          0
-          % elif person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
-          1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
-          1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno:
-          2
-          % endif
       - "kindergeld1_vorname": |
-          % if person[0].kindergeld_yesno:
+          % if andere_personen_yesno and person[0].kindergeld_yesno:
           ${ person[0].kindergeld_vorname }
           % endif
       - "kindergeld1_name": |
-          % if person[0].kindergeld_yesno:
+          % if andere_personen_yesno and person[0].kindergeld_yesno:
           ${ person[0].kindergeld_nachname }
           % endif
       - "person2_bruttoeinkuenfte": |
-          % if andere_personen_yesno == True and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
           ${ person[0].bruttoeinkuenfte }
-          % elif andere_personen_yesno == True and person[0].transferleistungen == 'Ja':
+          % elif andere_personen_yesno and person[0].transferleistungen == 'Ja':
           Transferleistungen
           % endif
       - "person2_bruttoeinkuenfte_monatlich": |
@@ -268,15 +252,15 @@ attachment:
           % else:
           % endif 
       - "einnahmen2_name": |
-          % if andere_personen_yesno == True and person[0].einnahmen_yesno == True:
+          % if andere_personen_yesno and person[0].einnahmen_yesno == True:
           ${ person[0].familienname }
           % endif   
       - "einnahmen2_vorname": |
-          % if andere_personen_yesno == True and person[0].einnahmen_yesno == True:
+          % if andere_personen_yesno and person[0].einnahmen_yesno == True:
           ${ person[0].vorname }
           % endif    
       - "einnahmen2_datum": |
-          % if andere_personen_yesno == True and person[0].einnahmen_yesno == True:
+          % if andere_personen_yesno and person[0].einnahmen_yesno == True:
           ${ person[0].einnahmen_datum }
           % endif
       - "einnahmen2_grund": |
@@ -312,71 +296,71 @@ attachment:
           % else:
           % endif       
       - "person2_bruttoeinkuenfte_steuern": |
-          % if andere_personen_yesno == True and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
           ${ person[0].bruttoeinkuenfte_steuern }
           % endif       
       - "person2_kpversicherung": |
-          % if andere_personen_yesno == True and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
           ${ person[0].kpversicherung }
           % endif          
       - "person2_rlversicherung": |
-          % if andere_personen_yesno == True and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
           ${ person[0].rlversicherung }
           % endif
       - "person3_familienname": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].continue_field == True:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].continue_field == True:
           ${ person[1].familienname }
           % endif
       - "person3_geburtsname": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].geburtsname }
           % endif
       - "person3_vorname": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].vorname }
           % endif
       - "person3_geschlecht": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].geschlecht }
           % endif
       - "person3_geburtsdatum": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].geburtsdatum }
           % endif
       - "person3_geburtsort": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].geburtsort }
           % endif
       - "person3_familienstand": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].familienstand }
           % endif
       - "person3_ausgeuebte_taetigkeit": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].ausgeuebte_taetigkeit }
           % endif
       - "person3_staatsangehoerigkeit": |
-          % if andere_personen_yesno == True and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2':
           ${ person[1].staatsangehoerigkeit }
           % endif
       - "person3_vpverhaeltnis": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].vpverhaeltnis_yesno == True:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].vpverhaeltnis_yesno == True:
           ${ person[1].vpverhaeltnis }
-          % elif andere_personen_yesno == True and andere_personen == '2' and person[1].vpverhaeltnis_yesno == False: 
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].vpverhaeltnis_yesno == False: 
           kein Verhältnis
           % endif         
       - "kindergeld2_vorname": |
-          % if person[1].kindergeld_yesno:
+          % if person[1].kindergeld_yesno and andere_personen == '2':
           ${ person[1].kindergeld_vorname }
           % endif
       - "kindergeld2_name": |
-          % if person[1].kindergeld_yesno:
+          % if person[1].kindergeld_yesno and andere_personen == '2':
           ${ person[1].kindergeld_nachname }
           % endif
       - "person3_bruttoeinkuenfte": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].transferleistungen == 'Nein':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].transferleistungen == 'Nein':
           ${ person[1].bruttoeinkuenfte }
-          % elif andere_personen_yesno == True and andere_personen == '2' and person[1].transferleistungen == 'Ja':
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].transferleistungen == 'Ja':
           Transferleistungen
           % endif
       - "person3_bruttoeinkuenfte_monatlich": |
@@ -398,19 +382,19 @@ attachment:
           % else:
           % endif
       - "einnahmen3_name": |
-          % if andere_personen_yesno == True and person[1].einnahmen_yesno == True:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           ${ person[1].familienname }
           % endif   
       - "einnahmen3_vorname": |
-          % if andere_personen_yesno == True and person[1].einnahmen_yesno == True:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           ${ person[1].vorname }
           % endif    
       - "einnahmen3_datum": |
-          % if andere_personen_yesno == True and person[1].einnahmen_yesno == True:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           ${ person[1].einnahmen_datum }
           % endif
       - "einnahmen3_grund": |
-          % if andere_personen_yesno and person[1].einnahmen_yesno:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           Zu ${ person[1].familienname } ${ person[1].vorname }: ${ person[1].einnahmen_grund }
           % endif
       - "person3_wkosten_jahresbetrag": |
@@ -454,11 +438,29 @@ attachment:
           ${ person[1].rlversicherung }
           % endif
       - "einnahmen": |
-          % if person[2].einnahmen_yesno == True or person[0].einnahmen_yesno == True or person[1].einnahmen_yesno == True:
+          % if person[2].einnahmen_yesno or person[0].einnahmen_yesno or person[1].einnahmen_yesno:
           2
           % else:
           1
           % endif  
+      - "kindergeld": |
+          % if person[0].kindergeld_yesno:
+          2
+          % elif person[0].kindergeld_yesno or person[1].kindergeld_yesno:
+          2
+          % else:
+          1
+          % endif  
+      - "kindergeld_anzahl": |
+          % if person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
+          0
+          % elif person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
+          1
+          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
+          1
+          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno:
+          2
+          % endif
       - "verstorbener": |
           % if verstorbener and not transferleistungen:
           2
