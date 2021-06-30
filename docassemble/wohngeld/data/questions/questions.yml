@@ -648,3 +648,7 @@ question: |
 fields:
   - Anlage: zuschuesse_anlage
     datatype: file
+---
+auto terms:
+  Transferleistungen: |
+    Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.    
