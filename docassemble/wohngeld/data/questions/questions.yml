@@ -19,10 +19,12 @@ code: |
   person[i].kpversicherung
   person[i].rlversicherung
   person[i].bruttoeinkuenfte
-  person[i].bruttoeinkuenfte_summe
+  person[i].bruttoeinkuenfte_monatlich_hoehe
+  person[i].jzahlungen_hoehe 
   person[i].wkkosten_yesno
   person[i].kosten_art
-  person[i].kosten_jahresbetrag
+  person[i].wkosten_jahresbetrag
+  person[i].kkosten_jahresbetrag
   person[i].continue_field
   person[i].continue_person
   person[i].transferleistungen
@@ -30,7 +32,8 @@ code: |
   person[i].einnahmen_datum
   person[i].einnahmen_grund
   person[i].kindergeld_yesno
-  person[i].kindergeld_name 
+  person[i].kindergeld_vorname
+  person[i].kindergeld_nachname
 
 ---
 # To-Do suggestions
@@ -80,6 +83,7 @@ fields:
     choices:
       - Männlich: 1
       - Weiblich: 2
+      - Divers: 3
     default: Weiblich
   - Geburtsdatum: person[i].geburtsdatum
     datatype: date
@@ -126,10 +130,14 @@ fields:
     help: |
       Zu den Einkünften zählen z.B. Gehalt/Lohn - auch Abfindungen/Einmalzahlungen, Renten aller Art, Einkünfte aus selbstständiger Arbeit/Gewerbe, Arbeitslosengeld, Krankengeld,  Mutterschaftsgeld, Kindergeld, Unterhalt, Zinsen  aus  Kapitalvermögen,  Einnahmen  aus  Vermietung  und  Verpachtung,  Ausbildungsvergütung/-beihilfe oder BAföG.
     default: Gehalt, BAföG
-  - Höhe der monatlichen Einkünfte (brutto): person[i].bruttoeinkuenfte_summe
+  - Höhe der monatlichen Einkünfte (brutto): person[i].bruttoeinkuenfte_monatlich_hoehe
     datatype: currency
     min: 0
     default: 1000
+  - Höhe der jährlichen Einmalzahlungen (brutto): person[i].jzahlungen_hoehe
+    required: False
+    datatype: currency
+    min: 0
 ---
 question: |
   Werden von den Einkünften Steuern gezahlt?
@@ -171,10 +179,16 @@ fields:
       - Nur Werbungskosten
       - Nur Kinderbetreuungskosten
     show if: person[i].wkkosten_yesno
-  - Höhe der Kosten pro Jahr: person[i].kosten_jahresbetrag
+  - Höhe der Werbungskosten pro Jahr: person[i].wkosten_jahresbetrag
     datatype: currency
     min: 0
-    show if: person[i].wkkosten_yesno  
+    show if: person[i].wkkosten_yesno
+    required: False
+  - Höhe der Kinderbetreuungskosten pro Jahr: person[i].kkosten_jahresbetrag
+    datatype: currency
+    min: 0
+    show if: person[i].wkkosten_yesno
+    required: False
 ---
 continue button field: person[i].continue_field
 question: |
@@ -309,7 +323,9 @@ question: |
 fields:
   - ' ': person[i].kindergeld_yesno
     datatype: yesnoradio
-  - Wer ist kindergeldberechtigt?: person[i].kindergeld_name
+  - Vorname des/der Kindergeldberechtigten: person[i].kindergeld_vorname
+    show if: person[i].kindergeld_yesno
+  - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
 question: |
@@ -408,6 +424,7 @@ fields:
     choices:
       - Männlich: 1
       - Weiblich: 2
+      - Divers: 3
     default: Männlich
   - Geburtsdatum: antragsteller_geburtsdatum
     datatype: date
@@ -504,10 +521,18 @@ choices:
 question: |
   Name und Anschrift des Kontoinhabers:
 fields:
-  - Zahlungsempfänger: zahlungsempfaenger
-    datatype: text
-    default: Max Mustermann, Musterstraße 1, 12345 Musterstadt
-# option: Variablen in Formular splitten
+  - Vorname: zahlungsempfaenger_vorname
+    default: Max
+  - Nachname: zahlungsempfaenger_familienname
+    default: Mustermann
+  - Straße: zahlungsempfaenger_strasse
+    default: Musterstraße
+  - Hausnummer: zahlungsempfaenger_hausnummer
+    default: 1
+  - Postleihzahl: zahlungsempfaenger_postleihzahl
+    default: 12345
+  - Ort: zahlungsempfaenger_ort
+    default: Musterstadt
 ---
 # Frage 4
 question: |
