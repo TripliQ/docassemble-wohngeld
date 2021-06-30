@@ -1,3 +1,8 @@
+# To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
+
+# To-Do Felix: Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung? -> Nein ist nicht anklickbar
+# To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
+
 # Beispiel Edit
 objects:
   - person: DAList.using(
@@ -19,10 +24,12 @@ code: |
   person[i].kpversicherung
   person[i].rlversicherung
   person[i].bruttoeinkuenfte
-  person[i].bruttoeinkuenfte_summe
+  person[i].bruttoeinkuenfte_monatlich_hoehe
+  person[i].jzahlungen_hoehe 
   person[i].wkkosten_yesno
   person[i].kosten_art
-  person[i].kosten_jahresbetrag
+  person[i].wkosten_jahresbetrag
+  person[i].kkosten_jahresbetrag
   person[i].continue_field
   person[i].continue_person
   person[i].transferleistungen
@@ -30,7 +37,8 @@ code: |
   person[i].einnahmen_datum
   person[i].einnahmen_grund
   person[i].kindergeld_yesno
-  person[i].kindergeld_name 
+  person[i].kindergeld_vorname
+  person[i].kindergeld_nachname
 
 ---
 # To-Do suggestions
@@ -51,6 +59,7 @@ fields:
   - ' ': andere_personen_yesno
     datatype: yesnoradio
   - Wie viele Personen leben mit Ihnen in der Wohnung?: andere_personen
+    required: False
     show if: andere_personen_yesno
     choices:
       - 1
@@ -80,6 +89,7 @@ fields:
     choices:
       - Männlich: 1
       - Weiblich: 2
+      - Divers: 3
     default: Weiblich
   - Geburtsdatum: person[i].geburtsdatum
     datatype: date
@@ -126,10 +136,14 @@ fields:
     help: |
       Zu den Einkünften zählen z.B. Gehalt/Lohn - auch Abfindungen/Einmalzahlungen, Renten aller Art, Einkünfte aus selbstständiger Arbeit/Gewerbe, Arbeitslosengeld, Krankengeld,  Mutterschaftsgeld, Kindergeld, Unterhalt, Zinsen  aus  Kapitalvermögen,  Einnahmen  aus  Vermietung  und  Verpachtung,  Ausbildungsvergütung/-beihilfe oder BAföG.
     default: Gehalt, BAföG
-  - Höhe der monatlichen Einkünfte (brutto): person[i].bruttoeinkuenfte_summe
+  - Höhe der monatlichen Einkünfte (brutto): person[i].bruttoeinkuenfte_monatlich_hoehe
     datatype: currency
     min: 0
     default: 1000
+  - Höhe der jährlichen Einmalzahlungen (brutto): person[i].jzahlungen_hoehe
+    required: False
+    datatype: currency
+    min: 0
 ---
 question: |
   Werden von den Einkünften Steuern gezahlt?
@@ -155,6 +169,7 @@ choices:
     default: Ja
   - Nein: 2
 ---
+# To-Do: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
   Fallen Werbungs- oder Kinderbetreuungskosten an?
@@ -171,10 +186,16 @@ fields:
       - Nur Werbungskosten
       - Nur Kinderbetreuungskosten
     show if: person[i].wkkosten_yesno
-  - Höhe der Kosten pro Jahr: person[i].kosten_jahresbetrag
+  - Höhe der Werbungskosten pro Jahr: person[i].wkosten_jahresbetrag
     datatype: currency
     min: 0
-    show if: person[i].wkkosten_yesno  
+    show if: person[i].wkkosten_yesno
+    required: False
+  - Höhe der Kinderbetreuungskosten pro Jahr: person[i].kkosten_jahresbetrag
+    datatype: currency
+    min: 0
+    show if: person[i].wkkosten_yesno
+    required: False
 ---
 continue button field: person[i].continue_field
 question: |
@@ -226,6 +247,7 @@ fields:
     # Beispiel bitte löschen
     required: False
 ---
+# To-Do: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
 question: |
   Haben Sie nach dem Tod der haushaltsangehörigen Person die Wohnung gewechselt?
 yesno: wohnungswechsel
@@ -276,6 +298,7 @@ fields:
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
     datatype: file
 ---
+# To-Do: Könnte man alternativ bei den Personen abfragen, dadruch erübrgit sich auch die Follow-Up Frage, oder dirket gebündelt mit allen Personen
 question: |
   Trifft auf eine Person in Ihrem Haushalt eine der folgenden
   Kriterien zu?
@@ -309,15 +332,18 @@ question: |
 fields:
   - ' ': person[i].kindergeld_yesno
     datatype: yesnoradio
-  - Wer ist kindergeldberechtigt?: person[i].kindergeld_name
+  - Vorname des/der Kindergeldberechtigten: person[i].kindergeld_vorname
+    show if: person[i].kindergeld_yesno
+  - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
+# to-do: einfacheres wording vlt mit bullet points etc. oder subquestion
 question: |
   Haben Sie oder eine zu Ihrem Haushalt rechnende Person eine der nachstehenden
   {Sozialleistungen} beantragt oder wird eine dieser Leistungen bezogen oder wird   noch über eine weitere Bewilligung oder Einstellung dieser Leistung               entschieden?
 yesno: sozialleistungen
 ---
-# debugging: interview ende -> source -> variablen und werte anzeigen -> sozialleistungen_art suchen und value vergleichen mit dem was bei PDF escape angeezeigt wird
+# to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
 question: |
   Bitte ankreuzen?
 fields:
@@ -336,6 +362,7 @@ fields:
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
 ---
+# to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
   Wer hat diese Leistungen beantragt?
 fields:
@@ -408,6 +435,7 @@ fields:
     choices:
       - Männlich: 1
       - Weiblich: 2
+      - Divers: 3
     default: Männlich
   - Geburtsdatum: antragsteller_geburtsdatum
     datatype: date
@@ -504,12 +532,24 @@ choices:
 question: |
   Name und Anschrift des Kontoinhabers:
 fields:
-  - Zahlungsempfänger: zahlungsempfaenger
-    datatype: text
-    default: Max Mustermann, Musterstraße 1, 12345 Musterstadt
-# option: Variablen in Formular splitten
+  - Vorname: zahlungsempfaenger_vorname
+    default: Max
+  - Nachname: zahlungsempfaenger_familienname
+    default: Mustermann
+  - Straße: zahlungsempfaenger_strasse
+    default: Musterstraße
+  - Hausnummer: zahlungsempfaenger_hausnummer
+    default: 1
+  - Postleihzahl: zahlungsempfaenger_postleihzahl
+    default: 12345
+  - Ort: zahlungsempfaenger_ort
+    default: Musterstadt
 ---
 # Frage 4
+# To-Do: Ggf. repharsen und einfacher schreiben?
+# e.g Ist die Wohnung in der Straße XYZ für alle Bewohner der Lebesnmittelpunkt
+# 
+# Lesen Sie bitte im Merkblatt die Erläuterungen, wer als haushaltsangehörige Person anzusehen ist! -> Direkt sagen wer als haushaltsangehörige Person zählt.
 question: |
   Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
   Personen, die den Wohnraum bewohnen den Mittelpunkt der
@@ -529,6 +569,7 @@ fields:
     default: Max Mustermann
 ---
 # Frage 5
+# To-DO: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -580,6 +621,7 @@ fields:
     datatype: file
 ---
 # Frage 7
+# To-Do in mehrere Fragen aufsplitten mit Radio ja/nein oder anderen Format und dann in der document logic mit True and True and False etc.
 question: |
   Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
 yesno: untervermietung_und_mitnutzung
@@ -590,8 +632,9 @@ fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
 ---
+# To-do: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
-  Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung, für die Sie Wohngeld beantragen?
+  Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
   - Einzugsdatum: datum_einzug
     datatype: date
@@ -614,6 +657,7 @@ question: |
 yesno: zuschuesse
 section: zuschuesse
 ---
+# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze.
 question: |
   Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
 yesno: zuschuesse_antrag
@@ -623,3 +667,8 @@ question: |
 fields:
   - Anlage: zuschuesse_anlage
     datatype: file
+---
+auto terms:
+  Transferleistungen: |
+    Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
+# add Sozialleistungen to terms @Simon
