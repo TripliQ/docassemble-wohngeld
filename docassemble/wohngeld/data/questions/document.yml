@@ -355,11 +355,11 @@ attachment:
           kein Verhältnis
           % endif         
       - "kindergeld2_vorname": |
-          % if person[1].kindergeld_yesno and andere_personen == '2':
+          % if andere_personen_yesno and person[1].kindergeld_yesno and andere_personen == '2':
           ${ person[1].kindergeld_vorname }
           % endif
       - "kindergeld2_name": |
-          % if person[1].kindergeld_yesno and andere_personen == '2':
+          % if andere_personen_yesno and person[1].kindergeld_yesno and andere_personen == '2':
           ${ person[1].kindergeld_nachname }
           % endif
       - "person3_bruttoeinkuenfte": |
@@ -439,31 +439,41 @@ attachment:
           ${ person[1].kpversicherung }
           % endif
       - "person3_rlversicherung": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].transferleistungen == 'Nein':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].transferleistungen == 'Nein':
           ${ person[1].rlversicherung }
           % endif
       - "einnahmen": |
-          % if person[2].einnahmen_yesno or person[0].einnahmen_yesno or person[1].einnahmen_yesno:
+          % if person[2].einnahmen_yesno: 
+          2
+          % elif andere_personen_yesno and person[0].einnahmen_yesno:
+          2
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           2
           % else:
           1
           % endif  
       - "kindergeld": |
-          % if person[0].kindergeld_yesno:
+          % if andere_personen_yesno and person[0].kindergeld_yesno:
           2
-          % elif person[0].kindergeld_yesno or person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
           2
           % else:
           1
           % endif  
       - "kindergeld_anzahl": |
-          % if person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
+          % if andere_personen_yesno == False:
           0
-          % elif person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '1' and person[0].kindergeld_yesno == False:
+          0
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
+          0
+          % elif andere_personen_yesno and andere_personen == '1' and person[0].kindergeld_yesno:
           1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
           1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
+          1
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno:
           2
           % endif
       - "verstorbener": |
