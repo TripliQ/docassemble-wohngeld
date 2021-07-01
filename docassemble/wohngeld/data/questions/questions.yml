@@ -671,4 +671,8 @@ fields:
 auto terms:
   Transferleistungen: |
     Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
-# add Sozialleistungen to terms @Simon
+# Erklärtext einfacher formulieren    
+---
+terms:
+  Sozialleistungen: |
+    Sozialleistungen behinhalten folgende Leistungen: Arbeitslosengeld II (SGB             II); Sozialgeld (SGB II); Grundversicherung (SGB XII); Hilfe zum                       Lebensunterhalt (SGB XII); Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.);           Asylbewerberleistung; Leistungen der Kinder- und Jugendhilfe (SGB; Leistungen           der Ausbildungsförderung (BAföG); Rente; Unterhaltsvorschuss;                           Arbeitslosengeld I (SGB III)
