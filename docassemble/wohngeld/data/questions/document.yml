@@ -232,6 +232,21 @@ attachment:
           % if andere_personen_yesno and person[0].kindergeld_yesno:
           ${ person[0].kindergeld_nachname }
           % endif
+      - "sozialleistungen2_vorname": |
+          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
+          ${ person[0].vorname }
+          % endif
+      - "sozialleistungen2_name": |
+          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
+          ${ person[0].name }
+          % endif
+      - "sozialleistungen2_antragsdatum_bezugszeitraum": |
+          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
+          ${ person[0].sleistungen_datum }
+          % endif
+      
+      
+      
       - "person2_bruttoeinkuenfte": |
           % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
           ${ person[0].bruttoeinkuenfte }

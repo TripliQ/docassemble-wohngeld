@@ -39,6 +39,8 @@ code: |
   person[i].kindergeld_yesno
   person[i].kindergeld_vorname
   person[i].kindergeld_nachname
+  person[i].sleistungen
+  person[i].sleistungen_datum
 
 ---
 # To-Do suggestions
@@ -345,11 +347,12 @@ yesno: sozialleistungen
 ---
 # to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
 question: |
-  Bitte ankreuzen?
+  Bezieht Person Transferleistungen?
 fields:
-  - "Wählen Sie aus": sozialleistungen_art
+  - "Wählen Sie aus": person[i].sleistungen
     datatype: checkboxes
     choices:
+      - Nein, es werden keine Transferleistungen bezogen
       - Arbeitslosengeld II (SGB II): 1
       - Sozialgeld (SGB II): 2
       - Grundversicherung (SGB XII): 3
@@ -361,6 +364,9 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
+  - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
+    required: False
+ 
 ---
 # to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |

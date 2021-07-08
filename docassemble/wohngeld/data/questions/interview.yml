@@ -3,13 +3,13 @@ include:
   - document.yml
 ---
 # main interview logik für Antragskriterien
-mandatory: True
 code: |
   if sozialleistungen:
     if entscheidung == 'Zum Antrag':
       final_document
   else:
       final_document
+mandatory: True
 ---
 # siehe to-do unten
 # exit Link setzen zu XYZ -> Exit Button Docassemble Documentation
