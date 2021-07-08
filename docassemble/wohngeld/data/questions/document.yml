@@ -233,24 +233,27 @@ attachment:
           ${ person[0].kindergeld_nachname }
           % endif
       - "sozialleistungen2_vorname": |
-          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
-          ${ person[0].vorname }
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
+          etwas
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False: 
           % endif
       - "sozialleistungen2_name": |
-          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
-          ${ person[0].name }
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
+          etwas
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False: 
           % endif
       - "sozialleistungen2_antragsdatum_bezugszeitraum": |
-          % if andere_personen_yesno and person[0].sleistungen != 'Nein, es werden keine Transferleistungen bezogen':
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
           ${ person[0].sleistungen_datum }
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False:
           % endif
       
       
       
       - "person2_bruttoeinkuenfte": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].bruttoeinkuenfte }
-          % elif andere_personen_yesno and person[0].transferleistungen == 'Ja':
+          % elif andere_personen_yesno and person[0].sleistungen_yesno:
           Transferleistungen
           % endif
       - "person2_bruttoeinkuenfte_monatlich": |
@@ -316,15 +319,15 @@ attachment:
           % else:
           % endif       
       - "person2_bruttoeinkuenfte_steuern": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen == 'Nein, es werden keine Transferleistungen bezogen':
           ${ person[0].bruttoeinkuenfte_steuern }
           % endif       
       - "person2_kpversicherung": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen == 'Nein, es werden keine Transferleistungen bezogen':
           ${ person[0].kpversicherung }
           % endif          
       - "person2_rlversicherung": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen == 'Nein, es werden keine Transferleistungen bezogen':
           ${ person[0].rlversicherung }
           % endif
       - "person3_familienname": |
