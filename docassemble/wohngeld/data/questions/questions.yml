@@ -1,5 +1,6 @@
 # To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
+# To-Do Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 
 # To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 
@@ -318,7 +319,11 @@ fields:
   - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
-# to-do: einfacheres wording vlt mit bullet points etc. oder subquestion
+# To-Do: @Daniel Transferleistungen Frage bündeln (wenn pair programming Felix kontkatieren)
+# To-Do: Splitten der Frage in 2
+# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen? -> Sollten mehrere Antworten ausgewählt werden können?
+# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
+# Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
   Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
 fields:
@@ -339,12 +344,15 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
+    none of the above: False
   - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
     datatype: date
     show if: sozialleistungen
 
 ---
-# to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
+# To-Do: Splitten der Frage in 2
+# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
+# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 question: |
   Bezieht **${ person[i].vorname } ${ person[i].familienname }** Transferleistungen?
 fields:
@@ -365,6 +373,7 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
+    none of the above: False
   - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
     datatype: date
     show if: person[i].sleistungen_yesno
@@ -552,7 +561,6 @@ fields:
   - Ort: zahlungsempfaenger_ort
     default: Musterstadt
 ---
-# Frage 4
 # To-Do: Ggf. repharsen und einfacher schreiben?
 # e.g Ist die Wohnung in der Straße XYZ für alle Bewohner der Lebesnmittelpunkt
 # 
