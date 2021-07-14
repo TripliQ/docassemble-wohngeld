@@ -39,7 +39,9 @@ code: |
   person[i].kindergeld_yesno
   person[i].kindergeld_vorname
   person[i].kindergeld_nachname
-
+  person[i].sleistungen_yesno
+  person[i].sleistungen
+  person[i].sleistungen_datum
 ---
 # To-Do suggestions
 # 1. set deaults
@@ -205,27 +207,6 @@ subquestion: |
  ${ static_image('undraw_add_document_0hek.svg') } 
 ---
 question: |
-  Hat **${ person[i].vorname } ${ person[i].familienname }** einen Antrag auf Transferleistungen gestellt oder bezieht **${ person[i].vorname } ${ person[i].familienname }** gegenwärtig Transferleistungen?
-subquestion: |
-  Zu den Transferleistungen zählen:
-  
-  - Arbeitslosengeld II und Sozialgeld nach dem Zweiten Buch Sozialgesetzbuch
-  
-  - Übergangsgeld und Verletztengeld in Höhe des Arbeitslosengeldes II nach dem Sechsten bzw. Siebten Buch Sozialgesetzbuch
-  
-  - Hilfe zum Lebensunterhalt oder Grundsicherung im Alter und bei Erwerbsminderung nach dem Zwölften Buch Sozialgesetzbuch
-  
-  - Ergänzende Hilfe zum Lebensunterhalt nach dem Bundesversorgungsgesetz
-  
-  - Leistungen in besonderen Fällen und Grundleistungen nach dem Asylbewerberleistungsgesetz
-  
-  - Leistungen der Kinder- und Jugendhilfe nach dem Achten Buch Sozialgesetzbuch
-field: person[i].transferleistungen
-choices:
-  - Ja
-  - Nein
----
-question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
 yesno: verstorbener
 ---
@@ -345,9 +326,12 @@ yesno: sozialleistungen
 ---
 # to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
 question: |
-  Bitte ankreuzen?
+  Bezieht **${ person[i].vorname } ${ person[i].familienname }** Transferleistungen?
 fields:
-  - "Wählen Sie aus": sozialleistungen_art
+  - ' ': person[i].sleistungen_yesno
+    datatype: yesnoradio
+  - Wählen Sie bitte aus: sozialleistungen_art
+    show if: person[i].sleistungen_yesno
     datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
@@ -361,6 +345,9 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
+  - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
+    datatype: date
+    show if: person[i].sleistungen_yesno
 ---
 # to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
