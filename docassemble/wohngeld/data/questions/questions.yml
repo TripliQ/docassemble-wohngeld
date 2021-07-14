@@ -1,6 +1,6 @@
 # To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
-# To-Do Felix: Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung? -> Nein ist nicht anklickbar
+
 # To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 
 # Beispiel Edit
@@ -42,7 +42,6 @@ code: |
   person[i].sleistungen_yesno
   person[i].sleistungen
   person[i].sleistungen_datum
-
 ---
 # To-Do suggestions
 # 1. set deaults
@@ -321,9 +320,29 @@ fields:
 ---
 # to-do: einfacheres wording vlt mit bullet points etc. oder subquestion
 question: |
-  Haben Sie oder eine zu Ihrem Haushalt rechnende Person eine der nachstehenden
-  {Sozialleistungen} beantragt oder wird eine dieser Leistungen bezogen oder wird   noch über eine weitere Bewilligung oder Einstellung dieser Leistung               entschieden?
-yesno: sozialleistungen
+  Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
+fields:
+  - ' ': sozialleistungen
+    datatype: yesnoradio
+  - Wählen Sie bitte aus: sozialleistungen_art
+    show if: sozialleistungen
+    datatype: checkboxes
+    choices:
+      - Arbeitslosengeld II (SGB II): 1
+      - Sozialgeld (SGB II): 2
+      - Grundversicherung (SGB XII): 3
+      - Hilfe zum Lebensunterhalt (SGB XII): 4
+      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
+      - Asylbewerberleistung: 6
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
+      - Leistungen der Ausbildungsförderung (BAföG): 8
+      - Rente: 9
+      - Unterhaltsvorschuss: 10
+      - Arbeitslosengeld I (SGB III): 11
+  - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
+    datatype: date
+    show if: sozialleistungen
+
 ---
 # to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
 question: |
@@ -349,7 +368,6 @@ fields:
   - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
     datatype: date
     show if: person[i].sleistungen_yesno
- 
 ---
 # to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
@@ -660,4 +678,8 @@ fields:
 auto terms:
   Transferleistungen: |
     Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
-# add Sozialleistungen to terms @Simon
+# Erklärtext einfacher formulieren    
+---
+terms:
+  Sozialleistungen: |
+    Sozialleistungen behinhalten folgende Leistungen: Arbeitslosengeld II (SGB             II); Sozialgeld (SGB II); Grundversicherung (SGB XII); Hilfe zum                       Lebensunterhalt (SGB XII); Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.);           Asylbewerberleistung; Leistungen der Kinder- und Jugendhilfe (SGB; Leistungen           der Ausbildungsförderung (BAföG); Rente; Unterhaltsvorschuss;                           Arbeitslosengeld I (SGB III)
