@@ -182,6 +182,8 @@ attachment:
       - "antragsteller_familienstand": ${ antragsteller_familienstand }
       - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
       - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }
+      - "sozialleistungen1_name": etwas
+      - "sozialleistungen1_vorname": etwas
       - "person2_familienname": |
           % if andere_personen_yesno and person[0].continue_field:
           ${ person[0].familienname }
@@ -232,10 +234,26 @@ attachment:
           % if andere_personen_yesno and person[0].kindergeld_yesno:
           ${ person[0].kindergeld_nachname }
           % endif
+      - "sozialleistungen2_vorname": |
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
+          ${ person[0].vorname }
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False: 
+          % endif
+      - "sozialleistungen2_name": |
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
+          ${ person[0].familienname }
+
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False: 
+          % endif
+      - "sozialleistungen2_antragsdatum_bezugszeitraum": |
+          % if andere_personen_yesno and person[0].sleistungen_yesno:
+          ${ person[0].sleistungen_datum }
+          % elif andere_personen_yesno and person[0].sleistungen_yesno == False:
+          % endif
       - "person2_bruttoeinkuenfte": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].bruttoeinkuenfte }
-          % elif andere_personen_yesno and person[0].transferleistungen == 'Ja':
+          % elif andere_personen_yesno and person[0].sleistungen_yesno:
           Transferleistungen
           % endif
       - "person2_bruttoeinkuenfte_monatlich": |
@@ -301,15 +319,15 @@ attachment:
           % else:
           % endif       
       - "person2_bruttoeinkuenfte_steuern": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].bruttoeinkuenfte_steuern }
           % endif       
       - "person2_kpversicherung": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].kpversicherung }
           % endif          
       - "person2_rlversicherung": |
-          % if andere_personen_yesno and person[0].transferleistungen == 'Nein':
+          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].rlversicherung }
           % endif
       - "person3_familienname": |
@@ -355,11 +373,11 @@ attachment:
           kein Verhältnis
           % endif         
       - "kindergeld2_vorname": |
-          % if person[1].kindergeld_yesno and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
           ${ person[1].kindergeld_vorname }
           % endif
       - "kindergeld2_name": |
-          % if person[1].kindergeld_yesno and andere_personen == '2':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
           ${ person[1].kindergeld_nachname }
           % endif
       - "person3_bruttoeinkuenfte": |
@@ -439,31 +457,41 @@ attachment:
           ${ person[1].kpversicherung }
           % endif
       - "person3_rlversicherung": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].transferleistungen == 'Nein':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].transferleistungen == 'Nein':
           ${ person[1].rlversicherung }
           % endif
       - "einnahmen": |
-          % if person[2].einnahmen_yesno or person[0].einnahmen_yesno or person[1].einnahmen_yesno:
+          % if person[2].einnahmen_yesno: 
+          2
+          % elif andere_personen_yesno and person[0].einnahmen_yesno:
+          2
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
           2
           % else:
           1
           % endif  
       - "kindergeld": |
-          % if person[0].kindergeld_yesno:
+          % if andere_personen_yesno and person[0].kindergeld_yesno:
           2
-          % elif person[0].kindergeld_yesno or person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
           2
           % else:
           1
           % endif  
       - "kindergeld_anzahl": |
-          % if person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
+          % if andere_personen_yesno == False:
           0
-          % elif person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '1' and person[0].kindergeld_yesno == False:
+          0
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
+          0
+          % elif andere_personen_yesno and andere_personen == '1' and person[0].kindergeld_yesno:
           1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
           1
-          % elif person[0].kindergeld_yesno and person[1].kindergeld_yesno:
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
+          1
+          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno:
           2
           % endif
       - "verstorbener": |
@@ -506,14 +534,7 @@ attachment:
           % else:
           1
           % endif
-      - "sozialleistungen_art": |
-          % if sozialleistungen:
-          ${ sozialleistungen_art }
-          % endif
-      - "sozialleistungen_name": |
-          % if sozialleistungen:
-          ${ sozialleistungen_name }
-          % endif
+      - "sozialleistungen_art": ${ sozialleistungen_art }
       - "unterhaltszahlungen": |
           % if unterhaltszahlungen:
           2

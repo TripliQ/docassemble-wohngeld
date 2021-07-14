@@ -1,6 +1,7 @@
 # To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
-# To-Do Felix: Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung? -> Nein ist nicht anklickbar
+# To-Do Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
+
 # To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 
 # Beispiel Edit
@@ -39,7 +40,9 @@ code: |
   person[i].kindergeld_yesno
   person[i].kindergeld_vorname
   person[i].kindergeld_nachname
-
+  person[i].sleistungen_yesno
+  person[i].sleistungen
+  person[i].sleistungen_datum
 ---
 # To-Do suggestions
 # 1. set deaults
@@ -205,27 +208,6 @@ subquestion: |
  ${ static_image('undraw_add_document_0hek.svg') } 
 ---
 question: |
-  Hat **${ person[i].vorname } ${ person[i].familienname }** einen Antrag auf Transferleistungen gestellt oder bezieht **${ person[i].vorname } ${ person[i].familienname }** gegenwärtig Transferleistungen?
-subquestion: |
-  Zu den Transferleistungen zählen:
-  
-  - Arbeitslosengeld II und Sozialgeld nach dem Zweiten Buch Sozialgesetzbuch
-  
-  - Übergangsgeld und Verletztengeld in Höhe des Arbeitslosengeldes II nach dem Sechsten bzw. Siebten Buch Sozialgesetzbuch
-  
-  - Hilfe zum Lebensunterhalt oder Grundsicherung im Alter und bei Erwerbsminderung nach dem Zwölften Buch Sozialgesetzbuch
-  
-  - Ergänzende Hilfe zum Lebensunterhalt nach dem Bundesversorgungsgesetz
-  
-  - Leistungen in besonderen Fällen und Grundleistungen nach dem Asylbewerberleistungsgesetz
-  
-  - Leistungen der Kinder- und Jugendhilfe nach dem Achten Buch Sozialgesetzbuch
-field: person[i].transferleistungen
-choices:
-  - Ja
-  - Nein
----
-question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
 yesno: verstorbener
 ---
@@ -337,17 +319,18 @@ fields:
   - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
-# to-do: einfacheres wording vlt mit bullet points etc. oder subquestion
+# To-Do: @Daniel Transferleistungen Frage bündeln (wenn pair programming Felix kontkatieren)
+# To-Do: Splitten der Frage in 2
+# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen? -> Sollten mehrere Antworten ausgewählt werden können?
+# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
+# Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Haben Sie oder eine zu Ihrem Haushalt rechnende Person eine der nachstehenden
-  {Sozialleistungen} beantragt oder wird eine dieser Leistungen bezogen oder wird   noch über eine weitere Bewilligung oder Einstellung dieser Leistung               entschieden?
-yesno: sozialleistungen
----
-# to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
-question: |
-  Bitte ankreuzen?
+  Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
 fields:
-  - "Wählen Sie aus": sozialleistungen_art
+  - ' ': sozialleistungen
+    datatype: yesnoradio
+  - Wählen Sie bitte aus: sozialleistungen_art
+    show if: sozialleistungen
     datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
@@ -361,6 +344,39 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
+    none of the above: False
+  - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
+    datatype: date
+    show if: sozialleistungen
+
+---
+# To-Do: Splitten der Frage in 2
+# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
+# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
+question: |
+  Bezieht **${ person[i].vorname } ${ person[i].familienname }** Transferleistungen?
+fields:
+  - ' ': person[i].sleistungen_yesno
+    datatype: yesnoradio
+  - Wählen Sie bitte aus: person[i].sleistungen
+    show if: person[i].sleistungen_yesno
+    datatype: checkboxes
+    choices:
+      - Arbeitslosengeld II (SGB II): 1
+      - Sozialgeld (SGB II): 2
+      - Grundversicherung (SGB XII): 3
+      - Hilfe zum Lebensunterhalt (SGB XII): 4
+      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
+      - Asylbewerberleistung: 6
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
+      - Leistungen der Ausbildungsförderung (BAföG): 8
+      - Rente: 9
+      - Unterhaltsvorschuss: 10
+      - Arbeitslosengeld I (SGB III): 11
+    none of the above: False
+  - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
+    datatype: date
+    show if: person[i].sleistungen_yesno
 ---
 # to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
@@ -545,7 +561,6 @@ fields:
   - Ort: zahlungsempfaenger_ort
     default: Musterstadt
 ---
-# Frage 4
 # To-Do: Ggf. repharsen und einfacher schreiben?
 # e.g Ist die Wohnung in der Straße XYZ für alle Bewohner der Lebesnmittelpunkt
 # 
@@ -671,4 +686,8 @@ fields:
 auto terms:
   Transferleistungen: |
     Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
-# add Sozialleistungen to terms @Simon
+# Erklärtext einfacher formulieren    
+---
+terms:
+  Sozialleistungen: |
+    Sozialleistungen behinhalten folgende Leistungen: Arbeitslosengeld II (SGB             II); Sozialgeld (SGB II); Grundversicherung (SGB XII); Hilfe zum                       Lebensunterhalt (SGB XII); Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.);           Asylbewerberleistung; Leistungen der Kinder- und Jugendhilfe (SGB; Leistungen           der Ausbildungsförderung (BAföG); Rente; Unterhaltsvorschuss;                           Arbeitslosengeld I (SGB III)
