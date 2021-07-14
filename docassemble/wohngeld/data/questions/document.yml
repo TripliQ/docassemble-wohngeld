@@ -182,6 +182,8 @@ attachment:
       - "antragsteller_familienstand": ${ antragsteller_familienstand }
       - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
       - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }
+      - "sozialleistungen1_name": etwas
+      - "sozialleistungen1_vorname": etwas
       - "person2_familienname": |
           % if andere_personen_yesno and person[0].continue_field:
           ${ person[0].familienname }

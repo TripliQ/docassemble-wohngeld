@@ -320,9 +320,29 @@ fields:
 ---
 # to-do: einfacheres wording vlt mit bullet points etc. oder subquestion
 question: |
-  Haben Sie oder eine zu Ihrem Haushalt rechnende Person eine der nachstehenden
-  {Sozialleistungen} beantragt oder wird eine dieser Leistungen bezogen oder wird   noch über eine weitere Bewilligung oder Einstellung dieser Leistung               entschieden?
-yesno: sozialleistungen
+  Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
+fields:
+  - ' ': sozialleistungen
+    datatype: yesnoradio
+  - Wählen Sie bitte aus: sozialleistungen_art
+    show if: sozialleistungen
+    datatype: checkboxes
+    choices:
+      - Arbeitslosengeld II (SGB II): 1
+      - Sozialgeld (SGB II): 2
+      - Grundversicherung (SGB XII): 3
+      - Hilfe zum Lebensunterhalt (SGB XII): 4
+      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
+      - Asylbewerberleistung: 6
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
+      - Leistungen der Ausbildungsförderung (BAföG): 8
+      - Rente: 9
+      - Unterhaltsvorschuss: 10
+      - Arbeitslosengeld I (SGB III): 11
+  - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
+    datatype: date
+    show if: sozialleistungen
+
 ---
 # to-do: Alignment mit Frage Tranferleistungen Personen (@Daniel)
 question: |
