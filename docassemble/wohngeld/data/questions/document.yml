@@ -242,13 +242,14 @@ attachment:
       - "sozialleistungen2_name": |
           % if andere_personen_yesno and person[0].sleistungen_yesno:
           ${ person[0].familienname }
+
           % elif andere_personen_yesno and person[0].sleistungen_yesno == False: 
           % endif
       - "sozialleistungen2_antragsdatum_bezugszeitraum": |
           % if andere_personen_yesno and person[0].sleistungen_yesno:
           ${ person[0].sleistungen_datum }
           % elif andere_personen_yesno and person[0].sleistungen_yesno == False:
-          % endif     
+          % endif
       - "person2_bruttoeinkuenfte": |
           % if andere_personen_yesno and person[0].sleistungen_yesno == False:
           ${ person[0].bruttoeinkuenfte }

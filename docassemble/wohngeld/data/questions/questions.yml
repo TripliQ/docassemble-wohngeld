@@ -350,7 +350,7 @@ question: |
 fields:
   - ' ': person[i].sleistungen_yesno
     datatype: yesnoradio
-  - Wählen Sie bitte aus: sozialleistungen_art
+  - Wählen Sie bitte aus: person[i].sleistungen
     show if: person[i].sleistungen_yesno
     datatype: checkboxes
     choices:
