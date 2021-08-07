@@ -253,17 +253,27 @@ question: |
 fields:
   - Name: weitere_person_name
 ---
-
 question: |
   Werden sich die Einkünfte in den nächsten 12 Monaten verringern oder erhöhen?
 fields:
+  - ' ': einnahmen1_yesno
+    datatype: yesnoradio
+  - Ab wann?: einnahmen1_datum
+    datatype: date
+    show if: einnahmen1_yesno
+  - Aus welchem Grund?: einnahmen1_grund
+    show if: einnahmen1_yesno
+---
+question: | 
+  Werden sich die Einkünfte von **${ person[i].vorname } ${ person[i].familienname }** in den nächsten 12 Monaten verringern oder erhöhen?
+fields: 
   - ' ': person[i].einnahmen_yesno
     datatype: yesnoradio
   - Ab wann?: person[i].einnahmen_datum
     datatype: date
     show if: person[i].einnahmen_yesno
   - Aus welchem Grund?: person[i].einnahmen_grund
-    show if: person[i].einnahmen_yesno
+    show if: person[i].einnahmen_yesno  
 ---
 question:  |
   Werden von den zu Ihrem Haushalt rechnenden Personen Unterhaltszahlungen geleistet?
@@ -322,13 +332,11 @@ fields:
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 # Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
+  Beziehen Sie {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt?
 fields:
   - ' ': sozialleistungen
     datatype: yesnoradio
   - Wählen Sie bitte aus: sozialleistungen_art
-    show if: sozialleistungen
-    datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
       - Sozialgeld (SGB II): 2
@@ -341,7 +349,7 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
-    none of the above: False
+    show if: sozialleistungen
   - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
     datatype: date
     show if: sozialleistungen
@@ -351,26 +359,24 @@ fields:
 # Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 question: |
-  Bezieht **${ person[i].vorname } ${ person[i].familienname }** Transferleistungen?
+  Bezieht **${ person[i].vorname } ${ person[i].familienname }** {Transferleistungen}?
 fields:
   - ' ': person[i].sleistungen_yesno
     datatype: yesnoradio
   - Wählen Sie bitte aus: person[i].sleistungen
-    show if: person[i].sleistungen_yesno
-    datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
       - Sozialgeld (SGB II): 2
       - Grundversicherung (SGB XII): 3
       - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
+      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
       - Asylbewerberleistung: 6
       - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
       - Leistungen der Ausbildungsförderung (BAföG): 8
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
-    none of the above: False
+    show if: person[i].sleistungen_yesno
   - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
     datatype: date
     show if: person[i].sleistungen_yesno
@@ -680,13 +686,6 @@ fields:
   - Anlage: zuschuesse_anlage
     datatype: file
 ---
-auto terms:
-  Transferleistungen: |
-    Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
-# Erklärtext einfacher formulieren    
----
 terms:
-  Sozialleistungen: |
-    Sozialleistungen behinhalten folgende Leistungen: Arbeitslosengeld II (SGB             II); Sozialgeld (SGB II); Grundversicherung (SGB XII); Hilfe zum                       Lebensunterhalt (SGB XII); Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.);           Asylbewerberleistung; Leistungen der Kinder- und Jugendhilfe (SGB; Leistungen           der Ausbildungsförderung (BAföG); Rente; Unterhaltsvorschuss;                           Arbeitslosengeld I (SGB III)
-  Werbungs- oder Kinderbetreuungskosten: |
-    **Werbungskosten** sind Aufwendungen zur Erwerbung, Sicherung und Erhaltung der Einnahmen (§ 9 Abs. 1 S. 1 EStG), z.B. Schuldzinsen, Steuern vom Grundbesitz, Aufwendungen, die einem Arbeitnehmer aus beruflichen Gründen anfallen (wie Fahrtkosten). **Kinderbetreuunsgkosten** sind Aufwendungen, die für die Betreuung eines Kindes anfallen (§ 10 Abs. 1 Nr. 5 EStG), z.B. Kosten für Kindergarten oder Tagesmutter, Haushaltshilfe, die nur betreut, nicht aber unterrichtet.
+  Transferleistungen: |
+    **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
