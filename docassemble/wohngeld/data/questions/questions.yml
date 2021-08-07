@@ -175,14 +175,11 @@ choices:
 # To-Do: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
-  Fallen Werbungs- oder Kinderbetreuungskosten an?
+  Fallen {Werbungs- oder Kinderbetreuungskosten} an?
 fields:
   - ' ': person[i].wkkosten_yesno
     datatype: yesnoradio
     default: Nein
-    help: | 
-      **Werbungskosten** sind Aufwendungen zur Erwerbung, Sicherung und Erhaltung der Einnahmen (§ 9 Abs. 1 S. 1 EStG), z.B. Schuldzinsen, Steuern vom Grundbesitz, Aufwendungen, die einem Arbeitnehmer aus aus beruflichen Gründen anfallen (wie Fahrtkosten).
-      **Kinderbetreuunsgkosten** sind Aufwendungen, die für die Betreuung eines Kindes anfallen (§ 10 Abs. 1 Nr. 5 EStG), z.B. Kosten für Kindergarten oder Tagesmutter, Haushaltshilfe, die nur betreut, nicht aber unterrichtet.
   - Art der Kosten: person[i].kosten_art
     choices:
       - Werbungskosten und Kinderbetreuungskosten
