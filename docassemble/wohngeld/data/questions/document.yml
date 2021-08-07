@@ -12,7 +12,12 @@ attachment:
     pdf template file: wohngeldantrag.pdf
     fields:
       - "antragsart": ${ antragsart }
-      - "antragsteller_wohngeldnummer": ${ antragsteller_wohngeldnummer }
+      - "antragsteller_wohngeldnummer": |
+          % if antragsart != "1":
+          ${ antragsteller_wohngeldnummer }
+          % else:
+          ''
+          % endif
       - "antragsteller_familienname": ${ antragsteller_familienname }
       - "antragsteller_vorname": ${ antragsteller_vorname }
       - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }

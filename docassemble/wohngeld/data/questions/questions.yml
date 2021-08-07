@@ -548,6 +548,7 @@ choices:
   - Vermieter(in): 3
   - Bei Heimbewohnern - Sozialhilfeträger: 4
 ---
+# TO-DO: Kontoinhaber dynamic
 question: |
   Name und Anschrift des Kontoinhabers:
 fields:
@@ -564,17 +565,14 @@ fields:
   - Ort: zahlungsempfaenger_ort
     default: Musterstadt
 ---
-# To-Do: Ggf. repharsen und einfacher schreiben?
-# e.g Ist die Wohnung in der Straße XYZ für alle Bewohner der Lebesnmittelpunkt
-# 
-# Lesen Sie bitte im Merkblatt die Erläuterungen, wer als haushaltsangehörige Person anzusehen ist! -> Direkt sagen wer als haushaltsangehörige Person zählt.
+# TO-DO: Könnte auch plural sein? Möglichkeit von Personenliste zu selektieren
 question: |
-  Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
-  Personen, die den Wohnraum bewohnen den Mittelpunkt der
-  Lebensbeziehungen?
+  Ist der Wohnraum für alle Personen der Mittelpunkt der Lebensbeziehungen?
 subquestion: |
-  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als
-  haushaltsangehörige Person anzusehen ist!
+  - Wenn alle Personen nur einen Wohnsitz haben, ist dies in der Regel Ihr Hauptwohnsitz, also der Mittelpunkt der Lebensbeziehungen
+  - Haben Personen mehrere Wohnsitze, müssen Sie prüffen, ob Sie an all diesen Wohnsitzen einen Mittelpunkt Ihrer Lebensbeziehungen haben. Es obliegt  Ihnen dann zu entscheiden, zu welchem Ihrer Wohnsitze Sie ein größeres Naheverhältnis haben und diesen als Ihren Hauptwohnsitz zu bezeichnen.
+  
+  Mehrere Infos hierzu finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
 yesno: mittelpunkt_lebensbeziehungen
 section: lebensverhaeltnisse
 ---
@@ -587,7 +585,7 @@ fields:
     default: Max Mustermann
 ---
 # Frage 5
-# To-DO: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
+# TO-DO: @Tobias: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -631,18 +629,30 @@ question: |
 subquestion: |
   Bitte laden Sie unten die Angaben des Vermieters zum Wohnraum oder ggf. der Untervermietung hoch. Ein Nachweis über die Höhe der Miete muss enthalten sein.
 fields:
-  - Warmmiete: warmmiete
-    datatype: money
+  - Warmmiete pro Monat: warmmiete
+    datatype: currency
     default: 1234
-    # check minimu maximum
+    min: 1
   - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
     datatype: file
 ---
 # Frage 7
-# To-Do in mehrere Fragen aufsplitten mit Radio ja/nein oder anderen Format und dann in der document logic mit True and True and False etc.
 question: |
-  Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
-yesno: untervermietung_und_mitnutzung
+  Bitte machen Sie weitere Angaben zur Nutzung der Wohnung
+fields:
+  - "Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen?": untervermietung
+    datatype: yesnoradio
+  - note: |
+      Zu den Haushaltsmitgliedern zählen:
+        
+        - der Antragsteller selbst
+        - Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte
+        - Eltern (auch Stief-, Pflege- und Schwiegereltern)
+        - Kinder (auch Pflege- und Adoptivkinder)
+        - sonstige Verwandte
+        - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
+  - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
+    datatype: yesnoradio
 ---
 question: |
   Sie haben die letzte Frage mit "Ja" beantwortet. Bitte fügen Sie die Anlage "Untervermietung" bei.
@@ -689,3 +699,6 @@ fields:
 terms:
   Transferleistungen: |
     **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
+---
+code: |
+  untervermietung_und_mitnutzung = untervermietung and mitnutzung
