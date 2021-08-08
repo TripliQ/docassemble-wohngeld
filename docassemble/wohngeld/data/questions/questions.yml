@@ -148,6 +148,7 @@ fields:
     datatype: currency
     min: 0
 ---
+# TO-DO: Cool wäre wenn hier ein Bild mit Steuerbescheid einfügen könnten wo man das sehen würde.
 question: |
   Werden von den Einkünften Steuern gezahlt?
 field: person[i].bruttoeinkuenfte_steuern
@@ -172,7 +173,7 @@ choices:
     default: Ja
   - Nein: 2
 ---
-# To-Do: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
+# T0-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
   Fallen {Werbungs- oder Kinderbetreuungskosten} an?
@@ -253,6 +254,7 @@ question: |
 fields:
   - Name: weitere_person_name
 ---
+# TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten
 question: |
   Werden sich die Einkünfte in den nächsten 12 Monaten verringern oder erhöhen?
 fields:
@@ -642,6 +644,8 @@ question: |
 fields:
   - "Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen?": untervermietung
     datatype: yesnoradio
+  - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
+    datatype: yesnoradio
   - note: |
       Zu den Haushaltsmitgliedern zählen:
         
@@ -651,11 +655,9 @@ fields:
         - Kinder (auch Pflege- und Adoptivkinder)
         - sonstige Verwandte
         - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
-  - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
-    datatype: yesnoradio
 ---
 question: |
-  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte fügen Sie die Anlage "Untervermietung" bei.
+  Sie haben eine der letzten beiden Fragen mit "Ja" beantwortet. Bitte fügen Sie die [Anlage "Untervermietung"](https://www.wohngeld.org/service/nordrhein-westfalen/wohngeld_untervermietung.pdf) bei.
 fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
@@ -690,6 +692,7 @@ question: |
   Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
 yesno: zuschuesse_antrag
 ---
+# TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
 question: |
   Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
 fields:
@@ -701,4 +704,4 @@ terms:
     **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
 ---
 code: |
-  untervermietung_und_mitnutzung = untervermietung and mitnutzung
+  untervermietung_und_mitnutzung = untervermietung or mitnutzung
