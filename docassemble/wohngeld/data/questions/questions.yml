@@ -1,10 +1,8 @@
-# To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
+# TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
-# To-Do Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
+# TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 
-# To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
-
-# Beispiel Edit
+# TO-DO Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -44,15 +42,9 @@ code: |
   person[i].sleistungen
   person[i].sleistungen_datum
 ---
-# To-Do suggestions
-# 1. set deaults
-
 # General Logic
 # Wie viele Personen antrag gestellt
 # Note to Felix: Logic Antragssteller vs. Personen mit im Antrag
-
-#Beginn der Fragen
-# line breaks and image example
 question: |
   Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung?
 subquestion: |
@@ -148,6 +140,7 @@ fields:
     datatype: currency
     min: 0
 ---
+# TO-DO: Cool wäre wenn hier ein Bild mit Steuerbescheid einfügen könnten wo man das sehen würde.
 question: |
   Werden von den Einkünften Steuern gezahlt?
 field: person[i].bruttoeinkuenfte_steuern
@@ -172,17 +165,14 @@ choices:
     default: Ja
   - Nein: 2
 ---
-# To-Do: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
+# TO-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
-  Fallen Werbungs- oder Kinderbetreuungskosten an?
+  Fallen {Werbungs- oder Kinderbetreuungskosten} an?
 fields:
   - ' ': person[i].wkkosten_yesno
     datatype: yesnoradio
     default: Nein
-    help: | 
-      **Werbungskosten** sind Aufwendungen zur Erwerbung, Sicherung und Erhaltung der Einnahmen (§ 9 Abs. 1 S. 1 EStG), z.B. Schuldzinsen, Steuern vom Grundbesitz, Aufwendungen, die einem Arbeitnehmer aus aus beruflichen Gründen anfallen (wie Fahrtkosten).
-      **Kinderbetreuunsgkosten** sind Aufwendungen, die für die Betreuung eines Kindes anfallen (§ 10 Abs. 1 Nr. 5 EStG), z.B. Kosten für Kindergarten oder Tagesmutter, Haushaltshilfe, die nur betreut, nicht aber unterrichtet.
   - Art der Kosten: person[i].kosten_art
     choices:
       - Werbungskosten und Kinderbetreuungskosten
@@ -229,7 +219,7 @@ fields:
     # Beispiel bitte löschen
     required: False
 ---
-# To-Do: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
+# TO-DO: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
 question: |
   Haben Sie nach dem Tod der haushaltsangehörigen Person die Wohnung gewechselt?
 yesno: wohnungswechsel
@@ -256,17 +246,28 @@ question: |
 fields:
   - Name: weitere_person_name
 ---
-
+# TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten
 question: |
   Werden sich die Einkünfte in den nächsten 12 Monaten verringern oder erhöhen?
 fields:
+  - ' ': einnahmen1_yesno
+    datatype: yesnoradio
+  - Ab wann?: einnahmen1_datum
+    datatype: date
+    show if: einnahmen1_yesno
+  - Aus welchem Grund?: einnahmen1_grund
+    show if: einnahmen1_yesno
+---
+question: | 
+  Werden sich die Einkünfte von **${ person[i].vorname } ${ person[i].familienname }** in den nächsten 12 Monaten verringern oder erhöhen?
+fields: 
   - ' ': person[i].einnahmen_yesno
     datatype: yesnoradio
   - Ab wann?: person[i].einnahmen_datum
     datatype: date
     show if: person[i].einnahmen_yesno
   - Aus welchem Grund?: person[i].einnahmen_grund
-    show if: person[i].einnahmen_yesno
+    show if: person[i].einnahmen_yesno  
 ---
 question:  |
   Werden von den zu Ihrem Haushalt rechnenden Personen Unterhaltszahlungen geleistet?
@@ -325,13 +326,11 @@ fields:
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 # Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Beziehen Sie {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf Sozialleistungen gestellt?
+  Beziehen Sie {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt?
 fields:
   - ' ': sozialleistungen
     datatype: yesnoradio
   - Wählen Sie bitte aus: sozialleistungen_art
-    show if: sozialleistungen
-    datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
       - Sozialgeld (SGB II): 2
@@ -344,51 +343,46 @@ fields:
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
-    none of the above: False
+    show if: sozialleistungen
   - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
     datatype: date
     show if: sozialleistungen
-
 ---
-# To-Do: Splitten der Frage in 2
+# TO-DO: Splitten der Frage in 2
 # Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 question: |
-  Bezieht **${ person[i].vorname } ${ person[i].familienname }** Transferleistungen?
+  Bezieht **${ person[i].vorname } ${ person[i].familienname }** {Transferleistungen}?
 fields:
   - ' ': person[i].sleistungen_yesno
     datatype: yesnoradio
   - Wählen Sie bitte aus: person[i].sleistungen
-    show if: person[i].sleistungen_yesno
-    datatype: checkboxes
     choices:
       - Arbeitslosengeld II (SGB II): 1
       - Sozialgeld (SGB II): 2
       - Grundversicherung (SGB XII): 3
       - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
+      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
       - Asylbewerberleistung: 6
       - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
       - Leistungen der Ausbildungsförderung (BAföG): 8
       - Rente: 9
       - Unterhaltsvorschuss: 10
       - Arbeitslosengeld I (SGB III): 11
-    none of the above: False
+    show if: person[i].sleistungen_yesno
   - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
     datatype: date
     show if: person[i].sleistungen_yesno
 ---
-# to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
+# TO-DO: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
   Wer hat diese Leistungen beantragt?
 fields:
   - Beantragender und Antragsdatum: sozialleistungen_name  
 ---
-# To-Do
-# change defaults to hints
+# TO-DO:
 # data types überprüen
 # input validation
-# letze if conditionals
 # terms und hints
 sections:
   - intro: Einführung
@@ -545,6 +539,7 @@ choices:
   - Vermieter(in): 3
   - Bei Heimbewohnern - Sozialhilfeträger: 4
 ---
+# TO-DO: Kontoinhaber dynamic
 question: |
   Name und Anschrift des Kontoinhabers:
 fields:
@@ -561,17 +556,14 @@ fields:
   - Ort: zahlungsempfaenger_ort
     default: Musterstadt
 ---
-# To-Do: Ggf. repharsen und einfacher schreiben?
-# e.g Ist die Wohnung in der Straße XYZ für alle Bewohner der Lebesnmittelpunkt
-# 
-# Lesen Sie bitte im Merkblatt die Erläuterungen, wer als haushaltsangehörige Person anzusehen ist! -> Direkt sagen wer als haushaltsangehörige Person zählt.
+# TO-DO: Könnte auch plural sein? Möglichkeit von Personenliste zu selektieren
 question: |
-  Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle
-  Personen, die den Wohnraum bewohnen den Mittelpunkt der
-  Lebensbeziehungen?
+  Ist der Wohnraum für alle Personen der Mittelpunkt der Lebensbeziehungen?
 subquestion: |
-  Lesen Sie bitte im Merkblatt die Erläuterungen, wer als
-  haushaltsangehörige Person anzusehen ist!
+  - Wenn alle Personen nur einen Wohnsitz haben, ist dies in der Regel Ihr Hauptwohnsitz, also der Mittelpunkt der Lebensbeziehungen
+  - Haben Personen mehrere Wohnsitze, müssen Sie prüffen, ob Sie an all diesen Wohnsitzen einen Mittelpunkt Ihrer Lebensbeziehungen haben. Es obliegt  Ihnen dann zu entscheiden, zu welchem Ihrer Wohnsitze Sie ein größeres Naheverhältnis haben und diesen als Ihren Hauptwohnsitz zu bezeichnen.
+  
+  Mehrere Infos hierzu finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
 yesno: mittelpunkt_lebensbeziehungen
 section: lebensverhaeltnisse
 ---
@@ -584,7 +576,7 @@ fields:
     default: Max Mustermann
 ---
 # Frage 5
-# To-DO: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
+# TO-DO: @Tobias: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -628,26 +620,38 @@ question: |
 subquestion: |
   Bitte laden Sie unten die Angaben des Vermieters zum Wohnraum oder ggf. der Untervermietung hoch. Ein Nachweis über die Höhe der Miete muss enthalten sein.
 fields:
-  - Warmmiete: warmmiete
-    datatype: money
+  - Warmmiete pro Monat: warmmiete
+    datatype: currency
     default: 1234
-    # check minimu maximum
+    min: 1
   - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
     datatype: file
 ---
 # Frage 7
-# To-Do in mehrere Fragen aufsplitten mit Radio ja/nein oder anderen Format und dann in der document logic mit True and True and False etc.
 question: |
-  Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen oder benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?
-yesno: untervermietung_und_mitnutzung
+  Bitte machen Sie weitere Angaben zur Nutzung der Wohnung
+fields:
+  - "Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen?": untervermietung
+    datatype: yesnoradio
+  - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
+    datatype: yesnoradio
+  - note: |
+      Zu den Haushaltsmitgliedern zählen:
+        
+        - der Antragsteller selbst
+        - Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte
+        - Eltern (auch Stief-, Pflege- und Schwiegereltern)
+        - Kinder (auch Pflege- und Adoptivkinder)
+        - sonstige Verwandte
+        - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
 ---
 question: |
-  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte fügen Sie die Anlage "Untervermietung" bei.
+  Sie haben eine der letzten beiden Fragen mit "Ja" beantwortet. Bitte fügen Sie die [Anlage "Untervermietung"](https://www.wohngeld.org/service/nordrhein-westfalen/wohngeld_untervermietung.pdf) bei.
 fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
 ---
-# To-do: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
+# TO-DO: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
@@ -677,17 +681,16 @@ question: |
   Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
 yesno: zuschuesse_antrag
 ---
+# TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
 question: |
   Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
 fields:
   - Anlage: zuschuesse_anlage
     datatype: file
 ---
-auto terms:
-  Transferleistungen: |
-    Transferleistung ist in der Wirtschaftswissenschaft ein Sammelbegriff für               staatliche Leistungen an natürliche Personen und Unternehmen und umgekehrt, ohne       dass eine gleichzeitige ökonomische Gegenleistung durch die begünstigten               Transferempfänger erfolgt.   
-# Erklärtext einfacher formulieren    
----
 terms:
-  Sozialleistungen: |
-    Sozialleistungen behinhalten folgende Leistungen: Arbeitslosengeld II (SGB             II); Sozialgeld (SGB II); Grundversicherung (SGB XII); Hilfe zum                       Lebensunterhalt (SGB XII); Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.);           Asylbewerberleistung; Leistungen der Kinder- und Jugendhilfe (SGB; Leistungen           der Ausbildungsförderung (BAföG); Rente; Unterhaltsvorschuss;                           Arbeitslosengeld I (SGB III)
+  Transferleistungen: |
+    **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
+---
+code: |
+  untervermietung_und_mitnutzung = untervermietung or mitnutzung

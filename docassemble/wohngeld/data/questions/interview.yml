@@ -5,34 +5,29 @@ include:
 # main interview logik für Antragskriterien
 code: |
   if sozialleistungen:
-    if entscheidung == 'Zum Antrag':
+    if entscheidung == 'Ja, ich möchte trotzdem fortfahren.':
       final_document
-  else:
+    else:
+      end_interview
+  elif sozialleistungen == False:
       final_document
 mandatory: True
 ---
 # siehe to-do unten
 # exit Link setzen zu XYZ -> Exit Button Docassemble Documentation
 question: |
-  Anspruch Fraglich
+  Da Sie bereits Transferleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
+subquestion: |
+  **Das ermittelte Ergebnis ist unverbindliche. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
+  
+  Möchten Sie trotzdem mit dem digitalen Wohngeldantrag NRW fortfahren?
 field: entscheidung
 buttons:
-  - Zum Antrag
-  - Exit
+  - Ja, ich möchte trotzdem fortfahren.
+  - Nein, ich möchte das Interview beenden.
 ---
-# to do: sozialleistungen screen
-# wahrscheinlich kein Wohngeld 
-# Wollen sie trotzdem weitermachen ja/nein.
-# ja -> final_document (TBD)
-# Wollen sie weitermachen
-
-# zur Diskussion:
-# wenn ko-kriterien rauskicken, dann direkt final dokument oder nochmal ko abfragen?
-event: kick_out
 question: |
-  Was soll hier passieren?
----
-# Daniel suggestion:
-#Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle Personen, die den Wohnraum bewohnen den Mittelpunkt der Lebensbeziehungen?
-#Lesen Sie bitte im Merkblatt die Erläuterungen, wer als haushaltsangehörige Person anzusehen ist!
-# 2 Fragen oder 1 Frage
+  Vielen Dank für das Nutzen des digitalen Wohngeldantrags NRW.
+subquestion: |
+  ${ static_image('undraw_Hello_re_3evm.svg') }
+event: end_interview
