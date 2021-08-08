@@ -1,10 +1,27 @@
-# To-Do: 
-# - Hinweis bei google chrome mit Kreuzen 
-# - andere Upload Dokumente hinzufügen
-# - cooles success bild
-# - Unterschrift Hinweis und wo hinschicken
+# TO-DO: Hinweis und wo hinschicken
+# To-DO: Manche Variablen wurden nicht am Ende definiert?
 section: zusammenfassung
-question: Hier ist Ihr Dokument
+question: Hier ist Ihr ausgefüllter Wohngeldantrag!
+subquestion: |
+  ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
+  
+  **Hinweis zur fehlerhaften Webansicht mit Google Chrome**:
+  
+  Wenn Sie den ausgefüllten Wohngeldantrag in der PDF Google Chrome Ansicht zum Dowload öffnen, scheint es als wenn nicht alle Boxen korrekt angekreutzt sind:
+  
+  ${ static_image('google_chrome_fehlerhafte_ansicht.png', width='100%') }
+  
+  Nach dem Download, sieht man jedoch das die Boxen in der Tat korrekt angekreutzt wurden:
+  
+  ${ static_image('pdf_korrekte_ansicht.png', width='100%') }
+  <br>
+  <br>
+  ## Ihre finalen Schritte zum Antrag:
+  
+  1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
+  2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
+  3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
+  ${ static_image('versandoptionen.png', width='100%') }
 event: final_document
 attachment:
   - name: Wohngeldantrag
@@ -12,7 +29,12 @@ attachment:
     pdf template file: wohngeldantrag.pdf
     fields:
       - "antragsart": ${ antragsart }
-      - "antragsteller_wohngeldnummer": ${ antragsteller_wohngeldnummer }
+      - "antragsteller_wohngeldnummer": |
+          % if antragsart != "1":
+          ${ antragsteller_wohngeldnummer }
+          % else:
+          ''
+          % endif
       - "antragsteller_familienname": ${ antragsteller_familienname }
       - "antragsteller_vorname": ${ antragsteller_vorname }
       - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }
@@ -196,10 +218,7 @@ attachment:
       - "antragsteller_geburtsort": ${ antragsteller_geburtsort }
       - "antragsteller_familienstand": ${ antragsteller_familienstand }
       - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
-      - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }
-      
-      
-      
+      - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }  
       - "person2_familienname": |
           % if andere_personen_yesno and person[0].continue_field:
           ${ person[0].familienname }
@@ -634,7 +653,6 @@ attachment:
           % if verstorbener and weitere_person:
           ${ weitere_person_name }
           % endif
-
       - "unterhaltszahlungen": |
           % if unterhaltszahlungen:
           2
