@@ -1,4 +1,5 @@
-# To-Do: Hinweis und wo hinschicken
+# TO-DO: Hinweis und wo hinschicken
+# To-DO: Manche Variablen wurden nicht am Ende definiert?
 section: zusammenfassung
 question: Hier ist Ihr ausgefüllter Wohngeldantrag!
 subquestion: |
@@ -217,10 +218,7 @@ attachment:
       - "antragsteller_geburtsort": ${ antragsteller_geburtsort }
       - "antragsteller_familienstand": ${ antragsteller_familienstand }
       - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
-      - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }
-      
-      
-      
+      - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }  
       - "person2_familienname": |
           % if andere_personen_yesno and person[0].continue_field:
           ${ person[0].familienname }
@@ -655,7 +653,6 @@ attachment:
           % if verstorbener and weitere_person:
           ${ weitere_person_name }
           % endif
-
       - "unterhaltszahlungen": |
           % if unterhaltszahlungen:
           2

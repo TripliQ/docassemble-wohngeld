@@ -1,10 +1,8 @@
-# To-Do Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
+# TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
-# To-Do Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
+# TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 
-# To-Do Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
-
-# Beispiel Edit
+# TO-DO Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -44,15 +42,9 @@ code: |
   person[i].sleistungen
   person[i].sleistungen_datum
 ---
-# To-Do suggestions
-# 1. set deaults
-
 # General Logic
 # Wie viele Personen antrag gestellt
 # Note to Felix: Logic Antragssteller vs. Personen mit im Antrag
-
-#Beginn der Fragen
-# line breaks and image example
 question: |
   Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung?
 subquestion: |
@@ -173,7 +165,7 @@ choices:
     default: Ja
   - Nein: 2
 ---
-# T0-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
+# TO-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
   Fallen {Werbungs- oder Kinderbetreuungskosten} an?
@@ -227,7 +219,7 @@ fields:
     # Beispiel bitte löschen
     required: False
 ---
-# To-Do: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
+# TO-DO: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
 question: |
   Haben Sie nach dem Tod der haushaltsangehörigen Person die Wohnung gewechselt?
 yesno: wohnungswechsel
@@ -355,9 +347,8 @@ fields:
   - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
     datatype: date
     show if: sozialleistungen
-
 ---
-# To-Do: Splitten der Frage in 2
+# TO-DO: Splitten der Frage in 2
 # Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 question: |
@@ -383,17 +374,15 @@ fields:
     datatype: date
     show if: person[i].sleistungen_yesno
 ---
-# to-do: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
+# TO-DO: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
   Wer hat diese Leistungen beantragt?
 fields:
   - Beantragender und Antragsdatum: sozialleistungen_name  
 ---
-# To-Do
-# change defaults to hints
+# TO-DO:
 # data types überprüen
 # input validation
-# letze if conditionals
 # terms und hints
 sections:
   - intro: Einführung
@@ -662,7 +651,7 @@ fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
 ---
-# To-do: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
+# TO-DO: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:

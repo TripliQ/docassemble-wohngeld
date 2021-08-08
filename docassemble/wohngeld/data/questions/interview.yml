@@ -31,20 +31,3 @@ question: |
 subquestion: |
   ${ static_image('undraw_Hello_re_3evm.svg') }
 event: end_interview
----
-# to do: sozialleistungen screen
-# wahrscheinlich kein Wohngeld 
-# Wollen sie trotzdem weitermachen ja/nein.
-# ja -> final_document (TBD)
-# Wollen sie weitermachen
-
-# zur Diskussion:
-# wenn ko-kriterien rauskicken, dann direkt final dokument oder nochmal ko abfragen?
-event: kick_out
-question: |
-  Was soll hier passieren?
----
-# Daniel suggestion:
-#Bildet der Wohnraum, für den Wohngeld beantragt wird, für alle Personen, die den Wohnraum bewohnen den Mittelpunkt der Lebensbeziehungen?
-#Lesen Sie bitte im Merkblatt die Erläuterungen, wer als haushaltsangehörige Person anzusehen ist!
-# 2 Fragen oder 1 Frage
