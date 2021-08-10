@@ -25,10 +25,10 @@ code: |
   person[i].bruttoeinkuenfte
   person[i].bruttoeinkuenfte_monatlich_hoehe
   person[i].jzahlungen_hoehe 
-  person[i].wkkosten_yesno
-  person[i].kosten_art
-  person[i].wkosten_jahresbetrag
-  person[i].kkosten_jahresbetrag
+  person[i].wkosten_yesno
+  person[i].wkosten
+  person[i].kkosten_yesno
+  person[i].kkosten
   person[i].continue_field
   person[i].continue_person
   person[i].transferleistungen
@@ -168,27 +168,48 @@ choices:
 # TO-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
 # add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
-  Fallen {Werbungs- oder Kinderbetreuungskosten} an?
+  Machen Sie {Werbungskosten} steuerlich geltend?
 fields:
-  - ' ': person[i].wkkosten_yesno
+  - ' ': antragsteller_wkosten_yesno
     datatype: yesnoradio
     default: Nein
-  - Art der Kosten: person[i].kosten_art
-    choices:
-      - Werbungskosten und Kinderbetreuungskosten
-      - Nur Werbungskosten
-      - Nur Kinderbetreuungskosten
-    show if: person[i].wkkosten_yesno
-  - Höhe der Werbungskosten pro Jahr: person[i].wkosten_jahresbetrag
+  - Jahresbetrag: antragsteller_wkosten
     datatype: currency
     min: 0
-    show if: person[i].wkkosten_yesno
-    required: False
-  - Höhe der Kinderbetreuungskosten pro Jahr: person[i].kkosten_jahresbetrag
+    show if: antragsteller_wkosten_yesno
+---
+question: |
+  Machen Sie {Kinderbetreuungskosten} steuerlich geltend?
+fields:
+  - ' ': antragsteller_kkosten_yesno
+    datatype: yesnoradio
+    default: Nein
+  - Jahresbetrag: antragsteller_kkosten
     datatype: currency
     min: 0
-    show if: person[i].wkkosten_yesno
-    required: False
+    show if: antragsteller_kkosten_yesno
+---
+question: |
+  Macht **${ person[i].vorname } ${ person[i].familienname }** {Werbungskosten} steuerlich geltend?
+fields:
+  - ' ': person[i].wkosten_yesno
+    datatype: yesnoradio
+    default: Nein
+  - Jahresbetrag: person[i].wkosten
+    datatype: currency
+    min: 0
+    show if: person[i].wkosten_yesno
+---
+question: |
+  Macht **${ person[i].vorname } ${ person[i].familienname }** {Kinderbetreuungskosten} steuerlich geltend?
+fields:
+  - ' ': person[i].kkosten_yesno
+    datatype: yesnoradio
+    default: Nein
+  - Jahresbetrag: person[i].kkosten
+    datatype: currency
+    min: 0
+    show if: person[i].kkosten_yesno
 ---
 continue button field: person[i].continue_field
 question: |
@@ -691,6 +712,10 @@ fields:
 terms:
   Transferleistungen: |
     **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
+  Werbungskosten: |
+    **Werbungskosten** sind Kosten, die in Zusammenhang mit der beruflichen Tätigkeit entstehen. Beispiele sind Kosten für Fahrten zur Arbeitsstelle, für Berufsbekleidung, für Reisekosten bei einer Dienstreise oder etwa für eine aus beruflichen Gründen notwendige Zweitwohnung.
+  Kinderbetreuungskosten: |
+    **Kinderbetreuungskosten** sind Kosten, die in Zusammenhang mit der Betreuung von Kindern entstehen. Beispiele sind Kosten für die Tagesmutter, für den Platz in einer Kindertagesstätte oder einem Kindergarten, für einen Babysitter oder für einen Nanny.
 ---
 code: |
   untervermietung_und_mitnutzung = untervermietung or mitnutzung
