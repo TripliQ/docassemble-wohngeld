@@ -165,8 +165,6 @@ choices:
     default: Ja
   - Nein: 2
 ---
-# TO-DO: Split question with Betreungskosten komplexe logik in mehrere Fragen @Daniel
-# add terms for hard to get things: https://docassemble.org/docs/modifiers.html#terms
 question: |
   Machen Sie {Werbungskosten} steuerlich geltend?
 fields:
