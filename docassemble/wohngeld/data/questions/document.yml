@@ -183,32 +183,21 @@ attachment:
           Zu ${ antragsteller_familienname } ${ antragsteller_vorname }: ${ einnahmen1_grund }
           % endif
       - "antragsteller_wkosten_jahresbetrag": |
-          % if person[2].wkkosten_yesno and person[2].kosten_art == 'Nur Werbungskosten':
-          ${ person[2].wkosten_jahresbetrag }
-          % elif person[2].wkkosten_yesno and person[2].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[2].wkosten_jahresbetrag }
-          % else:
-          % endif 
-      - "antragsteller_kkosten_jahresbetrag": |
-          % if person[2].wkkosten_yesno and person[2].kosten_art == 'Nur Kinderbetreuungskosten':
-          ${ person[2].kkosten_jahresbetrag }
-          % elif person[2].wkkosten_yesno and person[2].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[2].kkosten_jahresbetrag }
-          % else:
+          % if antragsteller_wkosten_yesno:
+          ${ antragsteller_wkosten }
           % endif
       - "antragsteller_wkosten": |   
-          % if person[2].wkkosten_yesno and person[2].kosten_art == 'Nur Werbungskosten':
+          % if antragsteller_wkosten_yesno:
           Werbungsk.
-          % elif person[2].wkkosten_yesno and person[2].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Werbungsk.
+          % endif          
+      - "antragsteller_kkosten_jahresbetrag": |
+          % if antragsteller_kkosten_yesno:
+          ${ antragsteller_kkosten }
           % else:
-          % endif 
+          % endif
       - "antragsteller_kkosten": |
-          % if person[2].wkkosten_yesno and person[2].kosten_art == 'Nur Kinderbetreuungskosten':
+          % if antragsteller_kkosten_yesno:
           Kinderbetr.
-          % elif person[2].wkkosten_yesno and person[2].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Kinderbetr.
-          % else:
           % endif
       - "antragsteller_bruttoeinkuenfte_steuern": ${ person[2].bruttoeinkuenfte_steuern }
       - "antragsteller_kpversicherung": ${ person[2].kpversicherung }
@@ -327,32 +316,20 @@ attachment:
           % else:
           % endif
       - "person2_wkosten_jahresbetrag": |        
-          % if andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Nur Werbungskosten':
-          ${ person[0].wkosten_jahresbetrag }
-          % elif andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[0].wkosten_jahresbetrag }
-          % else:
-          % endif
-      - "person2_kkosten_jahresbetrag": |
-          % if andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Nur Kinderbetreuungskosten':
-          ${ person[0].kkosten_jahresbetrag }
-          % elif andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[0].kkosten_jahresbetrag }
-          % else:
+          % if andere_personen_yesno and person[0].wkosten_yesno:
+          ${ person[0].wkosten }
           % endif
       - "person2_wkosten": |   
-          % if andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Nur Werbungskosten':
+          % if andere_personen_yesno and person[0].wkosten_yesno:
           Werbungsk.
-          % elif andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Werbungsk.
-          % else:
-          % endif 
+          % endif
+      - "person2_kkosten_jahresbetrag": |
+          % if andere_personen_yesno and person[0].kkosten_yesno:
+          ${ person[0].kkosten }
+          % endif
       - "person2_kkosten": |          
-          % if andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Nur Kinderbetreuungskosten':
+          % if andere_personen_yesno and person[0].kkosten_yesno:
           Kinderbetr.
-          % elif andere_personen_yesno and person[0].wkkosten_yesno and person[0].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Kinderbetr.
-          % else:
           % endif       
       - "person2_bruttoeinkuenfte_steuern": |
           % if andere_personen_yesno and person[0].sleistungen_yesno == False:
@@ -472,32 +449,20 @@ attachment:
           Zu ${ person[1].familienname } ${ person[1].vorname }: ${ person[1].einnahmen_grund }
           % endif
       - "person3_wkosten_jahresbetrag": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Nur Werbungskosten':
-          ${ person[1].wkosten_jahresbetrag }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[1].wkosten_jahresbetrag }
-          % else:
+          % if andere_personen_yesno and andere_personen == '2' and person[1].wkosten_yesno:
+          ${ person[1].wkosten }
           % endif 
-      - "person3_kkosten_jahresbetrag": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Nur Kinderbetreuungskosten':
-          ${ person[1].kkosten_jahresbetrag }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          ${ person[1].kkosten_jahresbetrag }
-          % else:
-          % endif
       - "person3_wkosten": |         
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Nur Werbungskosten':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].wkosten_yesno:
           Werbungsk.
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Werbungsk.
-          % else:
+          % endif
+      - "person3_kkosten_jahresbetrag": |
+          % if andere_personen_yesno and andere_personen == '2' and person[1].kkosten_yesno:
+          ${ person[1].kkosten }
           % endif
       - "person3_kkosten": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Nur Kinderbetreuungskosten':
+          % if andere_personen_yesno and andere_personen == '2' and person[1].kkosten_yesno:
           Kinderbetr.
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].wkkosten_yesno and person[1].kosten_art == 'Werbungskosten und Kinderbetreuungskosten':
-          Kinderbetr.
-          % else:
           % endif
       - "person3_bruttoeinkuenfte_steuern": |
           % if andere_personen_yesno == True and andere_personen == '2' and person[1].sleistungen_yesno == False:

@@ -18,7 +18,7 @@ mandatory: True
 question: |
   Da Sie bereits Transferleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
-  **Das ermittelte Ergebnis ist unverbindliche. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
+  **Das ermittelte Ergebnis ist unverbindlich. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
   
   Möchten Sie trotzdem mit dem digitalen Wohngeldantrag NRW fortfahren?
 field: entscheidung
