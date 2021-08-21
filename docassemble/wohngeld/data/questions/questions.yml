@@ -14,41 +14,6 @@ objects:
   - zahlungsempfaenger: Individual
   - vermieter: Individual
 ---
-code: |
-  person[i].familienname
-  person[i].geburtsname
-  person[i].vorname
-  person[i].geschlecht
-  person[i].geburtsdatum
-  person[i].geburtsort
-  person[i].familienstand
-  person[i].ausgeuebte_taetigkeit
-  person[i].staatsangehoerigkeit
-  person[i].vpverhaeltnis_yesno
-  person[i].vpverhaeltnis
-  person[i].bruttoeinkuenfte_steuern
-  person[i].kpversicherung
-  person[i].rlversicherung
-  person[i].bruttoeinkuenfte
-  person[i].bruttoeinkuenfte_monatlich_hoehe
-  person[i].jzahlungen_hoehe 
-  person[i].wkosten_yesno
-  person[i].wkosten
-  person[i].kkosten_yesno
-  person[i].kkosten
-  person[i].continue_field
-  person[i].continue_person
-  person[i].transferleistungen
-  person[i].einnahmen_yesno
-  person[i].einnahmen_datum
-  person[i].einnahmen_grund
-  person[i].kindergeld_yesno
-  person[i].kindergeld_vorname
-  person[i].kindergeld_nachname
-  person[i].sleistungen_yesno
-  person[i].sleistungen
-  person[i].sleistungen_datum
----
 # General Logic
 # Wie viele Personen antrag gestellt
 # Note to Felix: Logic Antragssteller vs. Personen mit im Antrag
@@ -146,31 +111,6 @@ fields:
     required: False
     datatype: currency
     min: 0
----
-# TO-DO: Cool wäre wenn hier ein Bild mit Steuerbescheid einfügen könnten wo man das sehen würde.
-question: |
-  Werden von den Einkünften Steuern gezahlt?
-field: person[i].bruttoeinkuenfte_steuern
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
----
-question: |
-  Werden Beiträge zur Kranken- und Pflegeversicherung gezahlt?
-field: person[i].kpversicherung
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
----
-question: |
-  Werden Beiträge zur Renten- und Lebensversicherung gezahlt?
-field: person[i].rlversicherung
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
 ---
 question: |
   Machen Sie {Werbungskosten} steuerlich geltend?
@@ -459,7 +399,6 @@ fields:
     choices:
       - Männlich: 1
       - Weiblich: 2
-      - Divers: 3
     default: Weiblich
   - Geburtsdatum: antragssteller[i].geburtsdatum
     datatype: date
@@ -476,7 +415,7 @@ fields:
       - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
       - eingetragene Lebenspartnerschaft aufgehoben
     default: verheiratet
-  - Ausgeübte Tätigkeit: antragssteller[i].ausgeuebte_taetigkeit
+  - Ausgeübte Tätigkeit: antragssteller[i].beruf
     default: Rechtsanwaltin
   - Staatsangehörigkeit: antragssteller[i].staatsangehoerigkeit
     default: deutsch
@@ -508,21 +447,40 @@ fields:
     show if:
       code: |
         len(antragssteller) <= 1
-  - Kind: antragssteller[i].kind
-    datatype: yesnoradio
-    default: False
+  - Verwandschaftsverhältnis zum Antragssteller*in: antragssteller[i].verwandschaftsverhaeltnis
+    datatype: dropdown
+    choices:
+      - Großvater
+      - Großmutter
+      - Onkel
+      - Vater
+      - Mutter
+      - Tante
+      - Cousin
+      - Cousine
+      - Bruder
+      - Schwester
+      - Ehemann
+      - Ehefrau
+      - Neffe
+      - Nichte
+      - Kind
+      - Enkelkind
     show if:
       code: |
-        len(antragssteller) > 1
+        len(antragssteller) > 1    
   - Kindergeldberechtigt: antragssteller[i].kindergeld_berechtigt
     default: yes
     required: False
     datatype: yesnoradio
-    show if: antragssteller[i].kind
+    show if: 
+      variable: antragssteller[i].verwandschaftsverhaeltnis
+      is: Kind
   - Schwerbehindert: antragssteller[i].beeintraechtigungen
     datatype: yesnoradio
     default: False
   - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
+    required: False
     show if: antragssteller[i].beeintraechtigungen
   - häuslich pflegebedürftig: antragssteller[i].pflegebeduerftig
     datatype: yesnoradio
@@ -530,6 +488,54 @@ fields:
   - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
     datatype: yesnoradio
     default: False
+---
+question: |
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+fields:
+  - Von Einkünften Steuern gezahlt: antragssteller[i].bruttoeinkuenfte_steuern
+    datatype: yesnoradio
+    default: True
+  - Beiträge zur Kranken- oder Pflegeversicherung gezahlt: antragssteller[i].kpversicherung
+    datatype: yesnoradio
+    default: True
+  - Beiträge zur Renten- oder Lebensversicherung gezahlt: antragssteller[i].rlversicherung
+    datatype: yesnoradio
+    default: False
+  - Werden {Werbungskosten} steuerlich geltend gemacht: antragssteller[i].wkosten_yesno
+    datatype: yesnoradio
+    default: False
+  - Jahresbetrag der {Werbungskosten}: antragssteller[i].wkosten
+    datatype: currency
+    min: 0
+    show if: antragssteller[i].wkosten_yesno   
+  - Werden {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].kkosten_yesno
+    datatype: yesnoradio
+    default: False
+  - Jahresbetrag der {Kinderbetreuungskosten}: antragssteller[i].kkosten
+    datatype: currency
+    min: 0
+    show if: antragssteller[i].kkosten_yesno  
+  - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
+    datatype: yesnoradio
+    default: False
+  - Ab wann: antragssteller[i].einnahmen_datum
+    datatype: date
+    show if: antragssteller[i].einnahmen_yesno  
+  - Grund: antragssteller[i].einnahmen_grund
+    show if: antragssteller[i].einnahmen_yesno  
+---
+question: |
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+fields:
+  - Art: antragssteller[i].einkuenfte[j].name.text
+  - Interval: antragssteller[i].einkuenfte[j].interval
+    datatype: radio
+    choices:
+      - monatlich
+      - jährliche Einmalzahlung
+  - Höhe: antragssteller[i].einkuenfte[j].hoehe
+    datatype: currency
+list collect: True
 ---
 question: |
   Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?

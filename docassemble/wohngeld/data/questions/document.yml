@@ -6,50 +6,106 @@ attachment:
     variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
     fields:
-      - "antragsart": ${ antragsart }
-      - "antragsteller_wohngeldnummer": |
-          % if antragsart != "1":
-          ${ antragsteller_wohngeldnummer }
+      - "antragssteller_nachname_geburtsname": ${ comma_list(antragssteller[0].name.last, antragssteller[0].geburtsname)}
+      - "antragssteller_vorname": ${ antragssteller[0].name.first }
+      - "antragssteller_geschlecht": ${ antragssteller[0].geschlecht }
+      - "antragssteller_geburtsdatum": ${ antragssteller[0].geburtsdatum }
+      - "antragssteller_geburtsort": ${ antragssteller[0].geburtsort }
+      - "antragssteller_familienstand": ${ antragssteller[0].familienstand }
+      - "antragssteller_beruf": ${ antragssteller[0].beruf }
+      - "antragssteller_staatsangehoerigkeit": ${ antragssteller[0].staatsangehoerigkeit }
+      - "antragssteller_bruttoeinkuenfte_steuern_ja" : |
+          ${ yesno(antragssteller[0].bruttoeinkuenfte_steuern) }
+      - "antragssteller_bruttoeinkuenfte_steuern_nein" : |
+          ${ yesno(antragssteller[0].bruttoeinkuenfte_steuern, invert=True) }
+      - "antragssteller_kpversicherung_ja": |
+          ${ yesno(antragssteller[0].kpversicherung) }
+      - "antragssteller_kpversicherung_nein" : |
+          ${ yesno(antragssteller[0].kpversicherung, invert=True) }
+      - "antragssteller_rlversicherung_ja" : |
+          ${ yesno(antragssteller[0].rlversicherung) }
+      - "antragssteller_rlversicherung_nein" : |
+          ${ yesno(antragssteller[0].rlversicherung, invert=True) }
+          
+          
+          
+          
+          
+      - "person_1_nachname_geburtsname": |
+          % if len(antragssteller) > 1:
+          ${ comma_list(antragssteller[1].name.last, antragssteller[1].geburtsname)}
           % endif
-      - "antragsteller_familienname": ${ antragssteller[0].name.last }
-      - "antragsteller_vorname": ${ antragssteller[0].name.first }
-      - "antragsteller_geburtsdatum": |
-          ${ format_date(antragssteller[0].geburtsdatum, format='dd.MM.yyyy') }
-      - "antragsteller_telefon": ${ antragssteller[0].telefon }
-      - "antragsteller_email": ${ antragssteller[0].email }
-      - "antragsteller_persoenliche_verhaeltnisse": |
-          ${ antragssteller[0].persoenliche_verhaeltnisse }
-      - "wohnungsadresse": ${ wohnung_addresse.on_one_line() }
-      - "antragsteller_kreditinstitut_name": |
-          ${ antragsteller_kreditinstitut_name }
-      - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
-      - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
-      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
-      - "zahlungsempfaenger": |
-          % if antragsteller_kontoinhaber == "1":
-            TO-DO-Antragssteller
-          % elif antragsteller_kontoinhaber == "2":
-            TO-DO-Familienmitglied  + Adressse
-          % else:
-            ${ zahlungsempfaenger.address_block()  }
+      - "person_1_vorname": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].name.first }
           % endif
-      - "person_nicht_lebensmittelpunkt": ${ person_nicht_lebensmittelpunkt }
-      - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
-      - "vermieter": |
-          % if antragsteller_wohnverhaeltnisse != "3":
-          ${ vermieter }
-          % endif   
-      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
-      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
-      - "gewerblich_nutzung_ja": ${ yesno(gewerbliche_nutzung) }
-      - "gewerblich_nutzung_nein": ${ yesno(gewerbliche_nutzung, invert=True) }
-      - "gewerbliche_nutzung_qm": ${ showif('gewerbliche_nutzung_qm', gewerbliche_nutzung) }
-      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
-      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
-      - "zuschuesse_ja": ${ yesno(zuschuesse) }
-      - "zuschuesse_nein": ${ yesno(zuschuesse, invert=True) } 
-      - "zuschuesse_antrag_ja": ${ yesno(zuschuesse) }
-      - "zuschuesse_antrag_nein": ${ yesno(zuschuesse, invert=True) } 
+      - "person_1_geschlecht": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geschlecht }
+          % endif
+      - "person_1_geburtsdatum": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geburtsdatum }
+          % endif
+      - "person_1_geburtsort": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geburtsort }
+          % endif
+      - "person_1_familienstand": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].familienstand }
+          % endif
+      - "person_1_verwandschaftsverhaeltnis": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].verwandschaftsverhaeltnis }
+          % endif
+      - "person_1_beruf": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].beruf }
+          % endif
+      - "person_1_staatsangehoerigkeit": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].staatsangehoerigkeit }
+          % endif
+
+
+      - "person_2_nachname_geburtsname": |
+          % if len(antragssteller) > 2:
+          ${ comma_list(antragssteller[2].name.last, antragssteller[2].geburtsname)}
+          % endif
+      - "person_2_vorname": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].name.first }
+          % endif          
+      - "person_2_geschlecht": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geschlecht }
+          % endif
+      - "person_2_geburtsdatum": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geburtsdatum }
+          % endif
+      - "person_2_geburtsort": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geburtsort }
+          % endif
+      - "person_2_familienstand": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].familienstand }
+          % endif
+      - "person_2_verwandschaftsverhaeltnis": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].verwandschaftsverhaeltnis }
+          % endif
+      - "person_2_beruf": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].beruf }
+          % endif
+      - "person_2_staatsangehoerigkeit": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].staatsangehoerigkeit }
+          % endif          
+          
 ---
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
