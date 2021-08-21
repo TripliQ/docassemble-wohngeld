@@ -25,9 +25,7 @@ attachment:
       - "antragssteller_rlversicherung_ja" : |
           ${ yesno(antragssteller[0].rlversicherung) }
       - "antragssteller_rlversicherung_nein" : |
-          ${ yesno(antragssteller[0].rlversicherung, invert=True) }
-          
-          
+          ${ yesno(antragssteller[0].rlversicherung, invert=True) }              
           
           
           
@@ -68,6 +66,31 @@ attachment:
           ${ antragssteller[1].staatsangehoerigkeit }
           % endif
 
+      - "person_1_bruttoeinkuenfte_steuern_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].bruttoeinkuenfte_steuern) }
+          % endif
+      - "person_1_bruttoeinkuenfte_steuern_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].bruttoeinkuenfte_steuern, invert=True) }
+          % endif
+      - "persion_1_kpversicherung_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].kpversicherung) }
+          % endif
+      - "persion_1_kpversicherung_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].kpversicherung, invert=True) }
+          % endif
+      - "person_1_rlversicherung_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].rlversicherung) }
+          % endif
+      - "person_1_rlversicherung_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].rlversicherung, invert=True) }
+          % endif
+
 
       - "person_2_nachname_geburtsname": |
           % if len(antragssteller) > 2:
@@ -106,6 +129,32 @@ attachment:
           ${ antragssteller[2].staatsangehoerigkeit }
           % endif          
           
+      - "person_2_bruttoeinkuenfte_steuern_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].bruttoeinkuenfte_steuern) }
+          % endif
+      - "person_2_bruttoeinkuenfte_steuern_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].bruttoeinkuenfte_steuern, invert=True) }
+          % endif
+      - "persion_2_kpversicherung_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].kpversicherung) }
+          % endif
+      - "persion_2_kpversicherung_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].kpversicherung, invert=True) }
+          % endif
+      - "person_2_rlversicherung_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].rlversicherung) }
+          % endif
+      - "person_2_rlversicherung_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].rlversicherung, invert=True) }
+          % endif       
+          
+       
 ---
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
