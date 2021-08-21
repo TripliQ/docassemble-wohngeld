@@ -1,0 +1,165 @@
+---
+objects:
+  - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
+  - antragssteller[i].einkuenfte: |
+      DAList.using(
+        object_type=Thing)
+---
+question: |
+  Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
+subquestion: |
+  Angegebene Haushaltsmitglieder:
+  
+  % for person in antragssteller:
+  * ${ person }
+  % endfor  
+yesno: antragssteller.there_is_another
+---
+question: |
+  % if len(antragssteller) <= 1:
+  Geben Sie bitte die folgenden persönlichen Daten zum Antragssteller an:
+  % else:
+  Geben Sie bitte die folgenden persönlichen Daten für das ${ ordinal(i) }  Haushaltsmitglied in Ihrer Wohnung an:  
+  % endif
+subquestion: |
+  <br>
+  ${ static_image('undraw_Receipt_re_fre3_1.svg') }
+fields:
+  - Nachname: antragssteller[i].name.last
+    default: Musterfrau
+  - Geburtsname: antragssteller[i].geburtsname
+    default: Gabler
+  - Vorname: antragssteller[i].name.first
+    default: Erika
+  - Geschlecht: antragssteller[i].geschlecht
+    choices:
+      - Männlich: 1
+      - Weiblich: 2
+      - Divers: 3
+    default: Weiblich
+  - Geburtsdatum: antragssteller[i].geburtsdatum
+    datatype: date
+    default: 12.08.1964
+  - Geburtsort: antragssteller[i].geburtsort
+    default: Berlin
+  - Familienstand: antragssteller[i].familienstand
+    choices:
+      - ledig
+      - verheiratet
+      - verwitwet
+      - geschieden
+      - eingetragene Lebenspartnerschaft
+      - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
+      - eingetragene Lebenspartnerschaft aufgehoben
+    default: verheiratet
+  - Ausgeübte Tätigkeit: antragssteller[i].ausgeuebte_taetigkeit
+    default: Rechtsanwaltin
+  - Staatsangehörigkeit: antragssteller[i].staatsangehoerigkeit
+    default: deutsch
+  - Kind: antragssteller[i].kind
+    datatype: yesnoradio
+    default: False
+    show if:
+      code: |
+        len(antragssteller) > 1
+  - Kindergeldberechtigt: antragssteller[i].kindergeld_berechtigt
+    default: yes
+    required: False
+    datatype: yesnoradio
+    show if: antragssteller[i].kind
+  - Schwerbehindert: antragssteller[i].beeintraechtigungen
+    datatype: yesnoradio
+    default: False
+  - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
+    show if: antragssteller[i].beeintraechtigungen
+  - häuslich pflegebedürftig: antragssteller[i].pflegebeduerftig
+    datatype: yesnoradio
+    default: False
+  - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
+    datatype: yesnoradio
+    default: False
+---
+
+---
+question: |
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+fields:
+  - Von Einkünften Steuern gezahlt: antragssteller[i].bruttoeinkuenfte_steuern
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2  
+  - Beiträge zur Kranken- oder Pflegeversicherung gezahlt: antragssteller[i].kpversicherung
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2 
+  - Beiträge zur Renten- oder Lebensversicherung gezahlt: antragssteller[i].rlversicherung
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2 
+  - Werden {Werbungskosten} steuerlich geltend gemacht: antragssteller[i].wkosten_yesno
+    datatype: yesnoradio
+    default: False
+  - Jahresbetrag der {Werbungskosten}: antragssteller[i].wkosten
+    datatype: currency
+    min: 0
+    show if: antragssteller[i].wkosten_yesno   
+  - Werden {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].kkosten_yesno
+    datatype: yesnoradio
+    default: False
+  - Jahresbetrag der {Kinderbetreuungskosten}: antragssteller[i].kkosten
+    datatype: currency
+    min: 0
+    show if: antragssteller[i].kkosten_yesno  
+  - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
+    datatype: yesnoradio
+    default: False
+  - Ab wann: antragssteller[i].einnahmen_datum
+    datatype: date
+    show if: antragssteller[i].einnahmen_yesno  
+  - Grund: antragssteller[i].einnahmen_grund
+    show if: antragssteller[i].einnahmen_yesno  
+---
+question: |
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+fields:
+  - Art: antragssteller[i].einkuenfte[j].name.text
+  - Interval: antragssteller[i].einkuenfte[j].interval
+    datatype: radio
+    choices:
+      - monatlich
+      - jährliche Einmalzahlung
+  - Höhe: antragssteller[i].einkuenfte[j].hoehe
+    datatype: currency
+list collect: True
+---
+question: |
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im Haushalt?
+fields:
+  - Erwachsene Personen: erwachsene_nicht_mittelpunkt
+    datatype: object_checkboxes
+    choices:
+      - antragssteller
+---
+mandatory: True
+question:  |
+  ${ antragssteller }
+  ${ erwachsene_nicht_mittelpunkt }
+  ${ antragssteller[0].bruttoeinkuenfte_steuern }
+  ${ antragssteller[0].einkuenfte[0] }
+  
+---
+terms:
+  Transferleistungen: |
+    **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
+  Werbungskosten: |
+    **Werbungskosten** sind Kosten, die in Zusammenhang mit der beruflichen Tätigkeit entstehen. Beispiele sind Kosten für Fahrten zur Arbeitsstelle, für Berufsbekleidung, für Reisekosten bei einer Dienstreise oder etwa für eine aus beruflichen Gründen notwendige Zweitwohnung.
+  Kinderbetreuungskosten: |
+    **Kinderbetreuungskosten** sind Kosten, die in Zusammenhang mit der Betreuung von Kindern entstehen. Beispiele sind Kosten für die Tagesmutter, für den Platz in einer Kindertagesstätte oder einem Kindergarten, für einen Babysitter oder für einen Nanny.
+  
+  
