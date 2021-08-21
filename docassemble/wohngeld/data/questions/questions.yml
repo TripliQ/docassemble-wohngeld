@@ -6,6 +6,13 @@
 objects:
   - person: DAList.using(
               object_type=Individual)
+  - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
+  - antragssteller[i].einkuenfte: |
+      DAList.using(
+        object_type=Thing)
+  - wohnung_addresse: Address
+  - zahlungsempfaenger: Individual
+  - vermieter: Individual
 ---
 code: |
   person[i].familienname
@@ -347,27 +354,8 @@ fields:
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 # Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Beziehen Sie {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt?
-fields:
-  - ' ': sozialleistungen
-    datatype: yesnoradio
-  - Wählen Sie bitte aus: sozialleistungen_art
-    choices:
-      - Arbeitslosengeld II (SGB II): 1
-      - Sozialgeld (SGB II): 2
-      - Grundversicherung (SGB XII): 3
-      - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
-      - Asylbewerberleistung: 6
-      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
-      - Leistungen der Ausbildungsförderung (BAföG): 8
-      - Rente: 9
-      - Unterhaltsvorschuss: 10
-      - Arbeitslosengeld I (SGB III): 11
-    show if: sozialleistungen
-  - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
-    datatype: date
-    show if: sozialleistungen
+  Beziehen Sie oder eine der zum hauslatangehörigen Personen {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+yesno: sozialleistungen
 ---
 # TO-DO: Splitten der Frage in 2
 # Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
@@ -438,6 +426,7 @@ choices:
   - Erstantrag: 1
   - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
   - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
+default: 1
 section: allgemein
 ---
 question: |
@@ -451,29 +440,33 @@ fields:
     required: False
 ---
 question: |
-  Geben Sie bitte Ihre persönlichen Daten an:
+  % if len(antragssteller) <= 1:
+  Geben Sie bitte die folgenden persönlichen Daten des **Antragsstellers** an:
+  % else:
+  Geben Sie bitte die folgenden persönlichen Daten für das **${ ordinal(i) }  Haushaltsmitglied** in Ihrer Wohnung an:  
+  % endif
 subquestion: |
   <br>
   ${ static_image('undraw_Receipt_re_fre3_1.svg') }
 fields:
-  - Vorname: antragsteller_vorname
-    default: Max
-  - Nachname: antragsteller_familienname
-    default: Mustermann
-  - Geburtsname: antragsteller_geburtsname
-    default: Mustermann
-  - Geschlecht: antragsteller_geschlecht
+  - Vorname: antragssteller[i].name.first
+    default: Erika
+  - Nachname: antragssteller[i].name.last
+    default: Musterfrau
+  - Geburtsname: antragssteller[i].geburtsname
+    default: Gabler
+  - Geschlecht: antragssteller[i].geschlecht
     choices:
       - Männlich: 1
       - Weiblich: 2
       - Divers: 3
-    default: Männlich
-  - Geburtsdatum: antragsteller_geburtsdatum
+    default: Weiblich
+  - Geburtsdatum: antragssteller[i].geburtsdatum
     datatype: date
-    default: 01.01.2000
-  - Geburtsort: antragsteller_geburtsort
-    default: Musterhausen
-  - Familienstand: antragsteller_familienstand
+    default: 12.08.1964
+  - Geburtsort: antragssteller[i].geburtsort
+    default: Berlin
+  - Familienstand: antragssteller[i].familienstand
     choices:
       - ledig
       - verheiratet
@@ -482,18 +475,24 @@ fields:
       - eingetragene Lebenspartnerschaft
       - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
       - eingetragene Lebenspartnerschaft aufgehoben
-    default: ledig
-  - Ausgeübte Tätigkeit: antragsteller_ausgeuebte_taetigkeit
-    default: Student
-  - Staatsangehörigkeit: antragsteller_staatsangehoerigkeit
+    default: verheiratet
+  - Ausgeübte Tätigkeit: antragssteller[i].ausgeuebte_taetigkeit
+    default: Rechtsanwaltin
+  - Staatsangehörigkeit: antragssteller[i].staatsangehoerigkeit
     default: deutsch
-  - Telefonnummer: antragsteller_telefon
+  - Telefonnummer: antragssteller[i].telefon
     datatype: text
     default: 0123456789
-  - Email-Adresse: antragsteller_email
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Email-Adresse: antragssteller[i].email
     datatype: email
     default: max@mustermann.de
-  - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
     choices:
       - Arbeiter(in): 1
       - Selbständige(r): 7
@@ -505,29 +504,57 @@ fields:
       - Student(in): 5
       - Beamter(in): 6
       - Pensionär(in): 10
+    default: 1
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Kind: antragssteller[i].kind
+    datatype: yesnoradio
+    default: False
+    show if:
+      code: |
+        len(antragssteller) > 1
+  - Kindergeldberechtigt: antragssteller[i].kindergeld_berechtigt
+    default: yes
+    required: False
+    datatype: yesnoradio
+    show if: antragssteller[i].kind
+  - Schwerbehindert: antragssteller[i].beeintraechtigungen
+    datatype: yesnoradio
+    default: False
+  - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
+    show if: antragssteller[i].beeintraechtigungen
+  - häuslich pflegebedürftig: antragssteller[i].pflegebeduerftig
+    datatype: yesnoradio
+    default: False
+  - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
+    datatype: yesnoradio
+    default: False
 ---
-# Frage 2
+question: |
+  Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
+subquestion: |
+  Angegebene Haushaltsmitglieder:
+  
+  % for person in antragssteller:
+  * ${ person }
+  % endfor  
+yesno: antragssteller.there_is_another
+---
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
-  - Straße: wohnung_strasse
-    datatype: text
-    default: Musterstraße
-  - Hausnummer: wohnung_hausnummer
-    datatype: text
-    default: 1
-  - PLZ: wohnung_postleitzahl
-    datatype: text
+  - Adresse: wohnung_addresse.address
+    default: Musterstraße 12
+  - PLZ: wohnung_addresse.postal_code
     default: 12345
-  - Ort: wohnung_ort
-    datatype: text
+  - Ort: wohnung_addresse.city
     default: Musterstadt
-  - Etage: wohnung_etage
-    datatype: text
-    default: 1
-  - Wohnungsnummer: wohnung_wohnungsnummer
-    datatype: text
-    default: 1
+  - Etage: wohnung_addresse.floor
+    default: 3
+    required: False
+  - Wohnungsnummer: wohnung_addresse.unit
+    default: 2
     required: False
 ---
 # Frage 3
@@ -537,6 +564,12 @@ subquestion: |
   <br>
   ${ static_image('undraw_Credit_card_re_blml.svg') }
 fields:
+  - Kontoinhaber: antragsteller_kontoinhaber
+    choices:
+      - Antragsstellende Person: 1
+      - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
+      - Vermieter(in): 3
+      - Bei Heimbewohnern - Sozialhilfeträger: 4
   - Name des Kreditinstituts: antragsteller_kreditinstitut_name
     datatype: text
     default: Volksbank Musterstadt
@@ -549,33 +582,38 @@ fields:
 section: zahlungsdaten
 ---
 question: |
-  Sind Sie Kontoinhaber?
-yesno: gleicher_kontoinhaber
----
-question: |
-  Wer ist Kontoinhaber?
-field: antragsteller_kontoinhaber
-choices:
-  - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
-  - Vermieter(in): 3
-  - Bei Heimbewohnern - Sozialhilfeträger: 4
----
-# TO-DO: Kontoinhaber dynamic
-question: |
   Name und Anschrift des Kontoinhabers:
 fields:
-  - Vorname: zahlungsempfaenger_vorname
+  - Vorname: zahlungsempfaenger.name.first
     default: Max
-  - Nachname: zahlungsempfaenger_familienname
+  - Nachname: zahlungsempfaenger.name.last
     default: Mustermann
-  - Straße: zahlungsempfaenger_strasse
-    default: Musterstraße
-  - Hausnummer: zahlungsempfaenger_hausnummer
-    default: 1
-  - Postleihzahl: zahlungsempfaenger_postleihzahl
+  - Adressse: zahlungsempfaenger.address.address
+    default: Musterstraße 12
+  - Postleihzahl: zahlungsempfaenger.address.postal_code
     default: 12345
-  - Ort: zahlungsempfaenger_ort
+  - Ort: zahlungsempfaenger.address.city
     default: Musterstadt
+---
+question: |
+  Auswahl des Kontoinhabers
+fields:
+  - Erwachsene Personen: person_nicht_lebensmittelpunkt
+    datatype: object_checkboxes
+    choices:
+      - antragssteller
+---
+question: |
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im Haushalt?
+fields:
+  - Erwachsene Personen: erwachsene_nicht_mittelpunkt
+    datatype: object_checkboxes
+    choices:
+      - antragssteller
+---
+question: |
+  Sind Sie Kontoinhaber?
+yesno: gleicher_kontoinhaber
 ---
 # TO-DO: Könnte auch plural sein? Möglichkeit von Personenliste zu selektieren
 question: |
@@ -588,16 +626,6 @@ subquestion: |
 yesno: mittelpunkt_lebensbeziehungen
 section: lebensverhaeltnisse
 ---
-question: |
-  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im
-  Haushalt?
-fields:
-  - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
-    datatype: text
-    default: Max Mustermann
----
-# Frage 5
-# TO-DO: @Tobias: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -613,25 +641,22 @@ section: mietdaten
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
-  - Nachname: vermieter_familienname
+  - Nachname: vermieter.name.last
     datatype: text
     default: Mustermann
-  - Vorname: vermieter_vorname
+  - Vorname: vermieter.name.first
     datatype: text
     default: Max
-  - Sraße: vermieter_strasse
+  - Sraße: vermieter.address.address
     datatype: text
     default: Musterstraße
-  - Hausnummer: vermieter_hausnummer
-    datatype: text
-    default: 1
-  - PLZ: vermieter_postleitzahl
+  - PLZ: vermieter.address.postal_code
     datatype: text
     default: 12345
-  - Wohnort: vermieter_ort
+  - Wohnort: vermieter.address.city
     datatype: text
     default: Musterstadt
-  - Telefonnummer: vermieter_telefon
+  - Telefonnummer: vermieter.phone
     datatype: text
     default: 0123456789
     required: False
@@ -672,6 +697,16 @@ fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
 ---
+question: |
+  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
+fields:  
+  - Gewerblich genutzt: gewerbliche_nutzung
+    datatype: yesnoradio
+  - Wie viel Quadratmeter: gewerbliche_nutzung_qm
+    show if: gewerbliche_nutzung
+    datatype: number
+    default: 123
+---
 # TO-DO: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
@@ -680,21 +715,14 @@ fields:
     datatype: date
     default: 01.01.2000
 ---
+# To-DO: Rewrite
 question: |
-  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
-yesno: gewerbliche_nutzung
----
-question: |
-  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte geben Sie an, um wie viel Quadratmeter es sich bei der gewerblichen/beruflichen Nutzung handelt.
+  Bitter vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen
 fields:
-  - Quadratmeter: gewerbliche_nutzung_qm
-    datatype: number
-    default: 123
----
-# Frage 8
-question: |
-  Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
-yesno: zuschuesse
+  - "Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?": zuschuesse
+    datatype: yesnoradio
+  - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
+    datatype: yesnoradio
 section: zuschuesse
 ---
 # To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze.

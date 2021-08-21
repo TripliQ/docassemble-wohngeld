@@ -79,7 +79,13 @@ fields:
     datatype: yesnoradio
     default: False
 ---
-
+question: |
+  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im Haushalt?
+fields:
+  - Erwachsene Personen: erwachsene_nicht_mittelpunkt
+    datatype: object_checkboxes
+    choices:
+      - antragssteller
 ---
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
@@ -138,18 +144,10 @@ fields:
     datatype: currency
 list collect: True
 ---
-question: |
-  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im Haushalt?
-fields:
-  - Erwachsene Personen: erwachsene_nicht_mittelpunkt
-    datatype: object_checkboxes
-    choices:
-      - antragssteller
----
 mandatory: True
 question:  |
   ${ antragssteller }
-  ${ erwachsene_nicht_mittelpunkt }
+
   ${ antragssteller[0].bruttoeinkuenfte_steuern }
   ${ antragssteller[0].einkuenfte[0] }
   
