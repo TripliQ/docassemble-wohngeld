@@ -1,31 +1,9 @@
-# TO-DO: Hinweis und wo hinschicken
-# To-DO: Manche Variablen wurden nicht am Ende definiert?
-section: zusammenfassung
-question: Hier ist Ihr ausgefüllter Wohngeldantrag!
-subquestion: |
-  ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
-  
-  **Hinweis zur fehlerhaften Webansicht mit Google Chrome**:
-  
-  Wenn Sie den ausgefüllten Wohngeldantrag in der PDF Google Chrome Ansicht zum Dowload öffnen, scheint es als wenn nicht alle Boxen korrekt angekreutzt sind:
-  
-  ${ static_image('google_chrome_fehlerhafte_ansicht.png', width='100%') }
-  
-  Nach dem Download, sieht man jedoch das die Boxen in der Tat korrekt angekreutzt wurden:
-  
-  ${ static_image('pdf_korrekte_ansicht.png', width='100%') }
-  <br>
-  <br>
-  ## Ihre finalen Schritte zum Antrag:
-  
-  1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
-  2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
-  3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
-  ${ static_image('versandoptionen.png', width='100%') }
-event: final_document
+include:
+  - questions.yml
+---
 attachment:
-  - name: Wohngeldantrag
     filename: wohngeldantrag
+    variable name: Wohngeldantrag_PDF
     pdf template file: wohngeldantrag.pdf
     fields:
       - "antragsart": ${ antragsart }
@@ -664,3 +642,41 @@ attachment:
       - "beeintraechtigungen1_opfer": No
       - "beeintraechtigungen2_opfer": No
       - "beeintraechtigungen3_opfer": No
+---
+mandatory: True
+code: |
+  output_file = pdf_concatenate(Wohngeldantrag_PDF, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
+---
+
+# TO-DO: Hinweis und wo hinschicken
+# To-DO: Manche Variablen wurden nicht am Ende definiert?
+mandatory: True
+section: zusammenfassung
+question: Hier ist Ihr ausgefüllter Wohngeldantrag!
+attachment:
+  - name: Wohngeldantrag
+    filename: Wohngeldantrag_final
+    variable name: output_file_attachment
+    content: |
+      ${ output_file }
+subquestion: |
+  ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
+  
+  **Hinweis zur fehlerhaften Webansicht mit Google Chrome**:
+  
+  Wenn Sie den ausgefüllten Wohngeldantrag in der PDF Google Chrome Ansicht zum Dowload öffnen, scheint es als wenn nicht alle Boxen korrekt angekreutzt sind:
+  
+  ${ static_image('google_chrome_fehlerhafte_ansicht.png', width='100%') }
+  
+  Nach dem Download, sieht man jedoch das die Boxen in der Tat korrekt angekreutzt wurden:
+  
+  ${ static_image('pdf_korrekte_ansicht.png', width='100%') }
+  <br>
+  <br>
+  ## Ihre finalen Schritte zum Antrag:
+  
+  1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
+  2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
+  3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
+  ${ static_image('versandoptionen.png', width='100%') }
+event: final_document
