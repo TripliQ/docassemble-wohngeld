@@ -6,215 +6,73 @@
 objects:
   - person: DAList.using(
               object_type=Individual)
+  - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
+  - antragssteller[i].einkuenfte: DAList.using(object_type=Thing, there_are_any=True)
+  - antragssteller[i].wkkosten: DAList.using(object_type=Thing)
+  - wohnung_addresse: Address
+  - zahlungsempfaenger: Individual
+  - vermieter: Individual
 ---
-code: |
-  person[i].familienname
-  person[i].geburtsname
-  person[i].vorname
-  person[i].geschlecht
-  person[i].geburtsdatum
-  person[i].geburtsort
-  person[i].familienstand
-  person[i].ausgeuebte_taetigkeit
-  person[i].staatsangehoerigkeit
-  person[i].vpverhaeltnis_yesno
-  person[i].vpverhaeltnis
-  person[i].bruttoeinkuenfte_steuern
-  person[i].kpversicherung
-  person[i].rlversicherung
-  person[i].bruttoeinkuenfte
-  person[i].bruttoeinkuenfte_monatlich_hoehe
-  person[i].jzahlungen_hoehe 
-  person[i].wkosten_yesno
-  person[i].wkosten
-  person[i].kkosten_yesno
-  person[i].kkosten
-  person[i].continue_field
-  person[i].continue_person
-  person[i].transferleistungen
-  person[i].einnahmen_yesno
-  person[i].einnahmen_datum
-  person[i].einnahmen_grund
-  person[i].kindergeld_yesno
-  person[i].kindergeld_vorname
-  person[i].kindergeld_nachname
-  person[i].sleistungen_yesno
-  person[i].sleistungen
-  person[i].sleistungen_datum
----
-# General Logic
-# Wie viele Personen antrag gestellt
-# Note to Felix: Logic Antragssteller vs. Personen mit im Antrag
 question: |
-  Leben weitere Personen (auch Kinder) mit Ihnen zusammen in der Wohnung?
+  Geben Sie bitte **alle brutto Einkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** von ${ antragssteller[i] } an
 subquestion: |
-  <br>
-  ${ static_image('undraw_neighbors_ciwb.svg') }
+  Entsprechende Nachweise sind dem Antrag beizufügen).
+  Zu den Einkünften zählen z.B. 
+  
+  - Gehalt/Lohn - auch Abfindungen/Einmalzahlungen
+  - Renten aller Art
+  - Einkünfte aus selbstständiger Arbeit/Gewerbe
+  - Arbeitslosengeld
+  - Krankengeld
+  - Mutterschaftsgeld
+  - Kindergeld
+  - Unterhalt
+  - Zinsen  aus  Kapitalvermögen
+  - Einnahmen  aus  Vermietung  und  Verpachtung
+  - Ausbildungsvergütung/-beihilfe oder BAföG.
 fields:
-  - ' ': andere_personen_yesno
-    datatype: yesnoradio
-  - Wie viele Personen leben mit Ihnen in der Wohnung?: andere_personen
-    required: False
-    show if: andere_personen_yesno
+  - Art: antragssteller[i].einkuenfte[j].name.text
+    default: Lohn
+  - Interval: antragssteller[i].einkuenfte[j].interval
+    datatype: radio
     choices:
-      - 1
-      - 2
----
-code: |
-  if andere_personen == '2':
-    person[i].continue_person = ordinal(i)
-    continue_casus = 'n'
-  else:
-    person[i].continue_person = ' '
-    continue_casus = ' '
----
-question: |
-  Geben Sie bitte die folgenden persönlichen Daten für die ${ person[i].continue_person } weitere Person in Ihrer Wohnung an:
-subquestion: |
-  <br>
-  ${ static_image('undraw_Receipt_re_fre3_1.svg') }
-fields:
-  - Nachname: person[i].familienname
-    default: Musterfrau
-  - Geburtsname: person[i].geburtsname
-    default: Gabler
-  - Vorname: person[i].vorname
-    default: Erika
-  - Geschlecht: person[i].geschlecht
-    choices:
-      - Männlich: 1
-      - Weiblich: 2
-      - Divers: 3
-    default: Weiblich
-  - Geburtsdatum: person[i].geburtsdatum
-    datatype: date
-    default: 12.08.1964
-  - Geburtsort: person[i].geburtsort
-    default: Berlin
-  - Familienstand: person[i].familienstand
-    choices:
-      - ledig
-      - verheiratet
-      - verwitwet
-      - geschieden
-      - eingetragene Lebenspartnerschaft
-      - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
-      - eingetragene Lebenspartnerschaft aufgehoben
-    default: verheiratet
-  - Ausgeübte Tätigkeit: person[i].ausgeuebte_taetigkeit
-    default: Rechtsanwaltin
-  - Staatsangehörigkeit: person[i].staatsangehoerigkeit
-    default: deutsch
----
-#Die Frage nach dem Verhältnis zum Antragsteller wird nur bei den weiteren Personen abgefragt, da die Frage ausgelagert ist und person[0].vpverhaeltnis nicht initialisiert ist.
-question: |
-  Steht **${ person[i].vorname } ${ person[i].familienname }** mit Ihnen in einem Verwandschafts- oder Partnerschaftsverhältnis?
-fields:
-  - ' ': person[i].vpverhaeltnis_yesno
-    datatype: yesnoradio
-  - Verhältnis: person[i].vpverhaeltnis
-    show if: person[i].vpverhaeltnis_yesno
----
-code: |
-  if person[i].vpverhaeltnis_yesno == False:
-    person[i].vpverhaeltnis == 'nein'
----
-subquestion: |
- <br>
- ${ static_image('undraw_Savings_re_eq4w_1.svg') } 
-question: |
-  Geben Sie bitte **alle Einkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** mit ihrem Bruttobetrag an (entsprechende Nachweise sind dem Antrag beizufügen).
-fields: 
-  - Art der Einkünfte: person[i].bruttoeinkuenfte
-    input type: area
-    rows: 10
-    help: |
-      Zu den Einkünften zählen z.B. Gehalt/Lohn - auch Abfindungen/Einmalzahlungen, Renten aller Art, Einkünfte aus selbstständiger Arbeit/Gewerbe, Arbeitslosengeld, Krankengeld,  Mutterschaftsgeld, Kindergeld, Unterhalt, Zinsen  aus  Kapitalvermögen,  Einnahmen  aus  Vermietung  und  Verpachtung,  Ausbildungsvergütung/-beihilfe oder BAföG.
-    default: Gehalt, BAföG
-  - Höhe der monatlichen Einkünfte (brutto): person[i].bruttoeinkuenfte_monatlich_hoehe
+      - monatlich
+      - jährliche Einmalzahlung
+    default: monatlich
+  - Höhe: antragssteller[i].einkuenfte[j].betrag
     datatype: currency
-    min: 0
     default: 1000
-  - Höhe der jährlichen Einmalzahlungen (brutto): person[i].jzahlungen_hoehe
-    required: False
-    datatype: currency
-    min: 0
----
-# TO-DO: Cool wäre wenn hier ein Bild mit Steuerbescheid einfügen könnten wo man das sehen würde.
-question: |
-  Werden von den Einkünften Steuern gezahlt?
-field: person[i].bruttoeinkuenfte_steuern
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
+list collect: True
 ---
 question: |
-  Werden Beiträge zur Kranken- und Pflegeversicherung gezahlt?
-field: person[i].kpversicherung
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
----
-question: |
-  Werden Beiträge zur Renten- und Lebensversicherung gezahlt?
-field: person[i].rlversicherung
-choices:
-  - Ja: 1
-    default: Ja
-  - Nein: 2
----
-question: |
-  Machen Sie {Werbungskosten} steuerlich geltend?
-fields:
-  - ' ': antragsteller_wkosten_yesno
-    datatype: yesnoradio
-    default: Nein
-  - Jahresbetrag: antragsteller_wkosten
-    datatype: currency
-    min: 0
-    show if: antragsteller_wkosten_yesno
----
-question: |
-  Machen Sie {Kinderbetreuungskosten} steuerlich geltend?
-fields:
-  - ' ': antragsteller_kkosten_yesno
-    datatype: yesnoradio
-    default: Nein
-  - Jahresbetrag: antragsteller_kkosten
-    datatype: currency
-    min: 0
-    show if: antragsteller_kkosten_yesno
----
-question: |
-  Macht **${ person[i].vorname } ${ person[i].familienname }** {Werbungskosten} steuerlich geltend?
-fields:
-  - ' ': person[i].wkosten_yesno
-    datatype: yesnoradio
-    default: Nein
-  - Jahresbetrag: person[i].wkosten
-    datatype: currency
-    min: 0
-    show if: person[i].wkosten_yesno
----
-question: |
-  Macht **${ person[i].vorname } ${ person[i].familienname }** {Kinderbetreuungskosten} steuerlich geltend?
-fields:
-  - ' ': person[i].kkosten_yesno
-    datatype: yesnoradio
-    default: Nein
-  - Jahresbetrag: person[i].kkosten
-    datatype: currency
-    min: 0
-    show if: person[i].kkosten_yesno
----
-continue button field: person[i].continue_field
-question: |
-  Geben Sie bitte im Folgenden die Daten der ${ person[i].continue_person }${ continue_casus } weiteren Person an.
+  Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
 subquestion: |
- <br>
- ${ static_image('undraw_add_document_0hek.svg') } 
+  Zu den Haushaltsmitgliedern zählen:
+   
+  - der Antragsteller selbst
+  - Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte
+  - Eltern (auch Stief-, Pflege- und Schwiegereltern)
+  - Kinder (auch Pflege- und Adoptivkinder)
+  - sonstige Verwandte
+  - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
+  
+  #### Angegebene Haushaltsmitglieder:
+  
+  % for person in antragssteller:
+  * ${ person }
+  % endfor  
+yesno: antragssteller.there_is_another
+---
+question: |
+  Sie sind in Ihrer Wohnung...
+fields:
+  - Wohnverhältnis: antragsteller_wohnverhaeltnisse
+    choices:
+      - Hauptmieter(in): 1
+      - Untermieter(in): 2
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
+      - Heimbewohner(in): 4
+section: mietdaten
 ---
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
@@ -278,18 +136,6 @@ fields:
     hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: einnahmen1_yesno
 ---
-question: | 
-  Werden sich die Einkünfte von **${ person[i].vorname } ${ person[i].familienname }** in den nächsten 12 Monaten verringern oder erhöhen?
-fields: 
-  - ' ': person[i].einnahmen_yesno
-    datatype: yesnoradio
-  - Ab wann?: person[i].einnahmen_datum
-    datatype: date
-    show if: person[i].einnahmen_yesno
-  - Aus welchem Grund?: person[i].einnahmen_grund
-    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
-    show if: person[i].einnahmen_yesno  
----
 question:  |
   Werden von den zu Ihrem Haushalt rechnenden Personen Unterhaltszahlungen geleistet?
 yesno: unterhaltszahlungen
@@ -347,27 +193,8 @@ fields:
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 # Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Beziehen Sie {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt?
-fields:
-  - ' ': sozialleistungen
-    datatype: yesnoradio
-  - Wählen Sie bitte aus: sozialleistungen_art
-    choices:
-      - Arbeitslosengeld II (SGB II): 1
-      - Sozialgeld (SGB II): 2
-      - Grundversicherung (SGB XII): 3
-      - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergaenzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
-      - Asylbewerberleistung: 6
-      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
-      - Leistungen der Ausbildungsförderung (BAföG): 8
-      - Rente: 9
-      - Unterhaltsvorschuss: 10
-      - Arbeitslosengeld I (SGB III): 11
-    show if: sozialleistungen
-  - Antragsdatum bzw. Bezugszeitraum: sozialleistungen1_antragsdatum_bezugszeitraum
-    datatype: date
-    show if: sozialleistungen
+  Beziehen Sie oder eine der zum hauslatangehörigen Personen {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+yesno: sozialleistungen
 ---
 # TO-DO: Splitten der Frage in 2
 # Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
@@ -438,6 +265,7 @@ choices:
   - Erstantrag: 1
   - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
   - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
+default: 1
 section: allgemein
 ---
 question: |
@@ -451,29 +279,32 @@ fields:
     required: False
 ---
 question: |
-  Geben Sie bitte Ihre persönlichen Daten an:
+  % if len(antragssteller) <= 1:
+  Geben Sie bitte die folgenden persönlichen Daten des **Antragsstellers** an:
+  % else:
+  Geben Sie bitte die folgenden persönlichen Daten für das **${ ordinal(i) }  Haushaltsmitglied** in Ihrer Wohnung an:  
+  % endif
 subquestion: |
   <br>
   ${ static_image('undraw_Receipt_re_fre3_1.svg') }
 fields:
-  - Vorname: antragsteller_vorname
-    default: Max
-  - Nachname: antragsteller_familienname
-    default: Mustermann
-  - Geburtsname: antragsteller_geburtsname
-    default: Mustermann
-  - Geschlecht: antragsteller_geschlecht
+  - Vorname: antragssteller[i].name.first
+    default: Erika
+  - Nachname: antragssteller[i].name.last
+    default: Musterfrau
+  - Geburtsname: antragssteller[i].geburtsname
+    default: Gabler
+  - Geschlecht: antragssteller[i].geschlecht
     choices:
       - Männlich: 1
       - Weiblich: 2
-      - Divers: 3
-    default: Männlich
-  - Geburtsdatum: antragsteller_geburtsdatum
+    default: Weiblich
+  - Geburtsdatum: antragssteller[i].geburtsdatum
     datatype: date
-    default: 01.01.2000
-  - Geburtsort: antragsteller_geburtsort
-    default: Musterhausen
-  - Familienstand: antragsteller_familienstand
+    default: 12.08.1964
+  - Geburtsort: antragssteller[i].geburtsort
+    default: Berlin
+  - Familienstand: antragssteller[i].familienstand
     choices:
       - ledig
       - verheiratet
@@ -482,18 +313,24 @@ fields:
       - eingetragene Lebenspartnerschaft
       - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
       - eingetragene Lebenspartnerschaft aufgehoben
-    default: ledig
-  - Ausgeübte Tätigkeit: antragsteller_ausgeuebte_taetigkeit
-    default: Student
-  - Staatsangehörigkeit: antragsteller_staatsangehoerigkeit
+    default: verheiratet
+  - Ausgeübte Tätigkeit: antragssteller[i].beruf
+    default: Rechtsanwaltin
+  - Staatsangehörigkeit: antragssteller[i].staatsangehoerigkeit
     default: deutsch
-  - Telefonnummer: antragsteller_telefon
+  - Telefonnummer: antragssteller[i].telefon
     datatype: text
     default: 0123456789
-  - Email-Adresse: antragsteller_email
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Email-Adresse: antragssteller[i].email
     datatype: email
     default: max@mustermann.de
-  - Persönliche Verhältnisse: antragsteller_persoenliche_verhaeltnisse
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
     choices:
       - Arbeiter(in): 1
       - Selbständige(r): 7
@@ -505,29 +342,116 @@ fields:
       - Student(in): 5
       - Beamter(in): 6
       - Pensionär(in): 10
+    default: 1
+    show if:
+      code: |
+        len(antragssteller) <= 1
+  - Verwandschaftsverhältnis zum Antragssteller*in: antragssteller[i].verwandschaftsverhaeltnis
+    datatype: dropdown
+    choices:
+      - Großvater
+      - Großmutter
+      - Onkel
+      - Vater
+      - Mutter
+      - Tante
+      - Cousin
+      - Cousine
+      - Bruder
+      - Schwester
+      - Ehemann
+      - Ehefrau
+      - Neffe
+      - Nichte
+      - Kind
+      - Enkelkind
+    show if:
+      code: |
+        len(antragssteller) > 1 
+    default: Kind
+  - Kindergeldberechtigt: antragssteller[i].kindergeld_berechtigt
+    default: yes
+    required: False
+    datatype: yesnoradio
+    show if: 
+      variable: antragssteller[i].verwandschaftsverhaeltnis
+      is: Kind
+  - Schwerbehindert: antragssteller[i].beeintraechtigungen
+    datatype: yesnoradio
+    default: False
+  - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
+    required: False
+    show if: antragssteller[i].beeintraechtigungen
+  - häuslich pflegebedürftig: antragssteller[i].pflegebeduerftig
+    datatype: yesnoradio
+    default: False
+  - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
+    datatype: yesnoradio
+    default: False
 ---
-# Frage 2
+question: |
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+fields:
+  - Von Einkünften Steuern gezahlt: antragssteller[i].bruttoeinkuenfte_steuern
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2  
+  - Beiträge zur Kranken- oder Pflegeversicherung gezahlt: antragssteller[i].kpversicherung
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2 
+  - Beiträge zur Renten- oder Lebensversicherung gezahlt: antragssteller[i].rlversicherung
+    datatype: radio
+    default: Ja
+    choices:
+      - Ja: 1
+      - Nein: 2 
+  - Werden {Werbungskosten} oder {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].wkkosten.there_are_any
+    datatype: yesnoradio
+    default: False
+  - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
+    datatype: yesnoradio
+    default: True
+  - Ab wann: antragssteller[i].einnahmen_datum
+    datatype: date
+    show if: antragssteller[i].einnahmen_yesno  
+  - Grund: antragssteller[i].einnahmen_grund
+    show if: antragssteller[i].einnahmen_yesno  
+---
+question: |
+  Geben Sie bitte **alle {Werbungskosten} oder ** {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
+fields:
+  - Art: antragssteller[i].wkkosten[j].name.text
+    default: Kita
+  - Interval: antragssteller[i].wkkosten[j].interval
+    datatype: radio
+    choices:
+      - Werbungskosten
+      - Kinderbetreuungskosten
+    default: Werbungskosten
+  - Höhe: antragssteller[i].wkkosten[j].betrag
+    datatype: currency
+    default: 1000
+list collect: True  
+---
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
-  - Straße: wohnung_strasse
-    datatype: text
-    default: Musterstraße
-  - Hausnummer: wohnung_hausnummer
-    datatype: text
-    default: 1
-  - PLZ: wohnung_postleitzahl
-    datatype: text
+  - Adresse: wohnung_addresse.address
+    default: Musterstraße 12
+  - PLZ: wohnung_addresse.postal_code
     default: 12345
-  - Ort: wohnung_ort
-    datatype: text
+  - Ort: wohnung_addresse.city
     default: Musterstadt
-  - Etage: wohnung_etage
-    datatype: text
-    default: 1
-  - Wohnungsnummer: wohnung_wohnungsnummer
-    datatype: text
-    default: 1
+  - Etage: wohnung_addresse.floor
+    default: 3
+    required: False
+  - Wohnungsnummer: wohnung_addresse.unit
+    default: 2
     required: False
 ---
 # Frage 3
@@ -537,6 +461,13 @@ subquestion: |
   <br>
   ${ static_image('undraw_Credit_card_re_blml.svg') }
 fields:
+  - Kontoinhaber: antragsteller_kontoinhaber
+    choices:
+      - Antragsstellende Person: 1
+      - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
+      - Vermieter(in): 3
+      - Bei Heimbewohnern - Sozialhilfeträger: 4
+    default: 1
   - Name des Kreditinstituts: antragsteller_kreditinstitut_name
     datatype: text
     default: Volksbank Musterstadt
@@ -549,89 +480,61 @@ fields:
 section: zahlungsdaten
 ---
 question: |
-  Sind Sie Kontoinhaber?
-yesno: gleicher_kontoinhaber
----
-question: |
-  Wer ist Kontoinhaber?
-field: antragsteller_kontoinhaber
-choices:
-  - Ehepartner(in) oder ein anderes Haushaltsmitglied: 2
-  - Vermieter(in): 3
-  - Bei Heimbewohnern - Sozialhilfeträger: 4
----
-# TO-DO: Kontoinhaber dynamic
-question: |
   Name und Anschrift des Kontoinhabers:
 fields:
-  - Vorname: zahlungsempfaenger_vorname
+  - Vorname: zahlungsempfaenger.name.first
     default: Max
-  - Nachname: zahlungsempfaenger_familienname
+  - Nachname: zahlungsempfaenger.name.last
     default: Mustermann
-  - Straße: zahlungsempfaenger_strasse
-    default: Musterstraße
-  - Hausnummer: zahlungsempfaenger_hausnummer
-    default: 1
-  - Postleihzahl: zahlungsempfaenger_postleihzahl
+  - Adressse: zahlungsempfaenger.address.address
+    default: Musterstraße 12
+  - Postleihzahl: zahlungsempfaenger.address.postal_code
     default: 12345
-  - Ort: zahlungsempfaenger_ort
+  - Ort: zahlungsempfaenger.address.city
     default: Musterstadt
 ---
-# TO-DO: Könnte auch plural sein? Möglichkeit von Personenliste zu selektieren
 question: |
-  Ist der Wohnraum für alle Personen der Mittelpunkt der Lebensbeziehungen?
+    Für welche Person(en) ist der Wohnraum **nicht Mittelpunkt** der Lebensbeziehungen?
 subquestion: |
   - Wenn alle Personen nur einen Wohnsitz haben, ist dies in der Regel Ihr Hauptwohnsitz, also der Mittelpunkt der Lebensbeziehungen
   - Haben Personen mehrere Wohnsitze, müssen Sie prüffen, ob Sie an all diesen Wohnsitzen einen Mittelpunkt Ihrer Lebensbeziehungen haben. Es obliegt  Ihnen dann zu entscheiden, zu welchem Ihrer Wohnsitze Sie ein größeres Naheverhältnis haben und diesen als Ihren Hauptwohnsitz zu bezeichnen.
   
   Mehrere Infos hierzu finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
-yesno: mittelpunkt_lebensbeziehungen
+fields:
+  - Auswahl: person_nicht_lebensmittelpunkt
+    datatype: object_checkboxes
+    choices:
+      - antragssteller
 section: lebensverhaeltnisse
 ---
 question: |
-  Welche Person hat ihren Mittelpunkt der Lebensbeziehungen nicht im
-  Haushalt?
+  Auswahl des Kontoinhabers
 fields:
-  - Kein Lebensmittelpunkt: mittelpunkt_lebensbeziehungen_extra
-    datatype: text
-    default: Max Mustermann
----
-# Frage 5
-# TO-DO: @Tobias: Überprüfung Logik atnaort eigenes Mehrfamilienhaus? Kontaktdetails von vemrieter untervermieter soltten nicht abggefragt werden.
-question: |
-  Sie sind in Ihrer Wohnung...
-fields:
-  - Wohnverhältnis: antragsteller_wohnverhaeltnisse
+  - Erwachsene Personen: zahlungsempfaenger
+    datatype: object_checkboxes
     choices:
-      - Hauptmieter(in): 1
-      - Untermieter(in): 2
-      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
-      - Heimbewohner(in): 4
-section: mietdaten
+      - antragssteller
 ---
 # Frage 6
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
-  - Nachname: vermieter_familienname
+  - Nachname: vermieter.name.last
     datatype: text
     default: Mustermann
-  - Vorname: vermieter_vorname
+  - Vorname: vermieter.name.first
     datatype: text
     default: Max
-  - Sraße: vermieter_strasse
+  - Sraße: vermieter.address.address
     datatype: text
     default: Musterstraße
-  - Hausnummer: vermieter_hausnummer
-    datatype: text
-    default: 1
-  - PLZ: vermieter_postleitzahl
+  - PLZ: vermieter.address.postal_code
     datatype: text
     default: 12345
-  - Wohnort: vermieter_ort
+  - Wohnort: vermieter.address.city
     datatype: text
     default: Musterstadt
-  - Telefonnummer: vermieter_telefon
+  - Telefonnummer: vermieter.phone
     datatype: text
     default: 0123456789
     required: False
@@ -672,6 +575,16 @@ fields:
   - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
     datatype: file
 ---
+question: |
+  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
+fields:  
+  - Gewerblich genutzt: gewerbliche_nutzung
+    datatype: yesnoradio
+  - Wie viel Quadratmeter: gewerbliche_nutzung_qm
+    show if: gewerbliche_nutzung
+    datatype: number
+    default: 123
+---
 # TO-DO: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
@@ -680,21 +593,16 @@ fields:
     datatype: date
     default: 01.01.2000
 ---
+# To-DO: Rewrite
 question: |
-  Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
-yesno: gewerbliche_nutzung
----
-question: |
-  Sie haben die letzte Frage mit "Ja" beantwortet. Bitte geben Sie an, um wie viel Quadratmeter es sich bei der gewerblichen/beruflichen Nutzung handelt.
+  Bitter vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen
 fields:
-  - Quadratmeter: gewerbliche_nutzung_qm
-    datatype: number
-    default: 123
----
-# Frage 8
-question: |
-  Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?
-yesno: zuschuesse
+  - "Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?": zuschuesse
+    datatype: yesnoradio
+    default: True
+  - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
+    datatype: yesnoradio
+    default: True
 section: zuschuesse
 ---
 # To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze.

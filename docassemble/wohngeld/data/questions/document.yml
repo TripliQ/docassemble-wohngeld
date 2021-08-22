@@ -3,662 +3,312 @@ include:
 ---
 attachment:
     filename: wohngeldantrag
-    variable name: Wohngeldantrag_PDF
+    variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
     fields:
       - "antragsart": ${ antragsart }
       - "antragsteller_wohngeldnummer": |
           % if antragsart != "1":
           ${ antragsteller_wohngeldnummer }
-          % else:
-          ''
           % endif
-      - "antragsteller_familienname": ${ antragsteller_familienname }
-      - "antragsteller_vorname": ${ antragsteller_vorname }
-      - "antragsteller_geburtsdatum": ${ antragsteller_geburtsdatum }
-      - "antragsteller_telefon": ${antragsteller_telefon}
-      - "antragsteller_email": ${ antragsteller_email }
-      - "antragsteller_persoenliche_verhaeltnisse": ${ antragsteller_persoenliche_verhaeltnisse }
-      - "sozialleistungen1_name": |
-          % if sozialleistungen:
-          ${ antragsteller_familienname }
-          % else:
-          % endif       
-      - "sozialleistungen1_vorname": |
-          % if sozialleistungen:
-          ${ antragsteller_vorname }
-          % else:
-          % endif
-      - "sozialleistungen1_antragsdatum_bezugszeitraum": |
-          % if sozialleistungen:
-          ${ sozialleistungen1_antragsdatum_bezugszeitraum }
-          % else:
-          % endif
-      - "wohnung_postleitzahl": ${ wohnung_postleitzahl }
-      - "wohnung_ort": ${ wohnung_ort }
-      - "wohnung_strasse": ${ wohnung_strasse }
-      - "wohnung_hausnummer": ${ wohnung_hausnummer }
-      - "wohnung_etage": ${ wohnung_etage }
-      - "wohnung_wohnungsnummer": ${ wohnung_wohnungsnummer }
-      - "antragsteller_kreditinstitut_name": ${ antragsteller_kreditinstitut_name }
+      - "antragsteller_familienname": ${ antragssteller[0].name.last }
+      - "antragsteller_vorname": ${ antragssteller[0].name.first }
+      - "antragsteller_geburtsdatum": |
+          ${ format_date(antragssteller[0].geburtsdatum, format='dd.MM.yyyy') }
+      - "antragsteller_telefon": ${ antragssteller[0].telefon }
+      - "antragsteller_email": ${ antragssteller[0].email }
+      - "antragsteller_persoenliche_verhaeltnisse": |
+          ${ antragssteller[0].persoenliche_verhaeltnisse }
+      - "wohnungsadresse": ${ wohnung_addresse.on_one_line() }
+      - "antragsteller_kreditinstitut_name": |
+          ${ antragsteller_kreditinstitut_name }
       - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
       - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
-      - "antragsteller_kontoinhaber": |
-          % if gleicher_kontoinhaber == True:
-          1
+      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
+      - "zahlungsempfaenger": |
+          % if antragsteller_kontoinhaber == "1":
+            TO-DO-Antragssteller
+          % elif antragsteller_kontoinhaber == "2":
+            TO-DO-Familienmitglied  + Adressse
           % else:
-          ${ antragsteller_kontoinhaber }
-          % endif:
-      - "zahlungsempfaenger_vorname": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_vorname }
-          % endif:
-      - "zahlungsempfaenger_familienname": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_familienname }
-          % endif:
-      - "zahlungsempfaenger_strasse": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_strasse }
-          % endif:
-      - "zahlungsempfaenger_hausnummer": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_hausnummer }
-          % endif:
-      - "zahlungsempfaenger_postleihzahl": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_postleihzahl }
-          % endif:
-      - "zahlungsempfaenger_ort": |
-          % if gleicher_kontoinhaber == False:
-          ${ zahlungsempfaenger_ort }
-          % endif:
-      - "mittelpunkt_lebensbeziehungen": |
-          % if mittelpunkt_lebensbeziehungen == True:
-          2
-          % else:
-          1
-          % endif:
-      - "mittelpunkt_lebensbeziehungen_extra": |
-          % if mittelpunkt_lebensbeziehungen == False:
-          ${ mittelpunkt_lebensbeziehungen_extra }
-          % endif:
+            ${ zahlungsempfaenger.address_block()  }
+          % endif
+      - "person_lebensmittelpunkt_nein": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0, invert=True) }
+      - "person_lebensmittelpunkt_ja": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0) }
+      - "person_nicht_lebensmittelpunkt": ${ person_nicht_lebensmittelpunkt }
       - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
-      - "vermieter_familienname": ${ vermieter_familienname }
-      - "vermieter_vorname": ${ vermieter_vorname }
-      - "vermieter_strasse": ${ vermieter_strasse }
-      - "vermieter_hausnummer": ${ vermieter_hausnummer }
-      - "vermieter_postleitzahl": ${ vermieter_postleitzahl }
-      - "vermieter_ort": ${ vermieter_ort }
-      - "vermieter_telefon": ${ vermieter_telefon }
-      - "warmmiete": ${ warmmiete }
-      - "datum_einzug": ${ datum_einzug }
-      - "untervermietung_und_mitnutzung": |
-          % if untervermietung_und_mitnutzung == True:
-          2
-          % else:
-          1
-          % endif:
-      - "untervermietung_und_mitnutzung_anlage": |
-          % if untervermietung_und_mitnutzung == True:
-          ${ untervermietung_und_mitnutzung_anlage }
-          % endif:
-      - "gewerbliche_nutzung": |
-          % if gewerbliche_nutzung == True:
-          2
-          % else:
-          1
-          % endif:
-      - "gewerbliche_nutzung_qm": |
-          % if gewerbliche_nutzung == True:
-          ${ gewerbliche_nutzung_qm }
-          % endif:
-      - "zuschuesse": |
-          % if zuschuesse == True:
-          2
-          % else:
-          1
-          % endif:
-      - "zuschuesse_antrag": |
-          % if zuschuesse == False:
-            % if zuschuesse_antrag == True:
-            2
-            % elif zuschuesse_antrag == False:
-            1
-            % endif:
-          % endif:
-      - "zuschuesse_anlage": |
-          % if zuschuesse == True or zuschuesse_antrag == True:
-          ${ zuschuesse_anlage }
-          % endif:    
-      - "antragsteller_bruttoeinkuenfte": ${ person[2].bruttoeinkuenfte }
-      - "antragsteller_bruttoeinkuenfte_monatlich": monatl. Eink. 
-      - "antragsteller_bruttoeinkuenfte_monatlich_hoehe": ${ person[2].bruttoeinkuenfte_monatlich_hoehe }
-      - "antragsteller_jzahlungen_hoehe": |
-          % if person[2].jzahlungen_hoehe:
-          ${ person[2].jzahlungen_hoehe }
-          % else:
-          % endif
-      - "antragsteller_jzahlungen": |
-          % if person[2].jzahlungen_hoehe:
-          jährl. Einmalz.
-          % else:
-          % endif
-      - "einnahmen1_name": |
-          % if einnahmen1_yesno:
-          ${ antragsteller_familienname }
+      - "vermieter": |
+          % if antragsteller_wohnverhaeltnisse != "3":
+          ${ vermieter }
           % endif   
-      - "einnahmen1_vorname": |
-          % if einnahmen1_yesno:
-          ${ antragsteller_vorname }
-          % endif    
-      - "einnahmen1_datum": |
-          % if einnahmen1_yesno:
-          ${ einnahmen1_datum }
-          % endif
-      - "einnahmen1_grund": |
-          % if einnahmen1_yesno:
-          Zu ${ antragsteller_familienname } ${ antragsteller_vorname }: ${ einnahmen1_grund }
-          % endif
-      - "antragsteller_wkosten_jahresbetrag": |
-          % if antragsteller_wkosten_yesno:
-          ${ antragsteller_wkosten }
-          % endif
-      - "antragsteller_wkosten": |   
-          % if antragsteller_wkosten_yesno:
-          Werbungsk.
-          % endif          
-      - "antragsteller_kkosten_jahresbetrag": |
-          % if antragsteller_kkosten_yesno:
-          ${ antragsteller_kkosten }
-          % else:
-          % endif
-      - "antragsteller_kkosten": |
-          % if antragsteller_kkosten_yesno:
-          Kinderbetr.
-          % endif
-      - "antragsteller_bruttoeinkuenfte_steuern": ${ person[2].bruttoeinkuenfte_steuern }
-      - "antragsteller_kpversicherung": ${ person[2].kpversicherung }
-      - "antragsteller_rlversicherung": ${ person[2].rlversicherung }
-      - "antragsteller_geburtsname": ${ antragsteller_geburtsname }
-      - "antragsteller_geschlecht": ${ antragsteller_geschlecht }
-      - "antragsteller_geburtsort": ${ antragsteller_geburtsort }
-      - "antragsteller_familienstand": ${ antragsteller_familienstand }
-      - "antragsteller_ausgeuebte_taetigkeit": ${ antragsteller_ausgeuebte_taetigkeit }
-      - "antragsteller_staatsangehoerigkeit": ${ antragsteller_staatsangehoerigkeit }  
-      - "person2_familienname": |
-          % if andere_personen_yesno and person[0].continue_field:
-          ${ person[0].familienname }
-          % endif
-      - "person2_geburtsname": |
-          % if andere_personen_yesno:
-          ${ person[0].geburtsname }
-          % endif
-      - "person2_vorname": |
-          % if andere_personen_yesno:
-          ${ person[0].vorname }
-          % endif
-      - "person2_geschlecht": |
-          % if andere_personen_yesno:
-          ${ person[0].geschlecht }
-          % endif
-      - "person2_geburtsdatum": |
-          % if andere_personen_yesno:
-          ${ person[0].geburtsdatum }
-          % endif
-      - "person2_geburtsort": |
-          % if andere_personen_yesno:
-          ${ person[0].geburtsort }
-          % endif
-      - "person2_familienstand": |
-          % if andere_personen_yesno:
-          ${ person[0].familienstand }
-          % endif
-      - "person2_ausgeuebte_taetigkeit": |
-          % if andere_personen_yesno:
-          ${ person[0].ausgeuebte_taetigkeit }
-          % endif
-      - "person2_staatsangehoerigkeit": |
-          % if andere_personen_yesno:
-          ${ person[0].staatsangehoerigkeit }
-          % endif
-      - "person2_vpverhaeltnis": |
-          % if andere_personen_yesno and person[0].vpverhaeltnis_yesno:
-          ${ person[0].vpverhaeltnis }
-          % elif andere_personen_yesno and person[0].vpverhaeltnis_yesno == False: 
-          kein Verhältnis
-          % endif
-      - "kindergeld1_vorname": |
-          % if andere_personen_yesno and person[0].kindergeld_yesno:
-          ${ person[0].kindergeld_vorname }
-          % endif
-      - "kindergeld1_name": |
-          % if andere_personen_yesno and person[0].kindergeld_yesno:
-          ${ person[0].kindergeld_nachname }
-          % endif
-      - "sozialleistungen2_vorname": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno:
-          ${ person[0].vorname }
-          % endif
-      - "sozialleistungen2_name": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno:
-          ${ person[0].familienname }
-          % endif
-      - "sozialleistungen2_antragsdatum_bezugszeitraum": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno:
-          ${ person[0].sleistungen_datum }
-          % endif
-      - "person2_bruttoeinkuenfte": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          ${ person[0].bruttoeinkuenfte }
-          % elif andere_personen_yesno and person[0].sleistungen_yesno:
-          Transferleistungen
-          % endif
-      - "person2_bruttoeinkuenfte_monatlich": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          monatl. Eink.
-          % elif andere_personen_yesno and person[0].sleistungen_yesno:
-          % endif
-      - "person2_bruttoeinkuenfte_monatlich_hoehe": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          ${ person[0].bruttoeinkuenfte_monatlich_hoehe }
-          % endif
-      - "person2_jzahlungen_hoehe": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False and person[0].jzahlungen_hoehe:
-          ${ person[0].jzahlungen_hoehe }
-          % else:
-          % endif
-      - "person2_jzahlungen": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False and person[0].jzahlungen_hoehe:
-          jährl. Einmalz.
-          % else:
-          % endif 
-      - "einnahmen2_name": |
-          % if andere_personen_yesno and person[0].einnahmen_yesno:
-          ${ person[0].familienname }
-          % else:
-          % endif   
-      - "einnahmen2_vorname": |
-          % if andere_personen_yesno and person[0].einnahmen_yesno:
-          ${ person[0].vorname }
-          % else:
-          % endif    
-      - "einnahmen2_datum": |
-          % if andere_personen_yesno and person[0].einnahmen_yesno:
-          ${ person[0].einnahmen_datum }
-          % else:
-          % endif
-      - "einnahmen2_grund": |
-          % if andere_personen_yesno and person[0].einnahmen_yesno:
-          Zu ${ person[0].familienname } ${ person[0].vorname }: ${ person[0].einnahmen_grund }
-          % else:
-          % endif
-      - "person2_wkosten_jahresbetrag": |        
-          % if andere_personen_yesno and person[0].wkosten_yesno:
-          ${ person[0].wkosten }
-          % endif
-      - "person2_wkosten": |   
-          % if andere_personen_yesno and person[0].wkosten_yesno:
-          Werbungsk.
-          % endif
-      - "person2_kkosten_jahresbetrag": |
-          % if andere_personen_yesno and person[0].kkosten_yesno:
-          ${ person[0].kkosten }
-          % endif
-      - "person2_kkosten": |          
-          % if andere_personen_yesno and person[0].kkosten_yesno:
-          Kinderbetr.
-          % endif       
-      - "person2_bruttoeinkuenfte_steuern": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          ${ person[0].bruttoeinkuenfte_steuern }
-          % endif       
-      - "person2_kpversicherung": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          ${ person[0].kpversicherung }
-          % endif          
-      - "person2_rlversicherung": |
-          % if andere_personen_yesno and person[0].sleistungen_yesno == False:
-          ${ person[0].rlversicherung }
-          % endif
-      - "person3_familienname": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].continue_field == True:
-          ${ person[1].familienname }
-          % endif
-      - "person3_geburtsname": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].geburtsname }
-          % endif
-      - "person3_vorname": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].vorname }
-          % endif
-      - "person3_geschlecht": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].geschlecht }
-          % endif
-      - "person3_geburtsdatum": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].geburtsdatum }
-          % endif
-      - "person3_geburtsort": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].geburtsort }
-          % endif
-      - "person3_familienstand": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].familienstand }
-          % endif
-      - "person3_ausgeuebte_taetigkeit": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].ausgeuebte_taetigkeit }
-          % endif
-      - "person3_staatsangehoerigkeit": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].staatsangehoerigkeit }
-          % endif
-      - "person3_vpverhaeltnis": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].vpverhaeltnis_yesno == True:
-          ${ person[1].vpverhaeltnis }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].vpverhaeltnis_yesno == False: 
-          kein Verhältnis
-          % endif         
-      - "kindergeld2_vorname": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
-          ${ person[1].kindergeld_vorname }
-          % endif
-      - "kindergeld2_name": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
-          ${ person[1].kindergeld_nachname }
-          % endif
-      - "sozialleistungen3_vorname": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno:
-          ${ person[1].vorname }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno == False: 
-          % endif
-      - "sozialleistungen3_name": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno:
-          ${ person[1].familienname }
-          % elif andere_personen_yesno and andere_personen == '2' and  person[1].sleistungen_yesno == False: 
-          % endif
-      - "sozialleistungen3_antragsdatum_bezugszeitraum": |
-          % if andere_personen_yesno and andere_personen == '2' and  person[1].sleistungen_yesno:
-          ${ person[1].sleistungen_datum }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno == False:
-          % endif      
-      - "person3_bruttoeinkuenfte": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno == False:
-          ${ person[1].bruttoeinkuenfte }
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno:
-          Transferleistungen
-          % endif
-      - "person3_bruttoeinkuenfte_monatlich": |
-          % if andere_personen_yesno and andere_personen == '2':
-          monatl. Eink.
-          % endif
-      - "person3_bruttoeinkuenfte_monatlich_hoehe": |
-          % if andere_personen_yesno and andere_personen == '2':
-          ${ person[1].bruttoeinkuenfte_monatlich_hoehe }
-          % endif
-      - "person3_jzahlungen_hoehe": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].jzahlungen_hoehe:
-          ${ person[1].jzahlungen_hoehe }
-          % else:
-          % endif
-      - "person3_jzahlungen": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].jzahlungen_hoehe:
-          jährl. Einmalz.
-          % else:
-          % endif
-      - "einnahmen3_name": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
-          ${ person[1].familienname }
-          % endif   
-      - "einnahmen3_vorname": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
-          ${ person[1].vorname }
-          % endif    
-      - "einnahmen3_datum": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
-          ${ person[1].einnahmen_datum }
-          % endif
-      - "einnahmen3_grund": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].einnahmen_yesno:
-          Zu ${ person[1].familienname } ${ person[1].vorname }: ${ person[1].einnahmen_grund }
-          % endif
-      - "person3_wkosten_jahresbetrag": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkosten_yesno:
-          ${ person[1].wkosten }
-          % endif 
-      - "person3_wkosten": |         
-          % if andere_personen_yesno and andere_personen == '2' and person[1].wkosten_yesno:
-          Werbungsk.
-          % endif
-      - "person3_kkosten_jahresbetrag": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].kkosten_yesno:
-          ${ person[1].kkosten }
-          % endif
-      - "person3_kkosten": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].kkosten_yesno:
-          Kinderbetr.
-          % endif
-      - "person3_bruttoeinkuenfte_steuern": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].sleistungen_yesno == False:
-          ${ person[1].bruttoeinkuenfte_steuern }
-          % endif
-      - "person3_kpversicherung": |
-          % if andere_personen_yesno == True and andere_personen == '2' and person[1].sleistungen_yesno == False:
-          ${ person[1].kpversicherung }
-          % endif
-      - "person3_rlversicherung": |
-          % if andere_personen_yesno and andere_personen == '2' and person[1].sleistungen_yesno == False:
-          ${ person[1].rlversicherung }
-          % endif
-      - "einnahmen": |
-          % if einnahmen1_yesno and andere_personen_yesno == False:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno == False:
-          1
-          % elif einnahmen1_yesno and andere_personen_yesno and person[0].einnahmen_yesno:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and person[0].einnahmen_yesno == False:
-          1
-          % elif einnahmen1_yesno and andere_personen_yesno and person[0].einnahmen_yesno == False:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and person[0].einnahmen_yesno:
-          2
-          % elif einnahmen1_yesno and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno and person[1].einnahmen_yesno:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno == False and person[1].einnahmen_yesno == False:
-          1
-          % elif einnahmen1_yesno and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno and person[1].einnahmen_yesno == False:
-          2  
-          % elif einnahmen1_yesno and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno == False and person[1].einnahmen_yesno:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno and person[1].einnahmen_yesno:
-          2
-          % elif einnahmen1_yesno and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno == False and person[1].einnahmen_yesno == False:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno and person[1].einnahmen_yesno == False:
-          2
-          % elif einnahmen1_yesno == False and andere_personen_yesno and andere_personen == '2' and person[0].einnahmen_yesno == False and person[1].einnahmen_yesno:
-          2
-          % endif
-      - "kindergeld": |
-          % if andere_personen_yesno and person[0].kindergeld_yesno:
-          2
-          % elif andere_personen_yesno and andere_personen == '2' and person[1].kindergeld_yesno:
-          2
-          % else:
-          1
-          % endif  
-      - "kindergeld_anzahl": |
-          % if andere_personen_yesno == False:
-          0
-          % elif andere_personen_yesno and person[0].kindergeld_yesno == False:
-          0
-          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno == False:
-          0
-          % elif andere_personen_yesno and person[0].kindergeld_yesno:
-          1
-          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno == False and person[1].kindergeld_yesno:
-          1
-          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno == False:
-          1
-          % elif andere_personen_yesno and andere_personen == '2' and person[0].kindergeld_yesno and person[1].kindergeld_yesno:
-          2
-          % endif    
-      - "sozialleistungen": |
-          % if sozialleistungen and andere_personen_yesno == False:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno == False:
-          1
-          % elif sozialleistungen and andere_personen_yesno and person[0].sleistungen_yesno:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and person[0].sleistungen_yesno == False:
-          1
-          % elif sozialleistungen and andere_personen_yesno and person[0].sleistungen_yesno == False:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and person[0].sleistungen_yesno:
-          2
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno == False:
-          1
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno == False:
-          2
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno:
-          2
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno == False:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno == False:
-          2
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno:
-          2
-          % endif
-      - "sozialleistungen_art": |
-          % if sozialleistungen and andere_personen_yesno == False:
-          ${ sozialleistungen_art }
-          % elif sozialleistungen and andere_personen_yesno and person[0].sleistungen_yesno == False:
-          $ { sozialleistungen_art }
-          % elif sozialleistungen == False and andere_personen_yesno and person[0].sleistungen_yesno:
-          ${ person[0].sleistungen }
-          % elif sozialleistungen and andere_personen_yesno and person[0].sleistungen_yesno:
-          $ { sozialleistungen_art }
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno:
-          $ { sozialleistungen_art }    
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno == False:
-          $ { sozialleistungen_art }
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno == False:
-          ${ person[0].sleistungen }
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno:
-          ${ person[1].sleistungen }
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno == False:
-          $ { sozialleistungen_art }
-          % elif sozialleistungen and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno == False and person[1].sleistungen_yesno:
-          $ { sozialleistungen_art }
-          % elif sozialleistungen == False and andere_personen_yesno and andere_personen == '2' and person[0].sleistungen_yesno and person[1].sleistungen_yesno:
-          ${ person[0].sleistungen }
-          % endif
-      - "verstorbener": |
-          % if verstorbener and not transferleistungen:
-          2
-          % else:
-          1
-          % endif
-      - "verstorbener_name": |
-          % if verstorbener and not transferleistungen:
-          ${ verstorbener_name }
-          % endif
-      - "verstorbener_datum": |
-          % if verstorbener and not transferleistungen:
-          ${ verstorbener_datum }
-          % endif
-      - "wohnungswechsel": |
-          % if verstorbener:
-          ${ wohnungswechsel }
-          % endif
-      - "wohnungswechsel_datum": |
-          % if verstorbener and wohnungswechsel:
-          ${ wohnungswechsel_datum }
-          % endif
-      - "weitere_person": |
-          % if verstorbener:
-          ${ weitere_person }
-          % endif
-      - "weitere_person_datum": |
-          % if verstorbener and weitere_person:
-          ${ weitere_person }
-          % endif
-      - "weitere_person_name": |
-          % if verstorbener and weitere_person:
-          ${ weitere_person_name }
-          % endif
-      - "unterhaltszahlungen": |
-          % if unterhaltszahlungen:
-          2
-          % else:
-          1
-          % endif
-      - "unterhaltsverpflichtungen": |
-          % if unterhaltszahlungen:
-          ${ unterhaltsverpflichtungen }
-          % endif
-      - "beeintraechtigungen": |
-          % if beeintraechtigungen:
-          2
-          % else:
-          1
-          % endif
-      - "beeintraechtigungen1_name": |
-          % if beeintraechtigungen:
-          ${ beeintraechtigungen1_name }
-          % endif
-      - "beeintraechtigungen2_name":
-      - "beeintraechtigungen3_name":
-      - "beeintraechtigungen1_vorname": |
-          % if beeintraechtigungen:
-          ${ beeintraechtigungen1_vorname }
-          % endif
-      - "beeintraechtigungen2_vorname":
-      - "beeintraechtigungen3_vorname":
-      - "beeintraechtigungen1_art": |
-          % if beeintraechtigungen:
-          ${ beeintraechtigungen1_art }
-          % endif
-      - "beeintraechtigungen2_art":
-      - "beeintraechtigungen3_art":
-      - "beeintraechtigungen1_grad": |
-          % if beeintraechtigungen:
-          ${ beeintraechtigungen1_grad }
-          % endif
-      - "beeintraechtigungen2_grad":
-      - "beeintraechtigungen3_grad":
-      - "beeintraechtigungen1_pflegebeduerftig": No
-      - "beeintraechtigungen2_pflegebeduerftig": No
-      - "beeintraechtigungen3_pflegebeduerftig": No
-      - "beeintraechtigungen1_opfer": No
-      - "beeintraechtigungen2_opfer": No
-      - "beeintraechtigungen3_opfer": No
----
-mandatory: True
-code: |
-  output_file = pdf_concatenate(Wohngeldantrag_PDF, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
----
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "warmmiete": ${ currency(warmmiete) }
+      - "datum_einzug": |
+          ${ format_date(datum_einzug, format='ddMMyyyy') }
+      - "gewerblich_nutzung_ja": ${ yesno(gewerbliche_nutzung) }
+      - "gewerblich_nutzung_nein": ${ yesno(gewerbliche_nutzung, invert=True) }
+      - "gewerbliche_nutzung_qm": ${ showif('gewerbliche_nutzung_qm', gewerbliche_nutzung) }
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "zuschuesse_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_nein": ${ yesno(zuschuesse, invert=True) } 
+      - "zuschuesse_antrag_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_antrag_nein": ${ yesno(zuschuesse, invert=True) }     
+    
 
+      - "antragssteller_nachname_geburtsname": ${ comma_list(antragssteller[0].name.last, antragssteller[0].geburtsname)}
+      - "antragssteller_vorname": ${ antragssteller[0].name.first }
+      - "antragssteller_geschlecht": ${ antragssteller[0].geschlecht }
+      - "antragssteller_geburtsdatum": ${ antragssteller[0].geburtsdatum }
+      - "antragssteller_geburtsort": ${ antragssteller[0].geburtsort }
+      - "antragssteller_familienstand": ${ antragssteller[0].familienstand }
+      - "antragssteller_beruf": ${ antragssteller[0].beruf }
+      - "antragssteller_staatsangehoerigkeit": ${ antragssteller[0].staatsangehoerigkeit }
+      - "antragssteller_bruttoeinkuenfte_steuern_ja" : |
+          ${ yesno(antragssteller[0].bruttoeinkuenfte_steuern) }
+      - "antragssteller_bruttoeinkuenfte_steuern_nein" : |
+          ${ yesno(antragssteller[0].bruttoeinkuenfte_steuern, invert=True) }
+      - "antragssteller_kpversicherung_ja": |
+          ${ yesno(antragssteller[0].kpversicherung) }
+      - "antragssteller_kpversicherung_nein": |
+          ${ yesno(antragssteller[0].kpversicherung, invert=True) }
+      - "antragssteller_rlversicherung_ja": |
+          ${ yesno(antragssteller[0].rlversicherung) }
+      - "antragssteller_rlversicherung_nein": |
+          ${ yesno(antragssteller[0].rlversicherung, invert=True) }             
+      - "antragssteller_einkuenfte": |
+          % for e in antragssteller[0].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+      - "antragssteller_einkuenfte_summen": |
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }  
+      - "antragssteller_wkkosten": |
+          % if antragssteller[0].wkkosten.there_are_any:
+          ${ antragssteller[0].wkkosten }
+          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[0].wkkosten])) }
+          % endif
+      
+      
+      
+      
+      - "person_1_nachname_geburtsname": |
+          % if len(antragssteller) > 1:
+          ${ comma_list(antragssteller[1].name.last, antragssteller[1].geburtsname)}
+          % endif
+      - "person_1_vorname": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].name.first }
+          % endif
+      - "person_1_geschlecht": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geschlecht }
+          % endif
+      - "person_1_geburtsdatum": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geburtsdatum }
+          % endif
+      - "person_1_geburtsort": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].geburtsort }
+          % endif
+      - "person_1_familienstand": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].familienstand }
+          % endif
+      - "person_1_verwandschaftsverhaeltnis": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].verwandschaftsverhaeltnis }
+          % endif
+      - "person_1_beruf": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].beruf }
+          % endif
+      - "person_1_staatsangehoerigkeit": |
+          % if len(antragssteller) > 1:
+          ${ antragssteller[1].staatsangehoerigkeit }
+          % endif
+      - "person_1_bruttoeinkuenfte_steuern_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].bruttoeinkuenfte_steuern) }
+          % endif
+      - "person_1_bruttoeinkuenfte_steuern_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].bruttoeinkuenfte_steuern, invert=True) }
+          % endif
+      - "persion_1_kpversicherung_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].kpversicherung) }
+          % endif
+      - "persion_1_kpversicherung_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].kpversicherung, invert=True) }
+          % endif
+      - "person_1_rlversicherung_ja": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].rlversicherung) }
+          % endif
+      - "person_1_rlversicherung_nein": |
+          % if len(antragssteller) > 1:
+          ${ yesno(antragssteller[1].rlversicherung, invert=True) }
+          % endif
+      - "person_1_einkuenfte": |
+          % if len(antragssteller) > 1 and len(antragssteller[1].einkuenfte) >= 1:
+          % for e in antragssteller[1].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+          % endif
+      - "person_1_einkuenfte_summen": |
+          % if len(antragssteller) > 1 and len(antragssteller[1].einkuenfte) >= 1:
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
+          % endif
+      - "person_1_wkkosten": |
+          % if len(antragssteller) > 1 and antragssteller[1].wkkosten.there_are_any:
+          ${ antragssteller[1].wkkosten }
+          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[1].wkkosten])) }
+          % endif
+
+
+      - "person_2_nachname_geburtsname": |
+          % if len(antragssteller) > 2:
+          ${ comma_list(antragssteller[2].name.last, antragssteller[2].geburtsname)}
+          % endif
+      - "person_2_vorname": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].name.first }
+          % endif          
+      - "person_2_geschlecht": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geschlecht }
+          % endif
+      - "person_2_geburtsdatum": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geburtsdatum }
+          % endif
+      - "person_2_geburtsort": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].geburtsort }
+          % endif
+      - "person_2_familienstand": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].familienstand }
+          % endif
+      - "person_2_verwandschaftsverhaeltnis": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].verwandschaftsverhaeltnis }
+          % endif
+      - "person_2_beruf": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].beruf }
+          % endif
+      - "person_2_staatsangehoerigkeit": |
+          % if len(antragssteller) > 2:
+          ${ antragssteller[2].staatsangehoerigkeit }
+          % endif          
+          
+      - "person_2_bruttoeinkuenfte_steuern_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].bruttoeinkuenfte_steuern) }
+          % endif
+      - "person_2_bruttoeinkuenfte_steuern_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].bruttoeinkuenfte_steuern, invert=True) }
+          % endif
+      - "persion_2_kpversicherung_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].kpversicherung) }
+          % endif
+      - "persion_2_kpversicherung_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].kpversicherung, invert=True) }
+          % endif
+      - "person_2_rlversicherung_ja": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].rlversicherung) }
+          % endif
+      - "person_2_rlversicherung_nein": |
+          % if len(antragssteller) > 2:
+          ${ yesno(antragssteller[2].rlversicherung, invert=True) }
+          % endif       
+      - "person_2_einkuenfte": |
+          % if len(antragssteller) > 2 and len(antragssteller[2].einkuenfte) >= 1:
+          % for e in antragssteller[2].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+          % endif
+      - "person_2_einkuenfte_summen": |
+          % if len(antragssteller) > 2 and len(antragssteller[2].einkuenfte) >= 1:
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
+          % endif          
+      - "person_2_wkkosten": |
+          % if len(antragssteller) > 2 and antragssteller[2].wkkosten.there_are_any:
+          ${ antragssteller[2].wkkosten }
+          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[2].wkkosten])) }
+          % endif
+                   
+      - "erhoehung_nein": | 
+          ${ yesno(any([e.einnahmen_yesno for e in antragssteller]), invert=True) }
+          
+      - "erhoehung_ja": | 
+          ${ yesno(any([e.einnahmen_yesno for e in antragssteller])) }  
+           
+
+      - "antragssteller_erhoehung_datum": |  
+          % if antragssteller[0].einnahmen_yesno:
+          ${ format_date(antragssteller[0].einnahmen_datum, format='dd.MM.yyyy') }
+          % endif
+      - "antragssteller_name": |   
+          % if antragssteller[0].einnahmen_yesno:
+          ${ antragssteller[0].name.last }, ${ antragssteller[0].name.first }
+          % endif 
+      
+      
+      - "person_1_name": |  
+          % if len(antragssteller) > 1 and antragssteller[1].einnahmen_yesno:
+          ${ antragssteller[1].name.last }, ${ antragssteller[1].name.first }
+          % endif      
+      - "person_1_erhoehung_datum": | 
+          % if len(antragssteller) > 1 and antragssteller[1].einnahmen_yesno:
+          ${ format_date(antragssteller[1].einnahmen_datum, format='dd.MM.yyyy') }
+          % endif
+
+      - "person_2_name": | 
+          % if len(antragssteller) > 2 and antragssteller[2].einnahmen_yesno:
+          ${ antragssteller[2].name.last }, ${ antragssteller[2].name.first }
+          % endif
+      - "person_2_erhoehung_datum": | 
+          % if len(antragssteller) > 2 and antragssteller[2].einnahmen_yesno:
+          ${ format_date(antragssteller[2].einnahmen_datum, format='dd.MM.yyyy') }
+          % endif        
+          
+      - "erhoehung_grund": | 
+          % if antragssteller[0].einnahmen_yesno:
+          ${ antragssteller[0] }: ${ antragssteller[0].einnahmen_grund }
+          % endif 
+          % if len(antragssteller) > 1 and antragssteller[1].einnahmen_yesno:
+          ${ antragssteller[1] }: ${ antragssteller[1].einnahmen_grund }
+          % endif  
+          % if len(antragssteller) > 2 and antragssteller[2].einnahmen_yesno:
+          ${ antragssteller[2] }: ${ antragssteller[2].einnahmen_grund }
+          % endif
+---
+code: |
+  output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
+---
 # TO-DO: Hinweis und wo hinschicken
 # To-DO: Manche Variablen wurden nicht am Ende definiert?
-mandatory: True
 section: zusammenfassung
 question: Hier ist Ihr ausgefüllter Wohngeldantrag!
-attachment:
-  - name: Wohngeldantrag
-    filename: Wohngeldantrag_final
-    variable name: output_file_attachment
-    content: |
-      ${ output_file }
+attachment code: wohngeldantrag_pdf
+
 subquestion: |
   ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
   
