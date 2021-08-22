@@ -136,18 +136,6 @@ fields:
     hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: einnahmen1_yesno
 ---
-question: | 
-  Werden sich die Einkünfte von **${ person[i].vorname } ${ person[i].familienname }** in den nächsten 12 Monaten verringern oder erhöhen?
-fields: 
-  - ' ': person[i].einnahmen_yesno
-    datatype: yesnoradio
-  - Ab wann?: person[i].einnahmen_datum
-    datatype: date
-    show if: person[i].einnahmen_yesno
-  - Aus welchem Grund?: person[i].einnahmen_grund
-    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
-    show if: person[i].einnahmen_yesno  
----
 question:  |
   Werden von den zu Ihrem Haushalt rechnenden Personen Unterhaltszahlungen geleistet?
 yesno: unterhaltszahlungen
@@ -427,7 +415,7 @@ fields:
     default: False
   - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
     datatype: yesnoradio
-    default: False
+    default: True
   - Ab wann: antragssteller[i].einnahmen_datum
     datatype: date
     show if: antragssteller[i].einnahmen_yesno  
