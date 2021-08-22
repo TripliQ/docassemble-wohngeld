@@ -6,6 +6,60 @@ attachment:
     variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
     fields:
+
+      - "antragsart": ${ antragsart }
+      - "antragsteller_wohngeldnummer": |
+          % if antragsart != "1":
+          ${ antragsteller_wohngeldnummer }
+          % endif
+      - "antragsteller_familienname": ${ antragssteller[0].name.last }
+      - "antragsteller_vorname": ${ antragssteller[0].name.first }
+      - "antragsteller_geburtsdatum": |
+          ${ format_date(antragssteller[0].geburtsdatum, format='dd.MM.yyyy') }
+      - "antragsteller_telefon": ${ antragssteller[0].telefon }
+      - "antragsteller_email": ${ antragssteller[0].email }
+      - "antragsteller_persoenliche_verhaeltnisse": |
+          ${ antragssteller[0].persoenliche_verhaeltnisse }
+      - "wohnungsadresse": ${ wohnung_addresse.on_one_line() }
+      - "antragsteller_kreditinstitut_name": |
+          ${ antragsteller_kreditinstitut_name }
+      - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
+      - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
+      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
+      - "zahlungsempfaenger": |
+          % if antragsteller_kontoinhaber == "1":
+            TO-DO-Antragssteller
+          % elif antragsteller_kontoinhaber == "2":
+            TO-DO-Familienmitglied  + Adressse
+          % else:
+            ${ zahlungsempfaenger.address_block()  }
+          % endif
+      - "person_lebensmittelpunkt_nein": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0, invert=True) }
+      - "person_lebensmittelpunkt_ja": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0) }
+      - "person_nicht_lebensmittelpunkt": ${ person_nicht_lebensmittelpunkt }
+      - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
+      - "vermieter": |
+          % if antragsteller_wohnverhaeltnisse != "3":
+          ${ vermieter }
+          % endif   
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "warmmiete": ${ currency(warmmiete) }
+      - "datum_einzug": |
+          ${ format_date(datum_einzug, format='ddMMyyyy') }
+      - "gewerblich_nutzung_ja": ${ yesno(gewerbliche_nutzung) }
+      - "gewerblich_nutzung_nein": ${ yesno(gewerbliche_nutzung, invert=True) }
+      - "gewerbliche_nutzung_qm": ${ showif('gewerbliche_nutzung_qm', gewerbliche_nutzung) }
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "zuschuesse_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_nein": ${ yesno(zuschuesse, invert=True) } 
+      - "zuschuesse_antrag_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_antrag_nein": ${ yesno(zuschuesse, invert=True) }     
+    
+    
       - "antragssteller_nachname_geburtsname": ${ comma_list(antragssteller[0].name.last, antragssteller[0].geburtsname)}
       - "antragssteller_vorname": ${ antragssteller[0].name.first }
       - "antragssteller_geschlecht": ${ antragssteller[0].geschlecht }
@@ -20,12 +74,19 @@ attachment:
           ${ yesno(antragssteller[0].bruttoeinkuenfte_steuern, invert=True) }
       - "antragssteller_kpversicherung_ja": |
           ${ yesno(antragssteller[0].kpversicherung) }
-      - "antragssteller_kpversicherung_nein" : |
+      - "antragssteller_kpversicherung_nein": |
           ${ yesno(antragssteller[0].kpversicherung, invert=True) }
-      - "antragssteller_rlversicherung_ja" : |
+      - "antragssteller_rlversicherung_ja": |
           ${ yesno(antragssteller[0].rlversicherung) }
-      - "antragssteller_rlversicherung_nein" : |
-          ${ yesno(antragssteller[0].rlversicherung, invert=True) }              
+      - "antragssteller_rlversicherung_nein": |
+          ${ yesno(antragssteller[0].rlversicherung, invert=True) }             
+      - "antragssteller_einkuenfte": |
+          % for e in antragssteller[0].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+      - "antragssteller_einkuenfte_summen": |
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }         
           
           
           
@@ -90,6 +151,17 @@ attachment:
           % if len(antragssteller) > 1:
           ${ yesno(antragssteller[1].rlversicherung, invert=True) }
           % endif
+      - "person_1_einkuenfte": |
+          % if len(antragssteller) > 1 and len(antragssteller[1].einkuenfte) >= 1:
+          % for e in antragssteller[1].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+          % endif
+      - "person_1_einkuenfte_summen": |
+          % if len(antragssteller) > 1 and len(antragssteller[1].einkuenfte) >= 1:
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
+          % endif
 
 
       - "person_2_nachname_geburtsname": |
@@ -153,7 +225,17 @@ attachment:
           % if len(antragssteller) > 2:
           ${ yesno(antragssteller[2].rlversicherung, invert=True) }
           % endif       
-          
+      - "person_2_einkuenfte": |
+          % if len(antragssteller) > 2 and len(antragssteller[2].einkuenfte) >= 1:
+          % for e in antragssteller[2].einkuenfte:
+          - ${ e.name.text }: ${ currency(e.betrag) } (${ e.interval })
+          % endfor
+          % endif
+      - "person_2_einkuenfte_summen": |
+          % if len(antragssteller) > 2 and len(antragssteller[2].einkuenfte) >= 1:
+          Monatlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'monatlich'])) }
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
+          % endif          
        
 ---
 code: |
