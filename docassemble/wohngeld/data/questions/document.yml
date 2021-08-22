@@ -6,7 +6,58 @@ attachment:
     variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
     fields:
-
+      - "antragsart": ${ antragsart }
+      - "antragsteller_wohngeldnummer": |
+          % if antragsart != "1":
+          ${ antragsteller_wohngeldnummer }
+          % endif
+      - "antragsteller_familienname": ${ antragssteller[0].name.last }
+      - "antragsteller_vorname": ${ antragssteller[0].name.first }
+      - "antragsteller_geburtsdatum": |
+          ${ format_date(antragssteller[0].geburtsdatum, format='dd.MM.yyyy') }
+      - "antragsteller_telefon": ${ antragssteller[0].telefon }
+      - "antragsteller_email": ${ antragssteller[0].email }
+      - "antragsteller_persoenliche_verhaeltnisse": |
+          ${ antragssteller[0].persoenliche_verhaeltnisse }
+      - "wohnungsadresse": ${ wohnung_addresse.on_one_line() }
+      - "antragsteller_kreditinstitut_name": |
+          ${ antragsteller_kreditinstitut_name }
+      - "antragsteller_bankleitzahl": ${ antragsteller_bankleitzahl }
+      - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
+      - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
+      - "zahlungsempfaenger": |
+          % if antragsteller_kontoinhaber == "1":
+            TO-DO-Antragssteller
+          % elif antragsteller_kontoinhaber == "2":
+            TO-DO-Familienmitglied  + Adressse
+          % else:
+            ${ zahlungsempfaenger.address_block()  }
+          % endif
+      - "person_lebensmittelpunkt_nein": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0, invert=True) }
+      - "person_lebensmittelpunkt_ja": |
+          ${ yesno(len(person_nicht_lebensmittelpunkt) == 0) }
+      - "person_nicht_lebensmittelpunkt": ${ person_nicht_lebensmittelpunkt }
+      - "antragsteller_wohnverhaeltnisse": ${ antragsteller_wohnverhaeltnisse }
+      - "vermieter": |
+          % if antragsteller_wohnverhaeltnisse != "3":
+          ${ vermieter }
+          % endif   
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "warmmiete": ${ currency(warmmiete) }
+      - "datum_einzug": |
+          ${ format_date(datum_einzug, format='ddMMyyyy') }
+      - "gewerblich_nutzung_ja": ${ yesno(gewerbliche_nutzung) }
+      - "gewerblich_nutzung_nein": ${ yesno(gewerbliche_nutzung, invert=True) }
+      - "gewerbliche_nutzung_qm": ${ showif('gewerbliche_nutzung_qm', gewerbliche_nutzung) }
+      - "vermietung_ja": ${ yesno(untervermietung and mitnutzung) }
+      - "vermietung_nein": ${ yesno(untervermietung and mitnutzung, invert=True) }
+      - "zuschuesse_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_nein": ${ yesno(zuschuesse, invert=True) } 
+      - "zuschuesse_antrag_ja": ${ yesno(zuschuesse) }
+      - "zuschuesse_antrag_nein": ${ yesno(zuschuesse, invert=True) }     
+    
 
       - "antragssteller_nachname_geburtsname": ${ comma_list(antragssteller[0].name.last, antragssteller[0].geburtsname)}
       - "antragssteller_vorname": ${ antragssteller[0].name.first }
