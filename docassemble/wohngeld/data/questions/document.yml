@@ -86,10 +86,17 @@ attachment:
           % endfor
       - "antragssteller_einkuenfte_summen": |
           Monatlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'monatlich'])) }
-          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }         
+          Jährlich: ${ currency(sum([e.betrag for e in antragssteller[0].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }  
+      - "antragssteller_wkkosten": |
+          % if antragssteller[0].wkkosten.there_are_any:
+          ${ antragssteller[0].wkkosten }
           
-          
-          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[0].wkkosten])) }
+          % endif
+      
+      
+      
+      
       - "person_1_nachname_geburtsname": |
           % if len(antragssteller) > 1:
           ${ comma_list(antragssteller[1].name.last, antragssteller[1].geburtsname)}
@@ -126,7 +133,6 @@ attachment:
           % if len(antragssteller) > 1:
           ${ antragssteller[1].staatsangehoerigkeit }
           % endif
-
       - "person_1_bruttoeinkuenfte_steuern_ja": |
           % if len(antragssteller) > 1:
           ${ yesno(antragssteller[1].bruttoeinkuenfte_steuern) }
@@ -161,6 +167,12 @@ attachment:
           % if len(antragssteller) > 1 and len(antragssteller[1].einkuenfte) >= 1:
           Monatlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'monatlich'])) }
           Jährlich: ${ currency(sum([e.betrag for e in antragssteller[1].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
+          % endif
+      - "person_1_wkkosten": |
+          % if len(antragssteller) > 1 and antragssteller[1].wkkosten.there_are_any:
+          ${ antragssteller[1].wkkosten }
+          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[1].wkkosten])) }
           % endif
 
 
@@ -236,7 +248,13 @@ attachment:
           Monatlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'monatlich'])) }
           Jährlich: ${ currency(sum([e.betrag for e in antragssteller[2].einkuenfte if e.interval == 'jährliche Einmalzahlung'])) }
           % endif          
-       
+      - "person_2_wkkosten": |
+          % if len(antragssteller) > 2 and antragssteller[2].wkkosten.there_are_any:
+          ${ antragssteller[2].wkkosten }
+          
+          Jahresbetrag: ${ currency(sum([e.betrag for e in antragssteller[2].wkkosten])) }
+          % endif
+
 ---
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")

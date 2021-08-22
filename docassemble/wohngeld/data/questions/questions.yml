@@ -8,8 +8,7 @@ objects:
               object_type=Individual)
   - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
   - antragssteller[i].einkuenfte: DAList.using(object_type=Thing, there_are_any=True)
-  - antragssteller[i].wkosten: DAList.using(object_type=Thing)
-  - antragssteller[i].kkosten: DAList.using(object_type=Thing)
+  - antragssteller[i].wkkosten: DAList.using(object_type=Thing)
   - wohnung_addresse: Address
   - zahlungsempfaenger: Individual
   - vermieter: Individual
@@ -423,20 +422,9 @@ fields:
     choices:
       - Ja: 1
       - Nein: 2 
-  - Werden {Werbungskosten} steuerlich geltend gemacht: antragssteller[i].wkosten_yesno
+  - Werden {Werbungskosten} oder {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].wkkosten.there_are_any
     datatype: yesnoradio
     default: False
-  - Jahresbetrag der {Werbungskosten}: antragssteller[i].wkosten
-    datatype: currency
-    min: 0
-    show if: antragssteller[i].wkosten_yesno   
-  - Werden {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].kkosten_yesno
-    datatype: yesnoradio
-    default: False
-  - Jahresbetrag der {Kinderbetreuungskosten}: antragssteller[i].kkosten
-    datatype: currency
-    min: 0
-    show if: antragssteller[i].kkosten_yesno  
   - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
     datatype: yesnoradio
     default: False
@@ -445,6 +433,22 @@ fields:
     show if: antragssteller[i].einnahmen_yesno  
   - Grund: antragssteller[i].einnahmen_grund
     show if: antragssteller[i].einnahmen_yesno  
+---
+question: |
+  Geben Sie bitte **alle {Werbungskosten} oder ** {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
+fields:
+  - Art: antragssteller[i].wkkosten[j].name.text
+    default: Kita
+  - Interval: antragssteller[i].wkkosten[j].interval
+    datatype: radio
+    choices:
+      - Werbungskosten
+      - Kinderbetreuungskosten
+    default: Werbungskosten
+  - Höhe: antragssteller[i].wkkosten[j].betrag
+    datatype: currency
+    default: 1000
+list collect: True  
 ---
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
