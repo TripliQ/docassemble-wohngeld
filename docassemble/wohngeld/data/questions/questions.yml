@@ -92,11 +92,8 @@ question: |
   Wie lautet der Name der verstorbenen Person?
 fields:
   - Name: verstorbener_name
-    hint: Max Mustermann
-    # Beispiel bitte löschen
     required: False
 ---
-# TO-DO: Name von Toten Person einfügen damit man einfacher weiß um wen es geht.
 question: |
   Haben Sie nach dem Tod von **${ verstorbener_name }** die Wohnung gewechselt?
 yesno: wohnungswechsel
@@ -123,7 +120,7 @@ question: |
 fields:
   - Name: weitere_person_name
 ---
-# TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten
+# TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten - Done
 question: |
   Werden sich die Einkünfte in den nächsten 12 Monaten verringern oder erhöhen?
 fields:
@@ -193,7 +190,7 @@ fields:
 # Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
 # Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
 question: |
-  Beziehen Sie oder eine der zum hauslatangehörigen Personen {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
 yesno: sozialleistungen
 ---
 # TO-DO: Splitten der Frage in 2
@@ -420,6 +417,7 @@ fields:
     datatype: date
     show if: antragssteller[i].einnahmen_yesno  
   - Grund: antragssteller[i].einnahmen_grund
+    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: antragssteller[i].einnahmen_yesno  
 ---
 question: |
@@ -593,11 +591,11 @@ fields:
     datatype: date
     default: 01.01.2000
 ---
-# To-DO: Rewrite
+# To-Do: Rewrite. - Done
 question: |
-  Bitter vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen
+  Bitte vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen
 fields:
-  - "Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?": zuschuesse
+  - "Erhalten Sie oder eine zum Haushalt rechnende Person bereits {Unterstützung} für die Miete dieser oder einer anderen Wohnung?": zuschuesse
     datatype: yesnoradio
     default: True
   - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
@@ -605,9 +603,13 @@ fields:
     default: True
 section: zuschuesse
 ---
-# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze.
+# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze. (Erledigt, aber es sieht so aus als wäre die Question nicht mehr Teil des Interviews)
 question: |
-  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
+  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf
+  - Wohngeld;
+  - andere private;
+  - oder öffentliche Zuschüsse 
+  zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
 yesno: zuschuesse_antrag
 ---
 # TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
@@ -624,6 +626,11 @@ terms:
     **Werbungskosten** sind Kosten, die in Zusammenhang mit der beruflichen Tätigkeit entstehen. Beispiele sind Kosten für Fahrten zur Arbeitsstelle, für Berufsbekleidung, für Reisekosten bei einer Dienstreise oder etwa für eine aus beruflichen Gründen notwendige Zweitwohnung.
   Kinderbetreuungskosten: |
     **Kinderbetreuungskosten** sind Kosten, die in Zusammenhang mit der Betreuung von Kindern entstehen. Beispiele sind Kosten für die Tagesmutter, für den Platz in einer Kindertagesstätte oder einem Kindergarten, für einen Babysitter oder für einen Nanny.
+  Unterstützung: |
+   Dazu zählen: Wohngeld sowie andere private oder öffentliche Zuschüsse zur Bezahlung der      Miete (z.B. von Verwandten, vom Arbeitgeber)
+  Haushalt angehörige: |
+   Zu den Haushaltsmitgliedern zählen:
+   der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
 ---
 code: |
   untervermietung_und_mitnutzung = untervermietung or mitnutzung
