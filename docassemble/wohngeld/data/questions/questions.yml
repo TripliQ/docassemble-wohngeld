@@ -14,7 +14,7 @@ objects:
   - vermieter: Individual
 ---
 question: |
-  Geben Sie bitte **alle brutto Einkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** von ${ antragssteller[i] } an
+  Geben Sie bitte **alle Bruttoeinkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** von ${ antragssteller[i] } an
 subquestion: |
   Entsprechende Nachweise sind dem Antrag beizufügen).
   Zu den Einkünften zählen z.B. 
@@ -47,10 +47,10 @@ list collect: True
 question: |
   Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
 subquestion: |
-  Zu den Haushaltsmitgliedern zählen:
+  **ACHTUNG**, zu den Haushaltsmitgliedern zählen nur:
    
   - der Antragsteller selbst
-  - Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte
+  - Ehegatte/eingetragener Lebenspartner/Lebensgefährte
   - Eltern (auch Stief-, Pflege- und Schwiegereltern)
   - Kinder (auch Pflege- und Adoptivkinder)
   - sonstige Verwandte
@@ -66,7 +66,7 @@ yesno: antragssteller.there_is_another
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
-  - Wohnverhältnis: antragsteller_wohnverhaeltnisse
+  - no label: antragsteller_wohnverhaeltnisse
     choices:
       - Hauptmieter(in): 1
       - Untermieter(in): 2
@@ -314,23 +314,23 @@ fields:
       - eingetragene Lebenspartnerin/eingetragener Lebenspartner verstorben
       - eingetragene Lebenspartnerschaft aufgehoben
     default: verheiratet
-  - Ausgeübte Tätigkeit: antragssteller[i].beruf
+  - ausgeübte Tätigkeit: antragssteller[i].beruf
     default: Rechtsanwaltin
   - Staatsangehörigkeit: antragssteller[i].staatsangehoerigkeit
     default: deutsch
-  - Telefonnummer: antragssteller[i].telefon
+  - Telefon: antragssteller[i].telefon
     datatype: text
     default: 0123456789
     show if:
       code: |
         len(antragssteller) <= 1
-  - Email-Adresse: antragssteller[i].email
+  - Email: antragssteller[i].email
     datatype: email
     default: max@mustermann.de
     show if:
       code: |
         len(antragssteller) <= 1
-  - Persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
+  - persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
     choices:
       - Arbeiter(in): 1
       - Selbständige(r): 7
@@ -346,7 +346,7 @@ fields:
     show if:
       code: |
         len(antragssteller) <= 1
-  - Verwandschaftsverhältnis zum Antragssteller*in: antragssteller[i].verwandschaftsverhaeltnis
+  - Verwandschaftsverhältnis zum/zur Antragssteller*in: antragssteller[i].verwandschaftsverhaeltnis
     datatype: dropdown
     choices:
       - Großvater
@@ -365,24 +365,32 @@ fields:
       - Nichte
       - Kind
       - Enkelkind
+      - Lebenspartner
+      - Lebenspartnerin
+      - Pflegevater
+      - Pflegemutter
+      - Adoptivvater
+      - Adoptivmutter
+      - Pflegekind
+      - Adoptivkind
     show if:
       code: |
         len(antragssteller) > 1 
     default: Kind
-  - Kindergeldberechtigt: antragssteller[i].kindergeld_berechtigt
+  - Kindergeldberechtigung: antragssteller[i].kindergeld_berechtigt
     default: yes
     required: False
     datatype: yesnoradio
     show if: 
       variable: antragssteller[i].verwandschaftsverhaeltnis
       is: Kind
-  - Schwerbehindert: antragssteller[i].beeintraechtigungen
+  - Schwerbehinderung: antragssteller[i].beeintraechtigungen
     datatype: yesnoradio
     default: False
   - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
     required: False
     show if: antragssteller[i].beeintraechtigungen
-  - häuslich pflegebedürftig: antragssteller[i].pflegebeduerftig
+  - häusliche Pflegebedürftigkeit: antragssteller[i].pflegebeduerftig
     datatype: yesnoradio
     default: False
   - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
@@ -390,40 +398,40 @@ fields:
     default: False
 ---
 question: |
-  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }
+  Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
-  - Von Einkünften Steuern gezahlt: antragssteller[i].bruttoeinkuenfte_steuern
+  - Zahlung von Steuern: antragssteller[i].bruttoeinkuenfte_steuern
     datatype: radio
     default: Ja
     choices:
       - Ja: 1
       - Nein: 2  
-  - Beiträge zur Kranken- oder Pflegeversicherung gezahlt: antragssteller[i].kpversicherung
+  - Beitragszahlungen zur Kranken- oder Pflegeversicherung: antragssteller[i].kpversicherung
     datatype: radio
     default: Ja
     choices:
       - Ja: 1
       - Nein: 2 
-  - Beiträge zur Renten- oder Lebensversicherung gezahlt: antragssteller[i].rlversicherung
+  - Beitragszahlungen zur Renten- oder Lebensversicherung: antragssteller[i].rlversicherung
     datatype: radio
     default: Ja
     choices:
       - Ja: 1
       - Nein: 2 
-  - Werden {Werbungskosten} oder {Kinderbetreuungskosten} steuerlich geltend gemacht: antragssteller[i].wkkosten.there_are_any
+  - steuerliche Geltendmachung von {Werbungskosten} oder {Kinderbetreuungskosten}: antragssteller[i].wkkosten.there_are_any
     datatype: yesnoradio
     default: False
-  - Einnahmen werden sich verringen oder erhöhen: antragssteller[i].einnahmen_yesno
+  - Veränderung der Höhe der Einnahmen in den nächsten 12 Monaten: antragssteller[i].einnahmen_yesno
     datatype: yesnoradio
     default: True
-  - Ab wann: antragssteller[i].einnahmen_datum
+  - Ab wann?: antragssteller[i].einnahmen_datum
     datatype: date
     show if: antragssteller[i].einnahmen_yesno  
-  - Grund: antragssteller[i].einnahmen_grund
+  - Grund der Veränderung: antragssteller[i].einnahmen_grund
     show if: antragssteller[i].einnahmen_yesno  
 ---
 question: |
-  Geben Sie bitte **alle {Werbungskosten} oder ** {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
+  Geben Sie bitte alle {Werbungskosten} oder {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
 fields:
   - Art: antragssteller[i].wkkosten[j].name.text
     default: Kita
@@ -441,17 +449,15 @@ list collect: True
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
-  - Adresse: wohnung_addresse.address
+  - Straße und Hausnummer: wohnung_addresse.address
     default: Musterstraße 12
   - PLZ: wohnung_addresse.postal_code
     default: 12345
   - Ort: wohnung_addresse.city
     default: Musterstadt
   - Etage: wohnung_addresse.floor
-    default: 3
     required: False
   - Wohnungsnummer: wohnung_addresse.unit
-    default: 2
     required: False
 ---
 # Frage 3
@@ -494,14 +500,14 @@ fields:
     default: Musterstadt
 ---
 question: |
-    Für welche Person(en) ist der Wohnraum **nicht Mittelpunkt** der Lebensbeziehungen?
+    Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
-  - Wenn alle Personen nur einen Wohnsitz haben, ist dies in der Regel Ihr Hauptwohnsitz, also der Mittelpunkt der Lebensbeziehungen
-  - Haben Personen mehrere Wohnsitze, müssen Sie prüffen, ob Sie an all diesen Wohnsitzen einen Mittelpunkt Ihrer Lebensbeziehungen haben. Es obliegt  Ihnen dann zu entscheiden, zu welchem Ihrer Wohnsitze Sie ein größeres Naheverhältnis haben und diesen als Ihren Hauptwohnsitz zu bezeichnen.
+  - Hat eine Person nur einen Wohnsitz haben, dann ist dieser in der Regel der Mittelpunkt der Lebensbeziehungen.
+  - Hat eine Person mehrere Wohnsitze oder an mehreren Orten Mittelpunkte verschiedener Lebensbeziehungen, ist entscheidend, zu welchem Ort die Person ein größeres Näheverhältnis hat.
   
-  Mehrere Infos hierzu finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
+  Weitere Informationen zur Bestimmung des Mittelpunkts der Lebensbeziehungen finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
 fields:
-  - Auswahl: person_nicht_lebensmittelpunkt
+  - no label: person_nicht_lebensmittelpunkt
     datatype: object_checkboxes
     choices:
       - antragssteller
@@ -525,7 +531,7 @@ fields:
   - Vorname: vermieter.name.first
     datatype: text
     default: Max
-  - Sraße: vermieter.address.address
+  - Sraße und Hausnummer: vermieter.address.address
     datatype: text
     default: Musterstraße
   - PLZ: vermieter.address.postal_code
@@ -553,17 +559,17 @@ fields:
 ---
 # Frage 7
 question: |
-  Bitte machen Sie weitere Angaben zur Nutzung der Wohnung
+  Bitte machen Sie weitere Angaben zur Nutzung der Wohnung.
 fields:
   - "Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen?": untervermietung
     datatype: yesnoradio
   - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
     datatype: yesnoradio
   - note: |
-      Zu den Haushaltsmitgliedern zählen:
+      **ACHTUNG**, zu den Haushaltsmitgliedern zählen nur:
         
         - der Antragsteller selbst
-        - Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte
+        - Ehegatte/eingetragener Lebenspartner/Lebensgefährte
         - Eltern (auch Stief-, Pflege- und Schwiegereltern)
         - Kinder (auch Pflege- und Adoptivkinder)
         - sonstige Verwandte
@@ -578,9 +584,9 @@ fields:
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
 fields:  
-  - Gewerblich genutzt: gewerbliche_nutzung
+  - no label: gewerbliche_nutzung
     datatype: yesnoradio
-  - Wie viel Quadratmeter: gewerbliche_nutzung_qm
+  - Anzahl der genutzten Quadratmeter: gewerbliche_nutzung_qm
     show if: gewerbliche_nutzung
     datatype: number
     default: 123
@@ -589,13 +595,13 @@ fields:
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
-  - Einzugsdatum: datum_einzug
+  - no label: datum_einzug
     datatype: date
     default: 01.01.2000
 ---
 # To-DO: Rewrite
 question: |
-  Bitter vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen
+  Bitte vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen.
 fields:
   - "Erhalten Sie oder eine zum Haushalt rechnende Person Wohngeld oder andere private oder öffentliche Zuschüsse zur Bezahlung der Miete(z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung?": zuschuesse
     datatype: yesnoradio
