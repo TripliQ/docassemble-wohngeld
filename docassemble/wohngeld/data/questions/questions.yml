@@ -68,10 +68,10 @@ question: |
 fields:
   - no label: antragsteller_wohnverhaeltnisse
     choices:
-      - Hauptmieter(in): 1
-      - Untermieter(in): 2
-      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
-      - Heimbewohner(in): 4
+      - Hauptmieter(in): Hauptmieter(in)
+      - Untermieter(in): Untermieter(in)
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: Bewohner(in) Mehrfamilienhaus
+      - Heimbewohner(in): Heimbewohner(in)
 section: mietdaten
 ---
 question: |
@@ -162,18 +162,6 @@ fields:
   - Name: beeintraechtigungen1_name
   - Vorname: beeintraechtigungen1_vorname
 ---
-question: |
-  Welches Kriterium trifft auf die Person zu?
-fields:
-  - "Kriterien": beeintraechtigungen1_art
-    datatype: checkboxes
-    choices:
-      - schwerbehindert
-      - häuslich pflegebedürftig
-      - Opfer der nationalsozialistischen Verfolgung und ihnen Gleichgestellte         im Sinne des Bundesentschädigungsgesetzes
-  - "Geben Sie ggf. den Grad der Behinderung an:": beeintraechtigungen1_grad
-    required: False
----
 question: | 
   Wird für **${ person[i].vorname } ${ person[i].familienname }** Kindergeld gewährt?
 fields:
@@ -203,17 +191,17 @@ fields:
     datatype: yesnoradio
   - Wählen Sie bitte aus: person[i].sleistungen
     choices:
-      - Arbeitslosengeld II (SGB II): 1
-      - Sozialgeld (SGB II): 2
-      - Grundversicherung (SGB XII): 3
-      - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
-      - Asylbewerberleistung: 6
-      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
-      - Leistungen der Ausbildungsförderung (BAföG): 8
-      - Rente: 9
-      - Unterhaltsvorschuss: 10
-      - Arbeitslosengeld I (SGB III): 11
+      - Arbeitslosengeld II (SGB II): Arbeitslosengeld II
+      - Sozialgeld (SGB II): Sozialgeld
+      - Grundversicherung (SGB XII): Grundversicherung
+      - Hilfe zum Lebensunterhalt (SGB XII): Hilfe zum Lebensunterhalt
+      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): Ergänzende Hilfe zum Lebensunterhalt
+      - Asylbewerberleistung: Asylbewerberleistung
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): Kinder- und Jugendhilfe
+      - Leistungen der Ausbildungsförderung (BAföG): Ausbildungsförderung
+      - Rente: Rente
+      - Unterhaltsvorschuss: Unterhaltsvorschuss
+      - Arbeitslosengeld I (SGB III): Arbeitslosengeld I
     show if: person[i].sleistungen_yesno
   - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
     datatype: date
@@ -259,10 +247,10 @@ question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
 choices:
-  - Erstantrag: 1
-  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
-  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
-default: 1
+  - Erstantrag: Erstantrag
+  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): Weiterleistungsantrag
+  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): Erhöhungsantrag
+default: Erstantrag
 section: allgemein
 ---
 question: |
@@ -329,17 +317,17 @@ fields:
         len(antragssteller) <= 1
   - persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
     choices:
-      - Arbeiter(in): 1
-      - Selbständige(r): 7
-      - Rentner(in): 2
-      - Auszubildende(r): 8
-      - Angestellte(r): 3
-      - Arbeitslose(r): 4
-      - sonst. Nichterwerbstätige(r): 9
-      - Student(in): 5
-      - Beamter(in): 6
-      - Pensionär(in): 10
-    default: 1
+      - Arbeiter(in)
+      - Selbständige(r)
+      - Rentner(in)
+      - Auszubildende(r)
+      - Angestellte(r)
+      - Arbeitslose(r)
+      - sonst. Nichterwerbstätige(r)
+      - Student(in)
+      - Beamter(in)
+      - Pensionär(in)
+    default: Arbeiter(in)
     show if:
       code: |
         len(antragssteller) <= 1
@@ -425,7 +413,7 @@ fields:
     datatype: date
     show if: antragssteller[i].einnahmen_yesno  
   - Grund der Veränderung: antragssteller[i].einnahmen_grund
-    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
+    default: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: antragssteller[i].einnahmen_yesno  
 ---
 question: |

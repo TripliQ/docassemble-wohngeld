@@ -1,0 +1,39 @@
+---
+event: allgemeines
+section: allgemeines
+question: |
+  Vertragsart
+review:
+  - Bearbeiten: antragsart
+    button: |
+      Antragsart: ${ antragsart } 
+  - Bearbeiten: antragsteller_wohngeldnummer
+    button: |  
+      Wohngeldnummer: ${ antragsteller_wohngeldnummer }
+    show if: |
+      antragsart != 'Erstantrag'
+---
+question: |
+  Angaben zum Käufer
+review:
+  - Bearbeiten: kaeufer.bekannt
+    button: |
+      Details Bekannt: ${ 'Ja' if kaeufer.bekannt else 'Nein' }
+      
+      Verkäufer: ${ kaeufer.art }
+      
+  - Details Bearbeiten: kaeufer.name.first
+    button: |
+      % if kaeufer.art == 'Unternehmen':
+      Firmenname: ${ kaeufer.firmenname }
+      % endif
+      
+      Vorname: ${ kaeufer.name.first } 
+      
+      Nachname: ${ kaeufer.name.last }
+      
+      Adresse: ${ kaeufer.address.address }
+      
+      Postleitzahl: ${ kaeufer.address.postal_code }
+      
+      Stadt: ${ kaeufer.address.city }

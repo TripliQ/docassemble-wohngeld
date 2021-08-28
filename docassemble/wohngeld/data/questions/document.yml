@@ -299,7 +299,63 @@ attachment:
           % if len(antragssteller) > 2 and antragssteller[2].einnahmen_yesno:
           ${ antragssteller[2] }: ${ antragssteller[2].einnahmen_grund }
           % endif
----
+          
+          
+      - "antragssteller_name_situation": | 
+          % if any([antragssteller[0].beeintraechtigungen, antragssteller[0].pflegebeduerftig, antragssteller[0].verfolgung]):
+          ${ antragssteller[0].name.last }, ${ antragssteller[0].name.first }
+          % endif
+      - "antragssteller_beeintraechtigung_grad": | 
+          % if antragssteller[0].beeintraechtigungen:
+          ${ antragssteller[0].beeintraechtigung_grad }
+          % endif  
+      - "antragssteller_pflegebeduerftig": | 
+          % if antragssteller[0].pflegebeduerftig:
+          ${ yesno(antragssteller[0].pflegebeduerftig) }
+          % endif  
+      - "antragssteller_verfolgung": | 
+          % if antragssteller[0].verfolgung:
+          ${ yesno(antragssteller[0].verfolgung) }
+          % endif  
+
+      - "person_1_name_situation": | 
+          % if len(antragssteller) > 1 and any([antragssteller[1].beeintraechtigungen, antragssteller[1].pflegebeduerftig, antragssteller[1].verfolgung]):
+          ${ antragssteller[1].name.last }, ${ antragssteller[1].name.first }
+          % endif
+      - "person_1_beeintraechtigung_grad": | 
+          % if len(antragssteller) > 1 and antragssteller[1].beeintraechtigungen:
+          ${ antragssteller[1].beeintraechtigung_grad }
+          % endif  
+      - "person_1_pflegebeduerftig": | 
+          % if len(antragssteller) > 1 and antragssteller[1].pflegebeduerftig:
+          ${ yesno(antragssteller[1].pflegebeduerftig) }
+          % endif  
+      - "person_1_verfolgung": | 
+          % if len(antragssteller) > 1 and antragssteller[1].verfolgung:
+          ${ yesno(antragssteller[1].verfolgung) }
+          % endif  
+          
+      - "person_2_name_situation": | 
+          % if len(antragssteller) > 2 and any([antragssteller[2].beeintraechtigungen, antragssteller[2].pflegebeduerftig, antragssteller[2].verfolgung]):
+          ${ antragssteller[2].name.last }, ${ antragssteller[2].name.first }
+          % endif
+      - "person_2_beeintraechtigung_grad": | 
+          % if len(antragssteller) > 2 and antragssteller[2].beeintraechtigungen:
+          ${ antragssteller[2].beeintraechtigung_grad }
+          % endif  
+      - "person_2_pflegebeduerftig": | 
+          % if len(antragssteller) > 2 and antragssteller[2].pflegebeduerftig:
+          ${ yesno(antragssteller[2].pflegebeduerftig) }
+          % endif  
+      - "person_2_verfolgung": | 
+          % if len(antragssteller) > 2 and antragssteller[2].verfolgung:
+          ${ yesno(antragssteller[2].verfolgung) }
+          % endif  
+          
+      - "anzahl_kinder": | 
+          bla
+          # ${ len([e for e in antragssteller if e.verwandschaftsverhaeltnis == 'Kind']) }
+---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
 ---
@@ -311,19 +367,8 @@ attachment code: wohngeldantrag_pdf
 
 subquestion: |
   ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
-  
-  **Hinweis zur fehlerhaften Webansicht mit Google Chrome**:
-  
-  Wenn Sie den ausgefüllten Wohngeldantrag in der PDF Google Chrome Ansicht zum Dowload öffnen, scheint es als wenn nicht alle Boxen korrekt angekreutzt sind:
-  
-  ${ static_image('google_chrome_fehlerhafte_ansicht.png', width='100%') }
-  
-  Nach dem Download, sieht man jedoch das die Boxen in der Tat korrekt angekreutzt wurden:
-  
-  ${ static_image('pdf_korrekte_ansicht.png', width='100%') }
-  <br>
-  <br>
-  ## Ihre finalen Schritte zum Antrag:
+
+  ### Ihre finalen Schritte zum Antrag:
   
   1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
   2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
