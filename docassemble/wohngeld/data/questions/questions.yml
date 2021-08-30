@@ -349,7 +349,7 @@ fields:
       code: |
         len(antragssteller) > 1 
     default: Kind
-  - Kindergeldberechtigung: antragssteller[i].kindergeld_berechtigt
+  - Wird für die Person Kindergeld gewährt: antragssteller[i].kindergeld_berechtigt
     default: no
     datatype: yesnoradio
     show if:
