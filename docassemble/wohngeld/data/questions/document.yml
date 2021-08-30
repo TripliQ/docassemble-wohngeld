@@ -353,8 +353,21 @@ attachment:
           % endif  
           
       - "anzahl_kinder": | 
-          bla
-          # ${ len([e for e in antragssteller if e.verwandschaftsverhaeltnis == 'Kind']) }
+          % if len(antragssteller) > 1:
+          ${ len([e for e in antragssteller[1:] if e.verwandschaftsverhaeltnis == 'Kind']) }
+          % endif 
+      - "kindergeld_berechtigte": | 
+          % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):
+          ${ comma_list([e.name for e in antragssteller[1:]  if e.kindergeld_berechtigt]) }
+          % endif 
+      - "kindergeld_nein": | 
+          % if len(antragssteller) == 1 or not any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):
+          ${ yesno(True) }
+          % endif
+      - "kindergeld_ja": | 
+          % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):    
+          ${ yesno(True) } 
+          % endif
 ---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
