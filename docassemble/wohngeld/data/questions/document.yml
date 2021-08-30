@@ -355,7 +355,7 @@ attachment:
           
       - "anzahl_kinder": | 
           % if len(antragssteller) > 1:
-          ${ len([e for e in antragssteller[1:] if e.verwandschaftsverhaeltnis == 'Kind']) }
+          ${ len([e for e in antragssteller[1:] if e.kindergeld_berechtigt]) }
           % endif 
       - "kindergeld_berechtigte": | 
           % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):
@@ -418,9 +418,46 @@ attachment:
           % if verstorbener and weitere_person:
           ${ format_date(weitere_person_datum, format='dd.MM.yyyy') } 
           % endif
-     
+
       - "personen_sozialleistungen": |  
-         ${ personen_sozialleistungen }
+         % for person in antragssteller:
+         % if person.sozialleistungen_yesno and person.sozialleistungen_type == 'beantragt':
+         
+         ${ person.name.last }, ${ person.name.first }, ${ format_date(person.sozialleistungen_start_date, format='dd.MM.yyyy') } | 
+         % endif
+         % if person.sozialleistungen_yesno and person.sozialleistungen_type == 'bezieht':
+         ${ person.name.last }, ${ person.name.first }, ${ format_date(person.sozialleistungen_start_date, format='dd.MM.yyyy') } - ${ format_date(person.sozialleistungen_end_date, format='dd.MM.yyyy') } | 
+         % endif
+         % endfor
+         
+      - "sozialleistungen_nein": |     
+         ${ yesno(any([person.sozialleistungen_yesno for person in antragssteller]), invert=True) }
+      - "sozialleistungen_ja": |  
+         ${ yesno(any([person.sozialleistungen_yesno for person in antragssteller])) }
+       
+         
+      - "Arbeitslosengeld II (SGB II)": |
+         ${ yesno(any([person.sozialleistungen == 'Arbeitslosengeld II (SGB II)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Sozialgeld (SGB II)": |
+         ${ yesno(any([person.sozialleistungen == 'Sozialgeld (SGB II)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Grundsicherung (SGB XII)": |
+         ${ yesno(any([person.sozialleistungen == 'Grundsicherung (SGB XII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Hilfe zum Lebensunterhalt (SGB XII)": |
+         ${ yesno(any([person.sozialleistungen == 'Hilfe zum Lebensunterhalt (SGB XII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.)": |
+         ${ yesno(any([person.sozialleistungen == 'Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Asylbewerberleistung": |
+         ${ yesno(any([person.sozialleistungen == 'Asylbewerberleistung' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Leistungen der Kinder- und Jugendhilfe (SGB VIII)": |
+         ${ yesno(any([person.sozialleistungen == 'Leistungen der Kinder- und Jugendhilfe (SGB VIII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Leistungen der Ausbildungsförderung (BAföG)": |
+         ${ yesno(any([person.sozialleistungen == 'Leistungen der Ausbildungsförderung (BAföG)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Rente": |
+         ${ yesno(any([person.sozialleistungen == 'Rente' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Unterhaltsvorschuss": |
+         ${ yesno(any([person.sozialleistungen == 'Unterhaltsvorschuss' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Arbeitslosengeld I (SGB III)": |
+         ${ yesno(any([person.sozialleistungen == 'Arbeitslosengeld I (SGB III)' for person in antragssteller if person.sozialleistungen_yesno])) }
 ---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
