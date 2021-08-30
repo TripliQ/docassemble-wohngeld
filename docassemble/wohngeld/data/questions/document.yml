@@ -5,7 +5,8 @@ attachment:
     filename: wohngeldantrag
     variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
-    fields:
+    fields:       
+
       - "antragsart": ${ antragsart }
       - "antragsteller_wohngeldnummer": |
           % if antragsart != "1":
@@ -368,6 +369,56 @@ attachment:
           % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):    
           ${ yesno(True) } 
           % endif
+          
+      - "unterhalt_nein": |  
+          ${ yesno(unterhaltszahlungen, invert=True) } 
+      - "unterhalt_ja": |  
+          ${ yesno(unterhaltszahlungen) } 
+    
+      - "verstorbene_person_nein": |  
+          ${ yesno(verstorbener, invert=True) }   
+      - "verstorbene_person_ja": |  
+          ${ yesno(verstorbener) }   
+      - "verstorbene_person_namen": |  
+          % if verstorbener:
+          ${ verstorbener_name } 
+          % endif
+      - "verstorbene_person_datum": |  
+          % if verstorbener:
+          ${ format_date(verstorbener_datum, format='dd.MM.yyyy') } 
+          % endif
+
+
+      - "wohnungswechsel_nein": |  
+          % if verstorbener:
+          ${ yesno(wohnungswechsel, invert=True) }  
+          % endif
+      - "wohnungswechsel_ja": | 
+          % if verstorbener:
+          ${ yesno(wohnungswechsel) }  
+          % endif
+      - "wohnungswechsel_datum": |  
+          % if verstorbener and wohnungswechsel:
+          ${ format_date(wohnungswechsel_datum, format='dd.MM.yyyy') } 
+          % endif
+          
+      - "wohnung_person_aufnahme_nein": |  
+          % if verstorbener:
+          ${ yesno(weitere_person, invert=True) } 
+          % endif
+      - "wohnung_person_aufnahme_ja": |  
+          % if verstorbener:
+          ${ yesno(weitere_person) }  
+          % endif
+      - "wohnung_person_aufnahme_namen": |  
+          % if verstorbener and weitere_person:
+          ${ weitere_person_name } 
+          % endif
+      - "wohnung_person_aufnahme_datum": |  
+          % if verstorbener and weitere_person:
+          ${ format_date(weitere_person_datum, format='dd.MM.yyyy') } 
+          % endif
+     
 ---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
