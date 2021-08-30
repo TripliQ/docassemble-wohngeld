@@ -9,6 +9,7 @@ objects:
   - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
   - antragssteller[i].einkuenfte: DAList.using(object_type=Thing, there_are_any=True)
   - antragssteller[i].wkkosten: DAList.using(object_type=Thing)
+  - antragssteller[i].sozialleistungen: DAList.using(object_type=Thing)
   - wohnung_addresse: Address
   - zahlungsempfaenger: Individual
   - vermieter: Individual
@@ -156,41 +157,6 @@ fields:
   - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
 ---
-# To-Do: @Daniel Transferleistungen Frage bündeln (wenn pair programming Felix kontkatieren)
-# To-Do: Splitten der Frage in 2
-# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen? -> Sollten mehrere Antworten ausgewählt werden können?
-# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
-# Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
-question: |
-  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
-yesno: sozialleistungen
----
-# TO-DO: Splitten der Frage in 2
-# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
-# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
-question: |
-  Bezieht **${ person[i].vorname } ${ person[i].familienname }** {Transferleistungen}?
-fields:
-  - ' ': person[i].sleistungen_yesno
-    datatype: yesnoradio
-  - Wählen Sie bitte aus: person[i].sleistungen
-    choices:
-      - Arbeitslosengeld II (SGB II): Arbeitslosengeld II
-      - Sozialgeld (SGB II): Sozialgeld
-      - Grundversicherung (SGB XII): Grundversicherung
-      - Hilfe zum Lebensunterhalt (SGB XII): Hilfe zum Lebensunterhalt
-      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): Ergänzende Hilfe zum Lebensunterhalt
-      - Asylbewerberleistung: Asylbewerberleistung
-      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): Kinder- und Jugendhilfe
-      - Leistungen der Ausbildungsförderung (BAföG): Ausbildungsförderung
-      - Rente: Rente
-      - Unterhaltsvorschuss: Unterhaltsvorschuss
-      - Arbeitslosengeld I (SGB III): Arbeitslosengeld I
-    show if: person[i].sleistungen_yesno
-  - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
-    datatype: date
-    show if: person[i].sleistungen_yesno
----
 # TO-DO: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
   Wer hat diese Leistungen beantragt?
@@ -246,6 +212,47 @@ fields:
     datatype: text
     default: 12345678901
     required: False
+---
+question: |
+  % if len(antragssteller) <= 1:
+  Hat ${ antragssteller[i] } (Antragssteller) Sozialleistungen bentantragt oder bezogen?
+  % else:
+  Hat das ${ ordinal(i) } Haushaltsmitglied ${ antragssteller[i] } Sozialleistungen bentantragt oder bezogen?
+  % endif
+fields:
+  - Sozialleistung: antragssteller[i].sozialleistungen[j].name.text
+    choices:
+      - Arbeitslosengeld II (SGB II): Arbeitslosengeld II
+      - Sozialgeld (SGB II): Sozialgeld
+      - Grundversicherung (SGB XII): Grundversicherung
+      - Hilfe zum Lebensunterhalt (SGB XII): Hilfe zum Lebensunterhalt
+      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): Ergänzende Hilfe zum Lebensunterhalt
+      - Asylbewerberleistung: Asylbewerberleistung
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): Kinder- und Jugendhilfe
+      - Leistungen der Ausbildungsförderung (BAföG): Ausbildungsförderung
+      - Rente: Rente
+      - Unterhaltsvorschuss: Unterhaltsvorschuss
+      - Arbeitslosengeld I (SGB III): Arbeitslosengeld I
+  - Status: antragssteller[i].sozialleistungen[j].type
+    datatype: dropdown
+    choices:
+      - beantragt
+      - bezogen
+  - Antragsdatum bzw. Bezugszeitraum: antragssteller[i].sozialleistungen[j].date
+    datatype: date
+list collect: True
+---
+code: |
+  personen_sozialleistungen = []
+  for person in antragssteller:
+    if person.sozialleistungen.there_are_any:
+      for sozialleistung in person.sozialleistungen:
+        personen_sozialleistungen_temp = f"{person.name.last}, {person.name.first}, {sozialleistung.name} ({sozialleistung.status}, {sozialleistung.date})"
+        personen_sozialleistungen.append(personen_sozialleistungen_temp)
+---
+question: |
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+yesno: sozialleistungen
 ---
 question: |
   % if len(antragssteller) <= 1:
@@ -387,6 +394,9 @@ fields:
     choices:
       - Ja: 1
       - Nein: 2 
+  - Sozialleistungen bezogen oder beantragt: antragssteller[i].sozialleistungen.there_are_any
+    datatype: yesnoradio
+    default: True
   - steuerliche Geltendmachung von {Werbungskosten} oder {Kinderbetreuungskosten}: antragssteller[i].wkkosten.there_are_any
     datatype: yesnoradio
     default: False

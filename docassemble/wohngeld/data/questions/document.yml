@@ -419,6 +419,8 @@ attachment:
           ${ format_date(weitere_person_datum, format='dd.MM.yyyy') } 
           % endif
      
+      - "personen_sozialleistungen": |  
+         ${ personen_sozialleistungen }
 ---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
