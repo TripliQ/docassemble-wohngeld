@@ -1,6 +1,7 @@
 include:
   - questions.yml
   - document.yml
+  - review.yml
 ---
 # main interview logik für Antragskriterien
 code: |
@@ -12,6 +13,28 @@ code: |
   elif sozialleistungen == False:
       final_document
 mandatory: True
+---
+---
+# TO-DO:
+# data types überprüen
+# input validation
+# terms und hints
+sections:
+  - intro: Einführung
+  - allgemeines: Allgemeines
+  - about: 1) Persönliche Daten
+  - wohnungsdaten: 2) Wohnungsdaten
+  - zahlungsdaten: Zahlungsdaten
+  - miete: 2) Miete und Bewohner
+    subsections:
+      - lebensverhaeltnisse: Lebensverhältnisse
+      - bewohnerangaben: Bewohnerangaben
+      - mietdaten: Mietmodalitäten
+  - zuschuesse: 3) Aktuelle & Zukünftige Zuschüsse und Leistungen
+  - zusammenfassung: Zusammenfassung
+---
+features:
+  navigation: True
 ---
 # siehe to-do unten
 # exit Link setzen zu XYZ -> Exit Button Docassemble Documentation

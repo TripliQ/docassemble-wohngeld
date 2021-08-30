@@ -68,57 +68,41 @@ question: |
 fields:
   - no label: antragsteller_wohnverhaeltnisse
     choices:
-      - Hauptmieter(in): 1
-      - Untermieter(in): 2
-      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: 3
-      - Heimbewohner(in): 4
+      - Hauptmieter(in): Hauptmieter(in)
+      - Untermieter(in): Untermieter(in)
+      - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: Bewohner(in) Mehrfamilienhaus
+      - Heimbewohner(in): Heimbewohner(in)
 section: mietdaten
 ---
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
-yesno: verstorbener
----
-question: |
-  Hat die verstorbene Person Transferleistungen erhalten?
-yesno: transferleistungen
----
-question: |
-  Datum des Todes?
 fields:
-  - Todesdatum: verstorbener_datum
+  - no label: verstorbener
+    datatype: yesnoradio
+  - "Hat die verstorbene Person Transferleistungen erhalten?": verstorbener_transferleistungen
+    datatype: yesnoradio
+    show if: verstorbener
+  - Name der verstorbenen Person: verstorbener_name
+    show if: verstorbener
+  - Datum des Todes: verstorbener_datum
+    show if: verstorbener
     datatype: date
 ---
 question: |
-  Wie lautet der Name der verstorbenen Person?
-fields:
-  - Name: verstorbener_name
-    required: False
----
-question: |
-  Haben Sie nach dem Tod von **${ verstorbener_name }** die Wohnung gewechselt?
-yesno: wohnungswechsel
----
-question: |
-  Datum des Wohnungswechsels?
-fields:
-  - Todesdatum: wohnungswechsel_datum
+  Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
+fields:  
+  - "Haben Sie nach dem Tod  die Wohnung gewechselt?": wohnungswechsel
+    datatype: yesnoradio
+  - "Datum des Wohnungswechsels": wohnungswechsel_datum
     datatype: date
----
-question: |
-  Haben Sie nach dem Tod der haushaltsangehörigen Person eine weitere Person
-  in den Haushalt aufgenommen?
-yesno: weitere_person
----
-question: |
-  Zu welchem Datum haben Sie die weitere Person aufgenommen?
-fields:
-  - Datum der Aufnahme: weitere_person_datum
+    show if: wohnungswechsel
+  - "Haben Sie nach dem Tod der haushaltsangehörigen Person eine weitere Person in den Haushalt aufgenommen?": weitere_person
+    datatype: yesnoradio
+  - "Name der weiteren Person": weitere_person_name
+    show if: weitere_person
+  - "Datum der Aufnahme": weitere_person_datum
     datatype: date
----
-question: |
-  Name der weiteren Person
-fields:
-  - Name: weitere_person_name
+    show if: weitere_person
 ---
 # TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten - Done
 question: |
@@ -134,7 +118,7 @@ fields:
     show if: einnahmen1_yesno
 ---
 question:  |
-  Werden von den zu Ihrem Haushalt rechnenden Personen Unterhaltszahlungen geleistet?
+  Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 yesno: unterhaltszahlungen
 ---
 question: |
@@ -162,18 +146,6 @@ fields:
   - Name: beeintraechtigungen1_name
   - Vorname: beeintraechtigungen1_vorname
 ---
-question: |
-  Welches Kriterium trifft auf die Person zu?
-fields:
-  - "Kriterien": beeintraechtigungen1_art
-    datatype: checkboxes
-    choices:
-      - schwerbehindert
-      - häuslich pflegebedürftig
-      - Opfer der nationalsozialistischen Verfolgung und ihnen Gleichgestellte         im Sinne des Bundesentschädigungsgesetzes
-  - "Geben Sie ggf. den Grad der Behinderung an:": beeintraechtigungen1_grad
-    required: False
----
 question: | 
   Wird für **${ person[i].vorname } ${ person[i].familienname }** Kindergeld gewährt?
 fields:
@@ -183,41 +155,6 @@ fields:
     show if: person[i].kindergeld_yesno
   - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
     show if: person[i].kindergeld_yesno
----
-# To-Do: @Daniel Transferleistungen Frage bündeln (wenn pair programming Felix kontkatieren)
-# To-Do: Splitten der Frage in 2
-# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen? -> Sollten mehrere Antworten ausgewählt werden können?
-# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
-# Bug-Fix: Wenn mehrere checkboxes auswählbar sein sollen, dann alle Antworten als Boolean (true, false) und anschließend in code zeile die true values unpacken oder dict_keys asignen: 
-question: |
-  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
-yesno: sozialleistungen
----
-# TO-DO: Splitten der Frage in 2
-# Frage 1: Beziehen Sie oder eine der zum hauslatangehörigen Personen eine der nachafolgenden Leistungen?
-# Frage 2: if yes-> Seit wann bzeiehen sie? -> if no-> befindet sich in Bearbeitung wissen sie es nicht
-question: |
-  Bezieht **${ person[i].vorname } ${ person[i].familienname }** {Transferleistungen}?
-fields:
-  - ' ': person[i].sleistungen_yesno
-    datatype: yesnoradio
-  - Wählen Sie bitte aus: person[i].sleistungen
-    choices:
-      - Arbeitslosengeld II (SGB II): 1
-      - Sozialgeld (SGB II): 2
-      - Grundversicherung (SGB XII): 3
-      - Hilfe zum Lebensunterhalt (SGB XII): 4
-      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.): 5
-      - Asylbewerberleistung: 6
-      - Leistungen der Kinder- und Jugendhilfe (SGB VIII): 7
-      - Leistungen der Ausbildungsförderung (BAföG): 8
-      - Rente: 9
-      - Unterhaltsvorschuss: 10
-      - Arbeitslosengeld I (SGB III): 11
-    show if: person[i].sleistungen_yesno
-  - Antragsdatum bzw. Bezugszeitraum: person[i].sleistungen_datum
-    datatype: date
-    show if: person[i].sleistungen_yesno
 ---
 # TO-DO: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
 question: |
@@ -259,10 +196,10 @@ question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
 choices:
-  - Erstantrag: 1
-  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): 2
-  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): 3
-default: 1
+  - Erstantrag: Erstantrag
+  - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): Weiterleistungsantrag
+  - Erhöhungsantrag (bei Änderungen im laufenden BWZR): Erhöhungsantrag
+default: Erstantrag
 section: allgemein
 ---
 question: |
@@ -274,6 +211,44 @@ fields:
     datatype: text
     default: 12345678901
     required: False
+---
+question: |
+  % if len(antragssteller) <= 1:
+  Hat ${ antragssteller[i] } (Antragssteller) Sozialleistungen bentantragt oder bezogen?
+  % else:
+  Bezieht das ${ ordinal(i) } Haushaltsmitglied ${ antragssteller[i] } Sozialleistungen oder wurden Sozialleistungen beantragt?
+  % endif
+fields:
+  - Sozialleistung: antragssteller[i].sozialleistungen
+    datatype: radio
+    choices:
+      - Arbeitslosengeld II (SGB II)
+      - Sozialgeld (SGB II)
+      - Grundsicherung (SGB XII)
+      - Hilfe zum Lebensunterhalt (SGB XII)
+      - Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.)
+      - Asylbewerberleistung
+      - Leistungen der Kinder- und Jugendhilfe (SGB VIII)
+      - Leistungen der Ausbildungsförderung (BAföG)
+      - Rente
+      - Unterhaltsvorschuss
+      - Arbeitslosengeld I (SGB III)
+  - Status: antragssteller[i].sozialleistungen_type
+    datatype: dropdown
+    choices:
+      - beantragt
+      - bezieht 
+  - Antragsdatum/Anfang Bezugszeitraum: antragssteller[i].sozialleistungen_start_date
+    datatype: date
+  - Ende Bezugszeitraum: antragssteller[i].sozialleistungen_end_date
+    datatype: date
+    show if:
+      variable: antragssteller[i].sozialleistungen_type
+      is: bezieht
+---
+question: |
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+yesno: sozialleistungen
 ---
 question: |
   % if len(antragssteller) <= 1:
@@ -329,17 +304,17 @@ fields:
         len(antragssteller) <= 1
   - persönliche Verhältnisse: antragssteller[i].persoenliche_verhaeltnisse
     choices:
-      - Arbeiter(in): 1
-      - Selbständige(r): 7
-      - Rentner(in): 2
-      - Auszubildende(r): 8
-      - Angestellte(r): 3
-      - Arbeitslose(r): 4
-      - sonst. Nichterwerbstätige(r): 9
-      - Student(in): 5
-      - Beamter(in): 6
-      - Pensionär(in): 10
-    default: 1
+      - Arbeiter(in)
+      - Selbständige(r)
+      - Rentner(in)
+      - Auszubildende(r)
+      - Angestellte(r)
+      - Arbeitslose(r)
+      - sonst. Nichterwerbstätige(r)
+      - Student(in)
+      - Beamter(in)
+      - Pensionär(in)
+    default: Arbeiter(in)
     show if:
       code: |
         len(antragssteller) <= 1
@@ -374,13 +349,12 @@ fields:
       code: |
         len(antragssteller) > 1 
     default: Kind
-  - Kindergeldberechtigung: antragssteller[i].kindergeld_berechtigt
-    default: yes
-    required: False
+  - Wird für die Person Kindergeld gewährt: antragssteller[i].kindergeld_berechtigt
+    default: no
     datatype: yesnoradio
-    show if: 
-      variable: antragssteller[i].verwandschaftsverhaeltnis
-      is: Kind
+    show if:
+      code: |
+        len(antragssteller) > 1 
   - Schwerbehinderung: antragssteller[i].beeintraechtigungen
     datatype: yesnoradio
     default: False
@@ -415,6 +389,9 @@ fields:
     choices:
       - Ja: 1
       - Nein: 2 
+  - Sozialleistungen bezogen oder beantragt: antragssteller[i].sozialleistungen_yesno
+    datatype: yesnoradio
+    default: True
   - steuerliche Geltendmachung von {Werbungskosten} oder {Kinderbetreuungskosten}: antragssteller[i].wkkosten.there_are_any
     datatype: yesnoradio
     default: False
@@ -425,7 +402,7 @@ fields:
     datatype: date
     show if: antragssteller[i].einnahmen_yesno  
   - Grund der Veränderung: antragssteller[i].einnahmen_grund
-    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
+    default: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: antragssteller[i].einnahmen_yesno  
 ---
 question: |
@@ -636,6 +613,9 @@ terms:
   Unterstützung: |
    Dazu zählen: Wohngeld sowie andere private oder öffentliche Zuschüsse zur Bezahlung der      Miete (z.B. von Verwandten, vom Arbeitgeber)
   Haushalt angehörige: |
+   Zu den Haushaltsmitgliedern zählen:
+   der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
+  Haushalt angehörigen: |
    Zu den Haushaltsmitgliedern zählen:
    der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
 ---

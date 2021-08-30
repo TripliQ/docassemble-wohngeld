@@ -5,7 +5,8 @@ attachment:
     filename: wohngeldantrag
     variable name: wohngeldantrag_pdf
     pdf template file: wohngeldantrag.pdf
-    fields:
+    fields:       
+
       - "antragsart": ${ antragsart }
       - "antragsteller_wohngeldnummer": |
           % if antragsart != "1":
@@ -299,7 +300,165 @@ attachment:
           % if len(antragssteller) > 2 and antragssteller[2].einnahmen_yesno:
           ${ antragssteller[2] }: ${ antragssteller[2].einnahmen_grund }
           % endif
----
+          
+          
+      - "antragssteller_name_situation": | 
+          % if any([antragssteller[0].beeintraechtigungen, antragssteller[0].pflegebeduerftig, antragssteller[0].verfolgung]):
+          ${ antragssteller[0].name.last }, ${ antragssteller[0].name.first }
+          % endif
+      - "antragssteller_beeintraechtigung_grad": | 
+          % if antragssteller[0].beeintraechtigungen:
+          ${ antragssteller[0].beeintraechtigung_grad }
+          % endif  
+      - "antragssteller_pflegebeduerftig": | 
+          % if antragssteller[0].pflegebeduerftig:
+          ${ yesno(antragssteller[0].pflegebeduerftig) }
+          % endif  
+      - "antragssteller_verfolgung": | 
+          % if antragssteller[0].verfolgung:
+          ${ yesno(antragssteller[0].verfolgung) }
+          % endif  
+
+      - "person_1_name_situation": | 
+          % if len(antragssteller) > 1 and any([antragssteller[1].beeintraechtigungen, antragssteller[1].pflegebeduerftig, antragssteller[1].verfolgung]):
+          ${ antragssteller[1].name.last }, ${ antragssteller[1].name.first }
+          % endif
+      - "person_1_beeintraechtigung_grad": | 
+          % if len(antragssteller) > 1 and antragssteller[1].beeintraechtigungen:
+          ${ antragssteller[1].beeintraechtigung_grad }
+          % endif  
+      - "person_1_pflegebeduerftig": | 
+          % if len(antragssteller) > 1 and antragssteller[1].pflegebeduerftig:
+          ${ yesno(antragssteller[1].pflegebeduerftig) }
+          % endif  
+      - "person_1_verfolgung": | 
+          % if len(antragssteller) > 1 and antragssteller[1].verfolgung:
+          ${ yesno(antragssteller[1].verfolgung) }
+          % endif  
+          
+      - "person_2_name_situation": | 
+          % if len(antragssteller) > 2 and any([antragssteller[2].beeintraechtigungen, antragssteller[2].pflegebeduerftig, antragssteller[2].verfolgung]):
+          ${ antragssteller[2].name.last }, ${ antragssteller[2].name.first }
+          % endif
+      - "person_2_beeintraechtigung_grad": | 
+          % if len(antragssteller) > 2 and antragssteller[2].beeintraechtigungen:
+          ${ antragssteller[2].beeintraechtigung_grad }
+          % endif  
+      - "person_2_pflegebeduerftig": | 
+          % if len(antragssteller) > 2 and antragssteller[2].pflegebeduerftig:
+          ${ yesno(antragssteller[2].pflegebeduerftig) }
+          % endif  
+      - "person_2_verfolgung": | 
+          % if len(antragssteller) > 2 and antragssteller[2].verfolgung:
+          ${ yesno(antragssteller[2].verfolgung) }
+          % endif  
+          
+      - "anzahl_kinder": | 
+          % if len(antragssteller) > 1:
+          ${ len([e for e in antragssteller[1:] if e.kindergeld_berechtigt]) }
+          % endif 
+      - "kindergeld_berechtigte": | 
+          % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):
+          ${ comma_list([e.name for e in antragssteller[1:]  if e.kindergeld_berechtigt]) }
+          % endif 
+      - "kindergeld_nein": | 
+          % if len(antragssteller) == 1 or not any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):
+          ${ yesno(True) }
+          % endif
+      - "kindergeld_ja": | 
+          % if len(antragssteller) > 1 and any([e.kindergeld_berechtigt for e in antragssteller[1:] if e.kindergeld_berechtigt]):    
+          ${ yesno(True) } 
+          % endif
+          
+      - "unterhalt_nein": |  
+          ${ yesno(unterhaltszahlungen, invert=True) } 
+      - "unterhalt_ja": |  
+          ${ yesno(unterhaltszahlungen) } 
+    
+      - "verstorbene_person_nein": |  
+          ${ yesno(verstorbener, invert=True) }   
+      - "verstorbene_person_ja": |  
+          ${ yesno(verstorbener) }   
+      - "verstorbene_person_namen": |  
+          % if verstorbener:
+          ${ verstorbener_name } 
+          % endif
+      - "verstorbene_person_datum": |  
+          % if verstorbener:
+          ${ format_date(verstorbener_datum, format='dd.MM.yyyy') } 
+          % endif
+
+
+      - "wohnungswechsel_nein": |  
+          % if verstorbener:
+          ${ yesno(wohnungswechsel, invert=True) }  
+          % endif
+      - "wohnungswechsel_ja": | 
+          % if verstorbener:
+          ${ yesno(wohnungswechsel) }  
+          % endif
+      - "wohnungswechsel_datum": |  
+          % if verstorbener and wohnungswechsel:
+          ${ format_date(wohnungswechsel_datum, format='dd.MM.yyyy') } 
+          % endif
+          
+      - "wohnung_person_aufnahme_nein": |  
+          % if verstorbener:
+          ${ yesno(weitere_person, invert=True) } 
+          % endif
+      - "wohnung_person_aufnahme_ja": |  
+          % if verstorbener:
+          ${ yesno(weitere_person) }  
+          % endif
+      - "wohnung_person_aufnahme_namen": |  
+          % if verstorbener and weitere_person:
+          ${ weitere_person_name } 
+          % endif
+      - "wohnung_person_aufnahme_datum": |  
+          % if verstorbener and weitere_person:
+          ${ format_date(weitere_person_datum, format='dd.MM.yyyy') } 
+          % endif
+
+      - "personen_sozialleistungen": |  
+         % for person in antragssteller:
+         % if person.sozialleistungen_yesno and person.sozialleistungen_type == 'beantragt':
+         
+         ${ person.name.last }, ${ person.name.first }, ${ format_date(person.sozialleistungen_start_date, format='dd.MM.yyyy') } | 
+         % endif
+         % if person.sozialleistungen_yesno and person.sozialleistungen_type == 'bezieht':
+         ${ person.name.last }, ${ person.name.first }, ${ format_date(person.sozialleistungen_start_date, format='dd.MM.yyyy') } - ${ format_date(person.sozialleistungen_end_date, format='dd.MM.yyyy') } | 
+         % endif
+         % endfor
+         
+      - "sozialleistungen_nein": |     
+         ${ yesno(any([person.sozialleistungen_yesno for person in antragssteller]), invert=True) }
+      - "sozialleistungen_ja": |  
+         ${ yesno(any([person.sozialleistungen_yesno for person in antragssteller])) }
+       
+         
+      - "Arbeitslosengeld II (SGB II)": |
+         ${ yesno(any([person.sozialleistungen == 'Arbeitslosengeld II (SGB II)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Sozialgeld (SGB II)": |
+         ${ yesno(any([person.sozialleistungen == 'Sozialgeld (SGB II)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Grundsicherung (SGB XII)": |
+         ${ yesno(any([person.sozialleistungen == 'Grundsicherung (SGB XII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Hilfe zum Lebensunterhalt (SGB XII)": |
+         ${ yesno(any([person.sozialleistungen == 'Hilfe zum Lebensunterhalt (SGB XII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.)": |
+         ${ yesno(any([person.sozialleistungen == 'Ergänzende Hilfe zum Lebensunterhalt (BVG o.a.)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Asylbewerberleistung": |
+         ${ yesno(any([person.sozialleistungen == 'Asylbewerberleistung' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Leistungen der Kinder- und Jugendhilfe (SGB VIII)": |
+         ${ yesno(any([person.sozialleistungen == 'Leistungen der Kinder- und Jugendhilfe (SGB VIII)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Leistungen der Ausbildungsförderung (BAföG)": |
+         ${ yesno(any([person.sozialleistungen == 'Leistungen der Ausbildungsförderung (BAföG)' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Rente": |
+         ${ yesno(any([person.sozialleistungen == 'Rente' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Unterhaltsvorschuss": |
+         ${ yesno(any([person.sozialleistungen == 'Unterhaltsvorschuss' for person in antragssteller if person.sozialleistungen_yesno])) }
+      - "Arbeitslosengeld I (SGB III)": |
+         ${ yesno(any([person.sozialleistungen == 'Arbeitslosengeld I (SGB III)' for person in antragssteller if person.sozialleistungen_yesno])) }
+---  
 code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
 ---
@@ -311,19 +470,8 @@ attachment code: wohngeldantrag_pdf
 
 subquestion: |
   ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
-  
-  **Hinweis zur fehlerhaften Webansicht mit Google Chrome**:
-  
-  Wenn Sie den ausgefüllten Wohngeldantrag in der PDF Google Chrome Ansicht zum Dowload öffnen, scheint es als wenn nicht alle Boxen korrekt angekreutzt sind:
-  
-  ${ static_image('google_chrome_fehlerhafte_ansicht.png', width='100%') }
-  
-  Nach dem Download, sieht man jedoch das die Boxen in der Tat korrekt angekreutzt wurden:
-  
-  ${ static_image('pdf_korrekte_ansicht.png', width='100%') }
-  <br>
-  <br>
-  ## Ihre finalen Schritte zum Antrag:
+
+  ### Ihre finalen Schritte zum Antrag:
   
   1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
   2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
