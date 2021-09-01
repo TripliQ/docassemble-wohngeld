@@ -44,7 +44,7 @@ list collect: True
 ---
 # TO-DO: Achtung noch mehr hevorheben
 question: |
-  Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
+  Wohnen mit Ihnen weitere Personen (auch Kinder) in der Wohnung?
 subquestion: |
   **ACHTUNG**, zu den Haushaltsmitgliedern zählen nur:
    
@@ -78,7 +78,7 @@ question: |
 fields:
   - no label: verstorbener
     datatype: yesnoradio
-  - "Hat die verstorbene Person Transferleistungen erhalten?": verstorbener_transferleistungen
+  - "Hat die verstorbene Person {Sozialleistungen} erhalten?": verstorbener_transferleistungen
     datatype: yesnoradio
     show if: verstorbener
   - Name der verstorbenen Person: verstorbener_name
@@ -167,12 +167,12 @@ fields:
 ---
 question: |
   % if len(antragssteller) <= 1:
-  Hat ${ antragssteller[i] } (Antragssteller) Sozialleistungen bentantragt oder bezogen?
+  Welche Sozialleistung bezieht **${ antragssteller[i] } (Antragssteller/in)** bzw. welche Sozialleistungen hat **${ antragssteller[i] } (Antragssteller/in)** beantragt?
   % else:
-  Bezieht das ${ ordinal(i) } Haushaltsmitglied ${ antragssteller[i] } Sozialleistungen oder wurden Sozialleistungen beantragt?
+  Welche Sozialleistung bezieht das ${ ordinal(i) } Haushaltsmitglied **${ antragssteller[i] }** bzw. welche Sozialleistung hat das ${ ordinal(i) } Haushaltsmitglied **${ antragssteller[i] }** beantragt?
   % endif
 fields:
-  - Sozialleistung: antragssteller[i].sozialleistungen
+  - no label: antragssteller[i].sozialleistungen
     datatype: radio
     choices:
       - Arbeitslosengeld II (SGB II)
@@ -191,7 +191,7 @@ fields:
     choices:
       - beantragt
       - bezieht 
-  - Antragsdatum/Anfang Bezugszeitraum: antragssteller[i].sozialleistungen_start_date
+  - Antragsdatum/Beginn Bezugszeitraum: antragssteller[i].sozialleistungen_start_date
     datatype: date
   - Ende Bezugszeitraum: antragssteller[i].sozialleistungen_end_date
     datatype: date
@@ -200,7 +200,7 @@ fields:
       is: bezieht
 ---
 question: |
-  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Transferleistungen} oder haben Sie kürzlich einen Antrag auf {Transferleistungen} gestellt? 
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt? 
 yesno: sozialleistungen
 ---
 question: |
@@ -313,6 +313,15 @@ fields:
     default: False
   - Grad der Behinderung: antragssteller[i].beeintraechtigung_grad
     required: False
+    choices:
+      - 30
+      - 40
+      - 50
+      - 60
+      - 70
+      - 80
+      - 90
+      - 100
     show if: antragssteller[i].beeintraechtigungen
   - häusliche Pflegebedürftigkeit: antragssteller[i].pflegebeduerftig
     datatype: yesnoradio
@@ -343,7 +352,7 @@ fields:
     choices:
       - Ja: 1
       - Nein: 2 
-  - Sozialleistungen bezogen oder beantragt: antragssteller[i].sozialleistungen_yesno
+  - Bezug von {Sozialleistungen}/Antrag auf {Sozialleistungen} gestellt: antragssteller[i].sozialleistungen_yesno
     datatype: yesnoradio
     default: True
   - steuerliche Geltendmachung von {Werbungskosten} oder {Kinderbetreuungskosten}: antragssteller[i].wkkosten.there_are_any
@@ -460,7 +469,7 @@ fields:
   - Vorname: vermieter.name.first
     datatype: text
     default: Max
-  - Sraße und Hausnummer: vermieter.address.address
+  - Straße und Hausnummer: vermieter.address.address
     datatype: text
     default: Musterstraße
   - PLZ: vermieter.address.postal_code
@@ -557,8 +566,8 @@ fields:
     datatype: file
 ---
 terms:
-  Transferleistungen: |
-    **Transferleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
+  Sozialleistungen: |
+    **Sozialleistungen** sind Leistungen wie Arbeitslosengeld II, Sozialgeld, Grundversicherung, Hilfe zum Lebensunterhalt, Ergaenzende Hilfe zum Lebensunterhalt, Asylbewerberleistung, Leistungen der Kinder- und Jugendhilfe, Leistungen der Ausbildungsförderung (BAföG), Rente, Unterhaltsvorschuss oder Arbeitslosengeld I.
   Werbungskosten: |
     **Werbungskosten** sind Kosten, die in Zusammenhang mit der beruflichen Tätigkeit entstehen. Beispiele sind Kosten für Fahrten zur Arbeitsstelle, für Berufsbekleidung, für Reisekosten bei einer Dienstreise oder etwa für eine aus beruflichen Gründen notwendige Zweitwohnung.
   Kinderbetreuungskosten: |
