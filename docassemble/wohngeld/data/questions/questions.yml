@@ -41,6 +41,7 @@ fields:
     datatype: currency
     default: 1000
 list collect: True
+section: bruttoeinkünfte
 ---
 # TO-DO: Achtung noch mehr hevorheben
 question: |
@@ -61,6 +62,7 @@ subquestion: |
   * ${ person }
   % endfor  
 yesno: antragssteller.there_is_another
+section: antragssteller
 ---
 question: |
   Sie sind in Ihrer Wohnung...
@@ -71,7 +73,7 @@ fields:
       - Untermieter(in): Untermieter(in)
       - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: Bewohner(in) Mehrfamilienhaus
       - Heimbewohner(in): Heimbewohner(in)
-section: mietdaten
+section: wohnverhältnisse
 ---
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
@@ -86,6 +88,7 @@ fields:
   - Datum des Todes: verstorbener_datum
     show if: verstorbener
     datatype: date
+section: verstorben
 ---
 question: |
   Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
@@ -102,6 +105,7 @@ fields:
   - "Datum der Aufnahme": weitere_person_datum
     datatype: date
     show if: weitere_person
+section: nach_tod
 ---
 # To-DO: Verlinkung zu den Zusatvordruck
 question:  |
@@ -114,27 +118,7 @@ fields:
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
     datatype: file  
     show if: unterhaltszahlungen
----
-# TO-DO:
-# data types überprüen
-# input validation
-# terms und hints
-sections:
-  - intro: Einführung
-  - about: 1) Persönliche Daten
-    subsections:
-      - allgemein: Allgemeines
-      - zahlungsdaten: Zahlungsdaten
-  - miete: 2) Miete und Bewohner
-    subsections:
-      - lebensverhaeltnisse: Lebensverhältnisse
-      - bewohnerangaben: Bewohnerangaben
-      - mietdaten: Mietmodalitäten
-  - zuschuesse: 3) Aktuelle & Zukünftige Zuschüsse und Leistungen
-  - zusammenfassung: Zusammenfassung
----
-features:
-  navigation: True
+section: unterhaltszahlungen
 ---
 mandatory: True
 question: |
@@ -153,7 +137,7 @@ choices:
   - Weiterleistungsantrag wegen Ablauf des Bewilligungszeitraumes (BWZR) (frühestens zwei Monate vor Ablauf des BWZR): Weiterleistungsantrag
   - Erhöhungsantrag (bei Änderungen im laufenden BWZR): Erhöhungsantrag
 default: Erstantrag
-section: allgemein
+section: art_antrag
 ---
 question: |
   Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
@@ -164,6 +148,7 @@ fields:
     datatype: text
     default: 12345678901
     required: False
+section: wohngeldnummer
 ---
 question: |
   % if len(antragssteller) <= 1:
@@ -198,10 +183,12 @@ fields:
     show if:
       variable: antragssteller[i].sozialleistungen_type
       is: bezieht
+section: sozialleistungen
 ---
 question: |
   Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt? 
 yesno: sozialleistungen
+section: anspruch
 ---
 question: |
   % if len(antragssteller) <= 1:
@@ -329,6 +316,7 @@ fields:
   - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
     datatype: yesnoradio
     default: False
+section: antragssteller
 ---
 # TO-DO: Änderung von 1/2 wegen Review
 question: |
@@ -367,6 +355,7 @@ fields:
   - Grund der Veränderung: antragssteller[i].einnahmen_grund
     default: z.B. Jobwechsel, wegfallende Mieteinnahmen
     show if: antragssteller[i].einnahmen_yesno  
+section: einkunftsarten
 ---
 question: |
   Geben Sie bitte alle {Werbungskosten} oder {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
@@ -383,6 +372,7 @@ fields:
     datatype: currency
     default: 1000
 list collect: True  
+section: wkkbkosten
 ---
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
@@ -397,6 +387,7 @@ fields:
     required: False
   - Wohnungsnummer: wohnung_addresse.unit
     required: False
+section: adresse
 ---
 # Frage 3
 question: |
@@ -421,7 +412,7 @@ fields:
   - Kontonummer: antragsteller_kontonummer
     datatype: text
     default: 1234567890
-section: zahlungsdaten
+section: bankverbindung
 ---
 question: |
   Name und Anschrift des Kontoinhabers:
@@ -449,7 +440,7 @@ fields:
     datatype: object_checkboxes
     choices:
       - antragssteller
-section: lebensverhaeltnisse
+section: lebensverhältnisse
 ---
 question: |
   Auswahl des Kontoinhabers
@@ -482,6 +473,7 @@ fields:
     datatype: text
     default: 0123456789
     required: False
+section: vermieter
 ---
 question: |
   Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
@@ -494,6 +486,7 @@ fields:
     min: 1
   - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
     datatype: file
+section: miethöhe
 ---
 # Frage 7
 question: |
@@ -518,6 +511,7 @@ fields:
         - Kinder (auch Pflege- und Adoptivkinder)
         - sonstige Verwandte
         - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
+section: nutzung
 ---
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
@@ -528,6 +522,7 @@ fields:
     show if: gewerbliche_nutzung
     datatype: number
     default: 123
+section: andere_nutzung
 ---
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
@@ -535,6 +530,7 @@ fields:
   - no label: datum_einzug
     datatype: date
     default: 01.01.2000
+section: einzugsdatum
 ---
 # To-Do: Rewrite. - Done
 question: |
@@ -547,7 +543,7 @@ fields:
   - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
     datatype: yesnoradio
     default: True
-section: zuschuesse
+section: zusschüsse
 ---
 # To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze. (Erledigt, aber es sieht so aus als wäre die Question nicht mehr Teil des Interviews)
 question: |
