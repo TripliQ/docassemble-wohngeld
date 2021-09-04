@@ -1,8 +1,6 @@
 # TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
 
 # TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
-
-# TO-DO Felix: Check warum von der zweiten Person auch die Daten abgefragt werden obwohl nur 1 Person ausgewählt wurde.
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -44,6 +42,7 @@ fields:
     default: 1000
 list collect: True
 ---
+# TO-DO: Achtung noch mehr hevorheben
 question: |
   Wohnen mit ihnen weitere Personen (auch Kinder) in der Wohnung?
 subquestion: |
@@ -104,63 +103,17 @@ fields:
     datatype: date
     show if: weitere_person
 ---
-# TO-DO: Wäre cool wenn wir noch bei aus welchen Grund noch ein gutes Beispiel mit Hint einfügen könnten - Done
-question: |
-  Werden sich die Einkünfte in den nächsten 12 Monaten verringern oder erhöhen?
-fields:
-  - ' ': einnahmen1_yesno
-    datatype: yesnoradio
-  - Ab wann?: einnahmen1_datum
-    datatype: date
-    show if: einnahmen1_yesno
-  - Aus welchem Grund?: einnahmen1_grund
-    hint: z.B. Jobwechsel, wegfallende Mieteinnahmen
-    show if: einnahmen1_yesno
----
+# To-DO: Verlinkung zu den Zusatvordruck
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
-yesno: unterhaltszahlungen
----
-question: |
-    Eine zu Ihrem Haushalt gehörende Person leistet Unterhaltszahlungen. Bitte fügen sie dazu die Anlage „Aufwendungen zur Erfüllung gesetzlicher Unterhaltspflichten“ bei.
-subquestion: |
-  Lesen Sie bitte die Hinweise zur Unterhaltsverpflichtung im Merkblatt sowie die weiteren Hinweise in dem Zusatzvordruck!
 fields:
-  - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
-    datatype: file
----
-# To-Do: Könnte man alternativ bei den Personen abfragen, dadruch erübrgit sich auch die Follow-Up Frage, oder dirket gebündelt mit allen Personen
-question: |
-  Trifft auf eine Person in Ihrem Haushalt eine der folgenden
-  Kriterien zu?
-subquestion: |
-  - Schwerbehinderung
-  - häusliche Pflegebedürftigkeit
-  - Opfer der nationalsozialistischen Verfolgung und ihnen
-    gleichgestellte im Sinne des Bundesentschädigungsgesetzes
-yesno: beeintraechtigungen
----
-question: |
-  Wie heißt die Person, auf die mindestens eine der Kriterien zutrifft?
-fields:
-  - Name: beeintraechtigungen1_name
-  - Vorname: beeintraechtigungen1_vorname
----
-question: | 
-  Wird für **${ person[i].vorname } ${ person[i].familienname }** Kindergeld gewährt?
-fields:
-  - ' ': person[i].kindergeld_yesno
+  - no label: unterhaltszahlungen
     datatype: yesnoradio
-  - Vorname des/der Kindergeldberechtigten: person[i].kindergeld_vorname
-    show if: person[i].kindergeld_yesno
-  - Nachname des/der Kindergeldberechtigten: person[i].kindergeld_nachname
-    show if: person[i].kindergeld_yesno
----
-# TO-DO: Pontentiell könnte man hier personen auswählen die vorher genannt wurden
-question: |
-  Wer hat diese Leistungen beantragt?
-fields:
-  - Beantragender und Antragsdatum: sozialleistungen_name  
+  - note: |
+      Lesen Sie bitte die Hinweise zur Unterhaltsverpflichtung im Merkblatt sowie die weiteren Hinweise in dem Zusatzvordruck!
+  - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
+    datatype: file  
+    show if: unterhaltszahlungen
 ---
 # TO-DO:
 # data types überprüen
@@ -368,6 +321,7 @@ fields:
     datatype: yesnoradio
     default: False
 ---
+# TO-DO: Änderung von 1/2 wegen Review
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
@@ -538,6 +492,12 @@ question: |
 fields:
   - "Haben Sie einen Teil Ihrer Wohnung einer anderen Person untervermietet oder kostenlos überlassen?": untervermietung
     datatype: yesnoradio
+  - note: |
+      [Bitte downloaden Sie folgendes Formular und laden Sie es anschließend ausgefüllt hier hoch.](https://www.wohngeld.org/service/nordrhein-westfalen/wohngeld_untervermietung.pdf)
+    show if: untervermietung
+  - "Anlage Untervermietung": untervermietung_und_mitnutzung_anlage
+    datatype: file
+    show if: untervermietung
   - "Benutzt eine nicht zum Haushalt rechnende Person die Wohnung mit?": mitnutzung
     datatype: yesnoradio
   - note: |
@@ -551,12 +511,6 @@ fields:
         - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
 ---
 question: |
-  Sie haben eine der letzten beiden Fragen mit "Ja" beantwortet. Bitte fügen Sie die [Anlage "Untervermietung"](https://www.wohngeld.org/service/nordrhein-westfalen/wohngeld_untervermietung.pdf) bei.
-fields:
-  - Anlage "Untervermietung": untervermietung_und_mitnutzung_anlage
-    datatype: file
----
-question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
 fields:  
   - no label: gewerbliche_nutzung
@@ -566,7 +520,6 @@ fields:
     datatype: number
     default: 123
 ---
-# TO-DO: Diskussion ob frühstes Datum mit abgefragt werden muss, z.B. bei Ehepartner (Tobias Beispiel) -> Ggf. als subquestion dazu
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
