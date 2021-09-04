@@ -39,7 +39,7 @@ features:
 # siehe to-do unten
 # exit Link setzen zu XYZ -> Exit Button Docassemble Documentation
 question: |
-  Da Sie bereits Transferleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
+  Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
   **Das ermittelte Ergebnis ist unverbindlich. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
   
