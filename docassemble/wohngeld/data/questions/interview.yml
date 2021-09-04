@@ -26,7 +26,7 @@ sections:
     subsections:
       - art_antrag: Antragsart
       - wohngeldnummer: Wohngeldnummer
-  - antragssteller: Antragssteller & Haushaltsmiglieder
+  - section_antragssteller: Antragssteller & Haushaltsmiglieder
   - adresse: Wohnungsadresse
   - bankverbindung: Bankverbindung
   - lebensverhältnisse: Lebensverhältnisse

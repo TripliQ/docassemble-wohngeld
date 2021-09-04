@@ -62,7 +62,7 @@ subquestion: |
   * ${ person }
   % endfor  
 yesno: antragssteller.there_is_another
-section: antragssteller
+section: section_antragssteller
 ---
 question: |
   Sie sind in Ihrer Wohnung...
@@ -316,7 +316,7 @@ fields:
   - Opfer der nationalsozialistischen Verfolgung: antragssteller[i].verfolgung
     datatype: yesnoradio
     default: False
-section: antragssteller
+section: section_antragssteller
 ---
 # TO-DO: Änderung von 1/2 wegen Review
 question: |
