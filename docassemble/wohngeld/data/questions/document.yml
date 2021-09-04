@@ -9,7 +9,7 @@ attachment:
 
       - "antragsart": ${ antragsart }
       - "antragsteller_wohngeldnummer": |
-          % if antragsart != "1":
+          % if antragsart != "Erstantrag":
           ${ antragsteller_wohngeldnummer }
           % endif
       - "antragsteller_familienname": ${ antragssteller[0].name.last }
