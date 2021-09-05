@@ -18,12 +18,15 @@ review:
     show if: |
       antragsart != 'Erstantrag'
 ---
-section: section_antragssteller
+# https://docassemble.org/docs/groups.html#editing
 event: section_antragssteller
+section: section_antragssteller
 question: |
-  Antragssteller & Haushaltsmitglieder
+  Antragssteller & Haushaltsmitglieder Bearbeiten
 review:
   - note: |
+      hello
+      ${ len(antragssteller) }
       Antragssteller & Haushaltsmitglieder:
 
       ${ antragssteller.table }
