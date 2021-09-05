@@ -389,7 +389,7 @@ fields:
     required: False
 section: adresse
 ---
-# Frage 3
+# To-Do: Abändern von Nummern auf Values bei choices
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
 subquestion: |
