@@ -1,7 +1,7 @@
 event: art_antrag
 section: art_antrag
 question: |
-  Vertragsart
+  Antragsart
 review:
   - Bearbeiten: antragsart
     button: |
@@ -40,3 +40,186 @@ columns:
       row_item.name.full()
 edit:
   - name.first
+---
+section: adresse
+event: adresse
+question: |
+  Wohnungsadresse
+review:
+  - Bearbeiten: wohnung_addresse.address
+    button: |
+      Straße und Hausnummer: ${ wohnung_addresse.address } 
+  - Bearbeiten: wohnung_addresse.postal_code
+    button: |
+      PLZ: ${ wohnung_addresse.postal_code } 
+  - Bearbeiten: wohnung_addresse.city
+    button: |
+      Ort: ${ wohnung_addresse.city } 
+  - Bearbeiten: wohnung_addresse.floor
+    button: |
+      Etage: ${ wohnung_addresse.floor } 
+  - Bearbeiten: wohnung_addresse.unit
+    button: |
+      Wohnungsnummer: ${ wohnung_addresse.unit }
+---
+section: bankverbindung
+event: bankverbindung
+question: |
+  Bankverbindung
+review:
+  - Bearbeiten: antragsteller_kontoinhaber
+    button: |
+      Kontoinhaber: ${ antragsteller_kontoinhaber }
+  - Bearbeiten: antragsteller_kreditinstitut_name
+    button: |
+      Name des Kreditinstituts: ${ antragsteller_kreditinstitut_name } 
+  - Bearbeiten: antragsteller_bankleitzahl
+    button: |
+      Bankleitzahl: ${ antragsteller_bankleitzahl } 
+  - Bearbeiten: antragsteller_kontonummer
+    button: |
+      Kontonummer: ${ antragsteller_kontonummer }
+---
+section: lebensverhältnisse
+event: lebensverhältnisse
+question: |
+  Mittelpunkt der Lebensbeziehungen
+review:
+  - Bearbeiten: person_nicht_lebensmittelpunkt
+    button: |
+      Nicht Mittelpunkt der Lebensbeziehungen: ${ person_nicht_lebensmittelpunkt }
+---
+section: wohnverhältnis
+event: wohnverhältnis
+question: |
+  Wohnverhältnis
+review:
+  - Bearbeiten: antragsteller_wohnverhaeltnisse
+    button: |
+      Wohnverhältnis: ${ antragsteller_wohnverhaeltnisse }
+---
+subsection: section_vermieter
+event: section_vermieter
+question: |
+  Vermieter
+review:
+  - Bearbeiten: vermieter.name.last
+    button: |
+      Nachname: ${ vermieter.name.last }
+      
+      Vorname: ${ vermieter.name.first }
+  - Bearbeiten: vermieter.address.address
+    button: |
+      Straße und Hausnummer: ${ vermieter.address.address } 
+  - Bearbeiten: vermieter.address.postal_code
+    button: |
+      PLZ: ${ vermieter.address.postal_code }
+  - Bearbeiten: vermieter.address.city
+    button: |
+      Ort: ${ vermieter.address.city }
+  - Bearbeiten: vermieter.phone
+    button: |
+      Telefonnummer: ${ vermieter.phone } 
+---
+section: nutzung
+event: nutzung
+question: |
+  Nutzung
+review:
+  - Bearbeiten: untervermietung
+    button: |
+      Untervermietung/Überlassung: ${ untervermietung }
+  - Bearbeiten: untervermietung_und_mitnutzung_anlage
+    button: |
+      Anlage Untervermietung: ${ untervermietung_und_mitnutzung_anlage }
+    show if: |
+      untervermietung
+  - Bearbeiten: mitnutzung
+    button: |
+      Mitnutzung: ${ mitnutzung }
+---
+section: miethöhe
+event: miethöhe
+question: |
+  Miethöhe
+review:
+  - Bearbeiten: warmmiete
+    button: |
+      Warmmiete pro Monat: ${ warmmiete }
+  - Bearbeiten: wohnung_angaben_anlage
+    button: |
+      Anlage zum Wohnraum/Untervermietung: ${ wohnung_angaben_anlage }
+---
+section: einzugsdatum
+event: einzugsdatum
+question: |
+  Einzugsdatum
+review:
+  - Bearbeiten: datum_einzug
+    button: |
+      Einzugsdatum: ${ datum_einzug }
+---
+section: andere_nutzung
+event: andere_nutzung
+question: |
+  Andere Nutzung
+review:
+  - Bearbeiten: gewerbliche_nutzung
+    button: |
+      Andere Nutzung: ${ gewerbliche_nutzung }
+  - Bearbeiten: gewerbliche_nutzung_qm
+    button: |
+      Anzahl der genutzten Quadratmeter: ${ gewerbliche_nutzung_qm }
+    show if: |
+      gewerbliche_nutzung
+---
+section: zusschüsse
+event: zusschüsse
+question: |
+  Zuschüsse
+review:
+  - Bearbeiten: zuschuesse
+    button: |
+      Erhalt von Unterstützung: ${ zuschuesse }
+  - Bearbeiten: zuschuesse_antrag
+    button: |
+      Antrag auf Unterstützung: ${ zuschuesse_antrag }
+---
+#section: unterhaltszahlungen
+#event: unterhaltszahlungen
+#question: |
+#  Unterhaltszahlungen
+#review:
+#  - Bearbeiten: unterhaltszahlungen
+#    button: |
+#      Unterhaltszahlungen: ${ unterhaltszahlungen }
+#  - Bearbeiten: unterhaltsverpflichtungen
+#    button: |
+#      Anlage Unterhaltszahlungen: ${ unterhaltsverpflichtungen }
+#    show if: |
+#      unterhaltszahlungen
+---
+section: verstorben
+event: verstorben
+question: |
+  Verstorbene Person
+review:
+  - Bearbeiten: verstorbener
+    button: |
+      Unterhaltszahlungen: ${ verstorbener }
+  - Bearbeiten: verstorbener_transferleistungen
+    button: |
+      Erhalt von Sozialleistungen: ${ verstorbener_transferleistungen }
+    show if: |
+      verstorbener
+  - Bearbeiten: verstorbener_name
+    button: |
+      Name: ${ verstorbener_name }
+    show if: |
+      verstorbener
+  - Bearbeiten: verstorbener_datum
+    button: |
+      Todesdatum: ${ verstorbener_datum }
+    show if: |
+      verstorbener
+---

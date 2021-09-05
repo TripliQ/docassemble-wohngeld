@@ -73,7 +73,7 @@ fields:
       - Untermieter(in): Untermieter(in)
       - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: Bewohner(in) Mehrfamilienhaus
       - Heimbewohner(in): Heimbewohner(in)
-section: wohnverhältnisse
+section: wohnverhältnis
 ---
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
@@ -466,14 +466,14 @@ fields:
   - PLZ: vermieter.address.postal_code
     datatype: text
     default: 12345
-  - Wohnort: vermieter.address.city
+  - Ort: vermieter.address.city
     datatype: text
     default: Musterstadt
-  - Telefonnummer: vermieter.phone
+  - Telefon: vermieter.phone
     datatype: text
     default: 0123456789
     required: False
-section: vermieter
+section: section_vermieter
 ---
 question: |
   Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
@@ -484,7 +484,7 @@ fields:
     datatype: currency
     default: 1234
     min: 1
-  - Anlage zum Wohnraum/ Untervermietung: wohnung_angaben_anlage
+  - Anlage zum Wohnraum/Untervermietung: wohnung_angaben_anlage
     datatype: file
 section: miethöhe
 ---

@@ -26,13 +26,14 @@ sections:
     subsections:
       - art_antrag: Antragsart
       - wohngeldnummer: Wohngeldnummer
-  - section_antragssteller: Antragssteller & Haushaltsmiglieder
+  - section_antragssteller: Antragssteller & Haushaltsmitglieder
   - adresse: Wohnungsadresse
   - bankverbindung: Bankverbindung
-  - lebensverhältnisse: Lebensverhältnisse
-  - wohnverhältnisse: Wohnverhältnisse
+  - lebensverhältnisse: Mittelpunkt der Lebensbeziehungen
+  - wohnsituation: Wohnsituation
     subsections:  
-      - vermieter: Vermieter
+      - wohnverhältnis: Wohnverhältnis
+      - section_vermieter: Vermieter
       - nutzung: Nutzung
       - miethöhe: Miethöhe
       - einzugsdatum: Einzugsdatum
@@ -44,7 +45,7 @@ sections:
       - bruttoeinkünfte: Bruttoeinkünfte
       - wkkbkosten: Werbungs- & Betreungskosten
   - unterhaltszahlungen: Unterhaltszahlungen
-  - verstorben: Verstorbene Personen
+  - verstorben: Verstorbene Person
     subsections:  
       - nach_tod: Situation nach dem Tod
   - sozialleistungen: Sozialleistungen
