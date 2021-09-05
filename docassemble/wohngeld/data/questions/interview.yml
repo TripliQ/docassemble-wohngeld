@@ -21,16 +21,33 @@ mandatory: True
 # terms und hints
 sections:
   - intro: Einführung
-  - allgemeines: Allgemeines
-  - about: 1) Persönliche Daten
-  - wohnungsdaten: 2) Wohnungsdaten
-  - zahlungsdaten: Zahlungsdaten
-  - miete: 2) Miete und Bewohner
+  - anspruch: Anspruch
+  - antrag: Antrag
     subsections:
-      - lebensverhaeltnisse: Lebensverhältnisse
-      - bewohnerangaben: Bewohnerangaben
-      - mietdaten: Mietmodalitäten
-  - zuschuesse: 3) Aktuelle & Zukünftige Zuschüsse und Leistungen
+      - art_antrag: Antragsart
+      - wohngeldnummer: Wohngeldnummer
+  - section_antragssteller: Antragssteller & Haushaltsmiglieder
+  - adresse: Wohnungsadresse
+  - bankverbindung: Bankverbindung
+  - lebensverhältnisse: Lebensverhältnisse
+  - wohnverhältnisse: Wohnverhältnisse
+    subsections:  
+      - vermieter: Vermieter
+      - nutzung: Nutzung
+      - miethöhe: Miethöhe
+      - einzugsdatum: Einzugsdatum
+      - andere_nutzung: Andere Nutzung
+      - zusschüsse: Zuschüsse
+  - einkünfte: Einkünfte
+    subsections:  
+      - einkunftsarten: Einkunftsarten
+      - bruttoeinkünfte: Bruttoeinkünfte
+      - wkkbkosten: Werbungs- & Betreungskosten
+  - unterhaltszahlungen: Unterhaltszahlungen
+  - verstorben: Verstorbene Personen
+    subsections:  
+      - nach_tod: Situation nach dem Tod
+  - sozialleistungen: Sozialleistungen
   - zusammenfassung: Zusammenfassung
 ---
 features:
@@ -48,6 +65,7 @@ field: entscheidung
 buttons:
   - Ja, ich möchte trotzdem fortfahren.
   - Nein, ich möchte das Interview beenden.
+section: zusammenfassung
 ---
 question: |
   Vielen Dank für das Nutzen des digitalen Wohngeldantrags NRW.

@@ -1,39 +1,42 @@
----
-event: allgemeines
-section: allgemeines
+event: art_antrag
+section: art_antrag
 question: |
   Vertragsart
 review:
   - Bearbeiten: antragsart
     button: |
       Antragsart: ${ antragsart } 
+---
+event: wohngeldnummer
+section: wohngeldnummer
+question: |
+  Wohngeldnummer
+review:
   - Bearbeiten: antragsteller_wohngeldnummer
     button: |  
       Wohngeldnummer: ${ antragsteller_wohngeldnummer }
     show if: |
       antragsart != 'Erstantrag'
 ---
+# https://docassemble.org/docs/groups.html#editing
+event: section_antragssteller
+section: section_antragssteller
 question: |
-  Angaben zum Käufer
+  Antragssteller & Haushaltsmitglieder Bearbeiten
 review:
-  - Bearbeiten: kaeufer.bekannt
-    button: |
-      Details Bekannt: ${ 'Ja' if kaeufer.bekannt else 'Nein' }
+  - note: |
+      hello
+      ${ len(antragssteller) }
+      Antragssteller & Haushaltsmitglieder:
+
+      ${ antragssteller.table }
       
-      Verkäufer: ${ kaeufer.art }
-      
-  - Details Bearbeiten: kaeufer.name.first
-    button: |
-      % if kaeufer.art == 'Unternehmen':
-      Firmenname: ${ kaeufer.firmenname }
-      % endif
-      
-      Vorname: ${ kaeufer.name.first } 
-      
-      Nachname: ${ kaeufer.name.last }
-      
-      Adresse: ${ kaeufer.address.address }
-      
-      Postleitzahl: ${ kaeufer.address.postal_code }
-      
-      Stadt: ${ kaeufer.address.city }
+      ${ antragssteller.add_action() }
+---
+table: antragssteller.table
+rows: antragssteller
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - name.first
