@@ -33,7 +33,7 @@ sections:
   - wohnsituation: Wohnsituation
     subsections:  
       - wohnverhältnis: Wohnverhältnis
-      - vermieter: Vermieter
+      - section_vermieter: Vermieter
       - nutzung: Nutzung
       - miethöhe: Miethöhe
       - einzugsdatum: Einzugsdatum

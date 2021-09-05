@@ -473,7 +473,7 @@ fields:
     datatype: text
     default: 0123456789
     required: False
-section: vermieter
+section: section_vermieter
 ---
 question: |
   Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?

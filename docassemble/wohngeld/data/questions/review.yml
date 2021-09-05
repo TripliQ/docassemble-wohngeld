@@ -95,29 +95,28 @@ review:
     button: |
       Wohnverhältnis: ${ antragsteller_wohnverhaeltnisse }
 ---
-#subsection: vermieter
-#event: vermieter
-#question: |
-#  Vermieter
-#review:
-#  - Bearbeiten: vermieter.name.last
-#    button: |
-#      Nachname: ${ vermieter.name.last }
-#  - Bearbeiten: vermieter.name.first
-#    button: |
-#      Vorname: ${ vermieter.name.first } 
-#  - Bearbeiten: vermieter.address.address
-#    button: |
-#      Straße und Hausnummer: ${ vermieter.address.address } 
-#  - Bearbeiten: vermieter.address.postal_code
-#    button: |
-#      PLZ: ${ vermieter.address.postal_code }
-#  - Bearbeiten: vermieter.address.city
-#    button: |
-#      Ort: ${ vermieter.address.city }
-#  - Bearbeiten: vermieter.phone
-#    button: |
-#      Telefonnummer: ${ vermieter.phone } 
+subsection: section_vermieter
+event: section_vermieter
+question: |
+  Vermieter
+review:
+  - Bearbeiten: vermieter.name.last
+    button: |
+      Nachname: ${ vermieter.name.last }
+      
+      Vorname: ${ vermieter.name.first }
+  - Bearbeiten: vermieter.address.address
+    button: |
+      Straße und Hausnummer: ${ vermieter.address.address } 
+  - Bearbeiten: vermieter.address.postal_code
+    button: |
+      PLZ: ${ vermieter.address.postal_code }
+  - Bearbeiten: vermieter.address.city
+    button: |
+      Ort: ${ vermieter.address.city }
+  - Bearbeiten: vermieter.phone
+    button: |
+      Telefonnummer: ${ vermieter.phone } 
 ---
 section: nutzung
 event: nutzung
