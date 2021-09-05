@@ -49,8 +49,7 @@ review:
   - Bearbeiten: wohnung_addresse.address
     button: |
       Straße und Hausnummer: ${ wohnung_addresse.address } 
-  - Bearbeiten: wohnung_addresse.postal_code
-    button: |
+
       PLZ: ${ wohnung_addresse.postal_code } 
   - Bearbeiten: wohnung_addresse.city
     button: |
