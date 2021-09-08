@@ -4,4 +4,4 @@ A docassemble extension.
 
 ## Author
 
-ddischinger@posteo.de
+simon.damschen@outlook.de

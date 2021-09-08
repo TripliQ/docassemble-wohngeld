@@ -1,0 +1,240 @@
+event: subsection_art_antrag
+section: subsection_art_antrag
+question: |
+  Antragsart
+review:
+  - Bearbeiten: antragsart
+    button: |
+      Antragsart: ${ antragsart } 
+---
+event: subsection_wohngeldnummer
+section: subsection_wohngeldnummer
+question: |
+  Wohngeldnummer
+review:
+  - Bearbeiten: antragsteller_wohngeldnummer
+    button: |  
+      Wohngeldnummer: ${ antragsteller_wohngeldnummer }
+    show if: |
+      antragsart != 'Erstantrag'
+---
+# https://docassemble.org/docs/groups.html#editing
+event: section_antragssteller
+section: section_antragssteller
+need: antragssteller.table
+question: |
+  Antragssteller & Haushaltsmitglieder
+review:
+  note: |
+  
+      ${ antragssteller.table }
+      
+      ${ antragssteller.add_action() }
+---
+table: antragssteller.table
+rows: antragssteller
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - name.first
+---
+section: section_adresse
+event: section_adresse
+question: |
+  Wohnungsadresse
+review:
+  - Bearbeiten: wohnung_addresse.address
+    button: |
+      Straße und Hausnummer: ${ wohnung_addresse.address } 
+
+      PLZ: ${ wohnung_addresse.postal_code } 
+
+      Ort: ${ wohnung_addresse.city } 
+
+      Etage: ${ wohnung_addresse.floor } 
+
+      Wohnungsnummer: ${ wohnung_addresse.unit }
+---
+section: section_bankverbindung
+event: section_bankverbindung
+question: |
+  Bankverbindung
+review:
+  - Bearbeiten: antragsteller_kontoinhaber
+    button: |
+      Kontoinhaber: ${ antragsteller_kontoinhaber }
+
+      Name des Kreditinstituts: ${ antragsteller_kreditinstitut_name } 
+
+      Bankleitzahl: ${ antragsteller_bankleitzahl } 
+
+      Kontonummer: ${ antragsteller_kontonummer }
+---
+section: section_lebensverhältnisse
+event: section_lebensverhältnisse
+question: |
+  Mittelpunkt der Lebensbeziehungen
+review:
+  - Bearbeiten: person_nicht_lebensmittelpunkt
+    button: |
+      Nicht Mittelpunkt der Lebensbeziehungen: ${ person_nicht_lebensmittelpunkt }
+---
+section: subsection_wohnverhältnis
+event: subsection_wohnverhältnis
+question: |
+  Wohnverhältnis
+review:
+  - Bearbeiten: antragsteller_wohnverhaeltnisse
+    button: |
+      Wohnverhältnis: ${ antragsteller_wohnverhaeltnisse }
+---
+subsection: subsection_vermieter
+event: subsection_vermieter
+question: |
+  Vermieter
+review:
+  - Bearbeiten: vermieter.name.last
+    button: |
+      Nachname: ${ vermieter.name.last }
+      
+      Vorname: ${ vermieter.name.first }
+
+      Straße und Hausnummer: ${ vermieter.address.address } 
+
+      PLZ: ${ vermieter.address.postal_code }
+
+      Ort: ${ vermieter.address.city }
+
+      Telefonnummer: ${ vermieter.phone } 
+---
+section: subsection_nutzung
+event: subsection_nutzung
+question: |
+  Nutzung
+review:
+  - Bearbeiten: untervermietung
+    button: |
+      Untervermietung/Überlassung: ${ untervermietung }
+  - Bearbeiten: untervermietung_und_mitnutzung_anlage
+    button: |
+      Anlage Untervermietung: ${ untervermietung_und_mitnutzung_anlage }
+    show if: |
+      untervermietung
+  - Bearbeiten: mitnutzung
+    button: |
+      Mitnutzung: ${ mitnutzung }
+---
+section: subsection_miethöhe
+event: subsection_miethöhe
+question: |
+  Miethöhe
+review:
+  - Bearbeiten: warmmiete
+    button: |
+      Warmmiete pro Monat: ${ warmmiete }
+
+      Anlage zum Wohnraum/Untervermietung: ${ wohnung_angaben_anlage }
+---
+section: subsection_einzugsdatum
+event: subsection_einzugsdatum
+question: |
+  Einzugsdatum
+review:
+  - Bearbeiten: datum_einzug
+    button: |
+      Einzugsdatum: ${ datum_einzug }
+---
+section: subsection_andere_nutzung
+event: subsection_andere_nutzung
+question: |
+  Andere Nutzung
+review:
+  - Bearbeiten: gewerbliche_nutzung
+    button: |
+      Andere Nutzung: ${ gewerbliche_nutzung }
+  - Bearbeiten: gewerbliche_nutzung_qm
+    button: |
+      Anzahl der genutzten Quadratmeter: ${ gewerbliche_nutzung_qm }
+    show if: |
+      gewerbliche_nutzung
+---
+section: subsection_zuschüsse
+event: subsection_zuschüsse
+question: |
+  Zuschüsse
+review:
+  - Bearbeiten: zuschuesse
+    button: |
+      Erhalt von Unterstützung: ${ zuschuesse }
+
+      Antrag auf Unterstützung: ${ zuschuesse_antrag }
+---
+section: section_unterhaltszahlungen
+event: section_unterhaltszahlungen
+question: |
+  Unterhaltszahlungen
+review:
+  - Bearbeiten: unterhaltszahlungen
+    button: |
+      Unterhaltszahlungen: ${ unterhaltszahlungen }
+  - Bearbeiten: unterhaltsverpflichtungen
+    button: |
+      Anlage Unterhaltszahlungen: ${ unterhaltsverpflichtungen }
+    show if: |
+      unterhaltszahlungen
+---
+section: subsection_angaben_todesfall
+event: subsection_angaben_todesfall
+question: |
+  Angaben zum Todesfall
+review:
+  - Bearbeiten: verstorbener
+    button: |
+      Verstorbenes Haushaltsmitglied: ${ verstorbener }
+  - Bearbeiten: verstorbener_name
+    button: |
+      Name: ${ verstorbener_name }
+    show if: |
+      verstorbener
+  - Bearbeiten: verstorbener_datum
+    button: |
+      Todesdatum: ${ verstorbener_datum }
+    show if: |
+      verstorbener
+  - Bearbeiten: verstorbener_transferleistungen
+    button: |
+      Erhalt von Sozialleistungen: ${ verstorbener_transferleistungen }
+    show if: |
+      verstorbener
+---
+section: subsection_nach_tod
+event: subsection_nach_tod
+question: |
+  Situation nach dem Todesfall
+review:
+  - Bearbeiten: wohnungswechsel
+    button: |
+      Wohnungswechsel: ${ wohnungswechsel }
+    show if: |
+      verstorbener
+  - Bearbeiten: wohnungswechsel_datum
+    button: |
+      Datum des Wohnungswechsels: ${ wohnungswechsel_datum }
+    show if: |
+      verstorbener and wohnungswechsel
+  - Bearbeiten: weitere_person
+    button: |
+      Aufnahme eines weiteren Haushaltsmitglieds: ${ weitere_person }
+    show if: |
+      verstorbener
+  - Bearbeiten: weitere_person_name
+    button: |
+      Name: ${ weitere_person_name }
+    show if: |
+      verstorbener and weitere_person
+  - Bearbeiten: weitere_person_datum
+    button: |
+      Datum der Aufnahme: ${ weitere_person_datum }
+    show if: |
+      verstorbener and weitere_person
