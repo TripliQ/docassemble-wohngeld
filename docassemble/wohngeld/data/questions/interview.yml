@@ -20,36 +20,36 @@ mandatory: True
 # input validation
 # terms und hints
 sections:
-  - intro: Einführung
-  - anspruch: Anspruch
-  - antrag: Antrag
+  - section_intro: Einführung
+  - section_anspruch: Anspruch
+  - section_antrag: Antrag
     subsections:
-      - art_antrag: Antragsart
-      - wohngeldnummer: Wohngeldnummer
+      - subsection_art_antrag: Antragsart
+      - subsection_wohngeldnummer: Wohngeldnummer
   - section_antragssteller: Antragssteller & Haushaltsmitglieder
-  - adresse: Wohnungsadresse
-  - bankverbindung: Bankverbindung
-  - lebensverhältnisse: Mittelpunkt der Lebensbeziehungen
-  - wohnsituation: Wohnsituation
+  - section_adresse: Wohnungsadresse
+  - section_bankverbindung: Bankverbindung
+  - section_lebensverhältnisse: Mittelpunkt der Lebensbeziehungen
+  - section_wohnsituation: Wohnsituation
     subsections:  
-      - wohnverhältnis: Wohnverhältnis
-      - section_vermieter: Vermieter
-      - nutzung: Nutzung
-      - miethöhe: Miethöhe
-      - einzugsdatum: Einzugsdatum
-      - andere_nutzung: Andere Nutzung
-      - zusschüsse: Zuschüsse
-  - einkünfte: Einkünfte
+      - subsection_wohnverhältnis: Wohnverhältnis
+      - subsection_vermieter: Vermieter
+      - subsection_nutzung: Nutzung
+      - subsection_miethöhe: Miethöhe
+      - subsection_einzugsdatum: Einzugsdatum
+      - subsection_andere_nutzung: Andere Nutzung
+      - subsection_zuschüsse: Zuschüsse
+  - section_einkünfte: Einkünfte
     subsections:  
-      - einkunftsarten: Einkunftsarten
-      - bruttoeinkünfte: Bruttoeinkünfte
-      - wkkbkosten: Werbungs- & Betreungskosten
-  - unterhaltszahlungen: Unterhaltszahlungen
-  - verstorben: Verstorbene Person
+      - subsection_einkunftsarten: Einkunftsarten
+      - subsection_bruttoeinkünfte: Bruttoeinkünfte
+      - subsection_wkkbkosten: Werbungs- & Betreungskosten
+  - section_unterhaltszahlungen: Unterhaltszahlungen
+  - section_verstorben: Verstorbene Person
     subsections:  
-      - nach_tod: Situation nach dem Tod
-  - sozialleistungen: Sozialleistungen
-  - zusammenfassung: Zusammenfassung
+      - subsection_nach_tod: Situation nach dem Tod
+  - section_sozialleistungen: Sozialleistungen
+  - section_zusammenfassung: Zusammenfassung
 ---
 features:
   navigation: True
