@@ -21,14 +21,12 @@ review:
 # https://docassemble.org/docs/groups.html#editing
 event: section_antragssteller
 section: section_antragssteller
+need: antragssteller.table
 question: |
   Antragssteller & Haushaltsmitglieder
 review:
-  - note: |
-      hello
-      ${ len(antragssteller) }
-      Antragssteller & Haushaltsmitglieder:
-
+  note: |
+  
       ${ antragssteller.table }
       
       ${ antragssteller.add_action() }
