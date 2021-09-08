@@ -186,19 +186,14 @@ review:
     show if: |
       unterhaltszahlungen
 ---
-section: verstorben
-event: verstorben
+section: subsection_angaben_todesfall
+event: subsection_angaben_todesfall
 question: |
-  Verstorbene Person
+  Angaben zum Todesfall
 review:
   - Bearbeiten: verstorbener
     button: |
-      Unterhaltszahlungen: ${ verstorbener }
-  - Bearbeiten: verstorbener_transferleistungen
-    button: |
-      Erhalt von Sozialleistungen: ${ verstorbener_transferleistungen }
-    show if: |
-      verstorbener
+      Verstorbenes Haushaltsmitglied: ${ verstorbener }
   - Bearbeiten: verstorbener_name
     button: |
       Name: ${ verstorbener_name }
@@ -209,4 +204,39 @@ review:
       Todesdatum: ${ verstorbener_datum }
     show if: |
       verstorbener
+  - Bearbeiten: verstorbener_transferleistungen
+    button: |
+      Erhalt von Sozialleistungen: ${ verstorbener_transferleistungen }
+    show if: |
+      verstorbener
 ---
+section: subsection_nach_tod
+event: subsection_nach_tod
+question: |
+  Situation nach dem Todesfall
+review:
+  - Bearbeiten: wohnungswechsel
+    button: |
+      Wohnungswechsel: ${ wohnungswechsel }
+    show if: |
+      verstorbener
+  - Bearbeiten: wohnungswechsel_datum
+    button: |
+      Datum des Wohnungswechsels: ${ wohnungswechsel_datum }
+    show if: |
+      verstorbener and wohnungswechsel
+  - Bearbeiten: weitere_person
+    button: |
+      Aufnahme eines weiteren Haushaltsmitglieds: ${ weitere_person }
+    show if: |
+      verstorbener
+  - Bearbeiten: weitere_person_name
+    button: |
+      Name: ${ weitere_person_name }
+    show if: |
+      verstorbener and weitere_person
+  - Bearbeiten: weitere_person_datum
+    button: |
+      Datum der Aufnahme: ${ weitere_person_datum }
+    show if: |
+      verstorbener and weitere_person

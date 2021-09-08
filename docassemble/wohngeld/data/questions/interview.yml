@@ -45,9 +45,10 @@ sections:
       - subsection_bruttoeinkünfte: Bruttoeinkünfte
       - subsection_wkkbkosten: Werbungs- & Betreungskosten
   - section_unterhaltszahlungen: Unterhaltszahlungen
-  - section_verstorben: Verstorbene Person
+  - section_verstorben: Verstorbenes Haushaltsmitglied
     subsections:  
-      - subsection_nach_tod: Situation nach dem Tod
+      - subsection_angaben_todesfall: Angaben zum Todesfall
+      - subsection_nach_tod: Situation nach dem Todesfall
   - section_sozialleistungen: Sozialleistungen
   - section_zusammenfassung: Zusammenfassung
 ---

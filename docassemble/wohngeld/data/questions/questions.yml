@@ -80,15 +80,15 @@ question: |
 fields:
   - no label: verstorbener
     datatype: yesnoradio
-  - "Hat die verstorbene Person {Sozialleistungen} erhalten?": verstorbener_transferleistungen
-    datatype: yesnoradio
-    show if: verstorbener
   - Name der verstorbenen Person: verstorbener_name
     show if: verstorbener
   - Datum des Todes: verstorbener_datum
     show if: verstorbener
     datatype: date
-section: section_verstorben
+  - "Hat die verstorbene Person {Sozialleistungen} erhalten?": verstorbener_transferleistungen
+    datatype: yesnoradio
+    show if: verstorbener  
+section: subsection_angaben_todesfall
 ---
 question: |
   Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
