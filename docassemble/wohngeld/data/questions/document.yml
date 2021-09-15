@@ -478,3 +478,4 @@ subquestion: |
   3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
   ${ static_image('versandoptionen.png', width='100%') }
 event: final_document
+progress: 100
