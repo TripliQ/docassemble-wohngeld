@@ -1,6 +1,3 @@
-# TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
-
-# TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -43,7 +40,6 @@ fields:
 list collect: True
 section: subsection_bruttoeinkünfte
 ---
-# TO-DO: Achtung noch mehr hevorheben
 question: |
   Gibt es weitere Haushaltsmitglieder?
 subquestion: |
@@ -111,14 +107,17 @@ fields:
 section: subsection_nach_tod
 progress: 92
 ---
-# To-DO: Verlinkung zu den Zusatvordruck
+# Future To-DO: Dokument in Interview einfügen
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 fields:
   - no label: unterhaltszahlungen
     datatype: yesnoradio
   - note: |
-      Lesen Sie bitte die Hinweise zur Unterhaltsverpflichtung im Merkblatt sowie die weiteren Hinweise in dem Zusatzvordruck!
+      Lesen Sie bitte die [Hinweise zur Unterhaltsverpflichtung im Merkblatt](https://recht.nrw.de/lmi/owa/br_show_anlage?p_id=33324) sowie die weiteren Hinweise in dem [Zusatzvordruck](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf)!
+  - note: |
+      Das Formular können sie [hier downloaden](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf). 
+    show if: unterhaltszahlungen
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
     datatype: file  
     show if: unterhaltszahlungen
@@ -224,6 +223,12 @@ fields:
     default: 12.08.1964
   - Geburtsort: antragssteller[i].geburtsort
     default: Berlin
+  - Adresse: antragssteller[i].address.address
+    default: ${ wohnung_addresse.address }
+  - PLZ: antragssteller[i].address.postal_code
+    default: ${ wohnung_addresse.postal_code }
+  - Ort: antragssteller[i].address.city
+    default: ${ wohnung_addresse.city }
   - Familienstand: antragssteller[i].familienstand
     choices:
       - ledig
@@ -326,7 +331,7 @@ fields:
     default: False
 section: section_antragssteller
 ---
-# TO-DO: Änderung von 1/2 wegen Review
+# Future TO-DO: Änderung von 1/2 wegen Review und Editieren von Listen von User
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
@@ -425,20 +430,6 @@ section: section_bankverbindung
 progress: 25
 ---
 question: |
-  Name und Anschrift des Kontoinhabers:
-fields:
-  - Vorname: zahlungsempfaenger.name.first
-    default: Max
-  - Nachname: zahlungsempfaenger.name.last
-    default: Mustermann
-  - Adressse: zahlungsempfaenger.address.address
-    default: Musterstraße 12
-  - Postleihzahl: zahlungsempfaenger.address.postal_code
-    default: 12345
-  - Ort: zahlungsempfaenger.address.city
-    default: Musterstadt
----
-question: |
     Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
   - Hat eine Person nur einen Wohnsitz haben, dann ist dieser in der Regel der Mittelpunkt der Lebensbeziehungen.
@@ -456,12 +447,23 @@ progress: 35
 question: |
   Auswahl des Kontoinhabers
 fields:
-  - Erwachsene Personen: zahlungsempfaenger
-    datatype: object_checkboxes
+  - no label: zahlungsempfaenger
+    datatype: object_radio
+    disable others: True
+    none of the above: andere Person
     choices:
       - antragssteller
+  - Vorname: zahlungsempfaenger.name.first
+    default: Max
+  - Nachname: zahlungsempfaenger.name.last
+    default: Mustermann
+  - Adressse: zahlungsempfaenger.address.address
+    default: Musterstraße 12
+  - Postleihzahl: zahlungsempfaenger.address.postal_code
+    default: 12345
+  - Ort: zahlungsempfaenger.address.city
+    default: Musterstadt
 ---
-# Frage 6
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
@@ -559,24 +561,11 @@ fields:
   - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
     datatype: yesnoradio
     default: True
+  - "Nachweise über ausgezahlte oder beantragte Zuschüsse": zuschuesse_anlage
+    datatype: file
+    show if: zuschuesse
 section: subsection_zuschüsse
 progress: 70
----
-# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze. (Erledigt, aber es sieht so aus als wäre die Question nicht mehr Teil des Interviews)
-question: |
-  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf
-  - Wohngeld;
-  - andere private;
-  - oder öffentliche Zuschüsse 
-  zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
-yesno: zuschuesse_antrag
----
-# TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
-question: |
-  Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
-fields:
-  - Anlage: zuschuesse_anlage
-    datatype: file
 ---
 terms:
   Sozialleistungen: |

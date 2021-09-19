@@ -14,10 +14,6 @@ code: |
       final_document
 mandatory: True
 ---
-# TO-DO:
-# data types überprüen
-# input validation
-# terms und hints
 sections:
   - section_intro: Einführung
   - section_anspruch: Anspruch
@@ -55,8 +51,6 @@ features:
   navigation: True
   progress bar: True
 ---
-# siehe to-do unten
-# exit Link setzen zu XYZ -> Exit Button Docassemble Documentation
 question: |
   Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
