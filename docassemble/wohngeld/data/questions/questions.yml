@@ -398,7 +398,7 @@ fields:
 section: section_adresse
 progress: 20
 ---
-# To-Do: Abändern von Nummern auf Values bei choices (Felix)
+# Future To-Do: Abändern von Nummern auf Values bei choices in PDF/Momentan durch if else im review block gelöst
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
 subquestion: |
