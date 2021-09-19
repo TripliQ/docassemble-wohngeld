@@ -1,4 +1,3 @@
-# TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -108,7 +107,7 @@ fields:
 section: subsection_nach_tod
 progress: 92
 ---
-# Future To-DO: In Interview einfügen
+# Future To-DO: Dokument in Interview einfügen
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 fields:
@@ -332,7 +331,7 @@ fields:
     default: False
 section: section_antragssteller
 ---
-# TO-DO: Änderung von 1/2 wegen Review
+# Future TO-DO: Änderung von 1/2 wegen Review und Editieren von Listen von User
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
@@ -465,7 +464,6 @@ fields:
   - Ort: zahlungsempfaenger.address.city
     default: Musterstadt
 ---
-# Frage 6
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
@@ -568,15 +566,6 @@ fields:
     show if: zuschuesse
 section: subsection_zuschüsse
 progress: 70
----
-# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze. (Erledigt, aber es sieht so aus als wäre die Question nicht mehr Teil des Interviews)
-question: |
-  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf
-  - Wohngeld;
-  - andere private;
-  - oder öffentliche Zuschüsse 
-  zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
-yesno: zuschuesse_antrag
 ---
 terms:
   Sozialleistungen: |
