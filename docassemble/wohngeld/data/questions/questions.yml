@@ -224,6 +224,12 @@ fields:
     default: 12.08.1964
   - Geburtsort: antragssteller[i].geburtsort
     default: Berlin
+  - Adresse: antragssteller[i].address.address
+    default: ${ wohnung_addresse.address }
+  - PLZ: antragssteller[i].address.postal_code
+    default: ${ wohnung_addresse.postal_code }
+  - Ort: antragssteller[i].address.city
+    default: ${ wohnung_addresse.city }
   - Familienstand: antragssteller[i].familienstand
     choices:
       - ledig
@@ -425,20 +431,6 @@ section: section_bankverbindung
 progress: 25
 ---
 question: |
-  Name und Anschrift des Kontoinhabers:
-fields:
-  - Vorname: zahlungsempfaenger.name.first
-    default: Max
-  - Nachname: zahlungsempfaenger.name.last
-    default: Mustermann
-  - Adressse: zahlungsempfaenger.address.address
-    default: Musterstraße 12
-  - Postleihzahl: zahlungsempfaenger.address.postal_code
-    default: 12345
-  - Ort: zahlungsempfaenger.address.city
-    default: Musterstadt
----
-question: |
     Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
   - Hat eine Person nur einen Wohnsitz haben, dann ist dieser in der Regel der Mittelpunkt der Lebensbeziehungen.
@@ -456,10 +448,22 @@ progress: 35
 question: |
   Auswahl des Kontoinhabers
 fields:
-  - Erwachsene Personen: zahlungsempfaenger
-    datatype: object_checkboxes
+  - no label: zahlungsempfaenger
+    datatype: object_radio
+    disable others: True
+    none of the above: andere Person
     choices:
       - antragssteller
+  - Vorname: zahlungsempfaenger.name.first
+    default: Max
+  - Nachname: zahlungsempfaenger.name.last
+    default: Mustermann
+  - Adressse: zahlungsempfaenger.address.address
+    default: Musterstraße 12
+  - Postleihzahl: zahlungsempfaenger.address.postal_code
+    default: 12345
+  - Ort: zahlungsempfaenger.address.city
+    default: Musterstadt
 ---
 # Frage 6
 question: |

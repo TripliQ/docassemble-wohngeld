@@ -27,13 +27,7 @@ attachment:
       - "antragsteller_kontonummer": ${ antragsteller_kontonummer }
       - "antragsteller_kontoinhaber": ${ antragsteller_kontoinhaber }
       - "zahlungsempfaenger": |
-          % if antragsteller_kontoinhaber == "1":
-            TO-DO-Antragssteller
-          % elif antragsteller_kontoinhaber == "2":
-            TO-DO-Familienmitglied  + Adressse
-          % else:
-            ${ zahlungsempfaenger.address_block()  }
-          % endif
+             ${ zahlungsempfaenger.address_block()  }
       - "person_lebensmittelpunkt_nein": |
           ${ yesno(len(person_nicht_lebensmittelpunkt) == 0, invert=True) }
       - "person_lebensmittelpunkt_ja": |
