@@ -8,6 +8,11 @@ objects:
   - zahlungsempfaenger: Individual
   - vermieter: Individual
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Applicant
+    count: True
 question: |
   Geben Sie bitte **alle Bruttoeinkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** von ${ antragssteller[i] } an
 subquestion: |
@@ -40,6 +45,11 @@ fields:
 list collect: True
 section: subsection_bruttoeinkünfte
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: More Household
+    count: True
 question: |
   Gibt es weitere Haushaltsmitglieder?
 subquestion: |
@@ -61,6 +71,11 @@ yesno: antragssteller.there_is_another
 section: section_antragssteller
 progress: 30
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Housing
+    count: True
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -73,6 +88,11 @@ fields:
 section: subsection_wohnverhältnis
 progress: 40
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Deceased Household
+    count: True
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
 fields:
@@ -89,6 +109,11 @@ fields:
 section: subsection_angaben_todesfall
 progress: 90
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Deceased Name
+    count: True
 question: |
   Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
 fields:  
@@ -107,6 +132,11 @@ fields:
 section: subsection_nach_tod
 progress: 92
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Child Support
+    count: True
 # Future To-DO: Dokument in Interview einfügen
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
@@ -125,6 +155,8 @@ section: section_unterhaltszahlungen
 progress: 85
 ---
 mandatory: True
+segment id: Interview Started
+ga id: Interview Started
 question: |
   Willkommen beim digitalen Wohngeldantrag NRW.
 subquestion: |
@@ -133,6 +165,11 @@ subquestion: |
   ${ static_image('welcome_screen.svg') }
 field: sees_nav_bar
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Type Application
+    count: True
 question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
@@ -144,6 +181,11 @@ default: Erstantrag
 section: subsection_art_antrag
 progress: 10
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Wohngeld Number
+    count: True
 question: |
   Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
 subquestion: |
@@ -156,6 +198,11 @@ fields:
 section: subsection_wohngeldnummer
 progress: 12
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Social Benefits
+    count: True
 question: |
   % if len(antragssteller) <= 1:
   Welche Sozialleistung bezieht **${ antragssteller[i] } (Antragssteller/in)** bzw. welche Sozialleistungen hat **${ antragssteller[i] } (Antragssteller/in)** beantragt?
@@ -191,12 +238,22 @@ fields:
       is: bezieht
 section: section_sozialleistungen
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Requirements Met
+    count: True
 question: |
   Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt? 
 yesno: sozialleistungen
 section: section_anspruch
 progress: 5
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Applicant Details
+    count: True
 question: |
   % if len(antragssteller) <= 1:
   Geben Sie bitte die folgenden persönlichen Daten des **Antragsstellers** an:
@@ -332,6 +389,11 @@ fields:
 section: section_antragssteller
 ---
 # Future TO-DO: Änderung von 1/2 wegen Review und Editieren von Listen von User
+segment:
+  id: Question Asked
+  arguments:
+    question: Income
+    count: True
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
@@ -370,6 +432,11 @@ fields:
     show if: antragssteller[i].einnahmen_yesno  
 section: subsection_einkunftsarten
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Expensable Costs
+    count: True
 question: |
   Geben Sie bitte alle {Werbungskosten} oder {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
 fields:
@@ -387,6 +454,11 @@ fields:
 list collect: True  
 section: subsection_wkkbkosten
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Address
+    count: True
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
@@ -404,6 +476,11 @@ section: section_adresse
 progress: 20
 ---
 # Future To-Do: Abändern von Nummern auf Values bei choices in PDF/Momentan durch if else im review block gelöst
+segment:
+  id: Question Asked
+  arguments:
+    question: Bank Account
+    count: True
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
 subquestion: |
@@ -429,6 +506,11 @@ fields:
 section: section_bankverbindung
 progress: 25
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Center Living
+    count: True
 question: |
     Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
@@ -444,6 +526,11 @@ fields:
 section: section_lebensverhältnisse
 progress: 35
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Account Owner
+    count: True
 question: |
   Auswahl des Kontoinhabers
 fields:
@@ -464,6 +551,11 @@ fields:
   - Ort: zahlungsempfaenger.address.city
     default: Musterstadt
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Landlord Details
+    count: True
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
@@ -489,6 +581,11 @@ fields:
 section: subsection_vermieter
 progress: 45
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Rent
+    count: True
 question: |
   Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
 subquestion: |
@@ -504,6 +601,11 @@ section: subsection_miethöhe
 progress: 55
 ---
 # Frage 7
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Use
+    count: True
 question: |
   Bitte machen Sie weitere Angaben zur Nutzung der Wohnung.
 fields:
@@ -529,6 +631,11 @@ fields:
 section: subsection_nutzung
 progress: 50
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Commercial usse
+    count: True
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
 fields:  
@@ -541,6 +648,11 @@ fields:
 section: subsection_andere_nutzung
 progress: 65
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Rent Date
+    count: True
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
@@ -550,6 +662,11 @@ fields:
 section: subsection_einzugsdatum
 progress: 60
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Subsidies
+    count: True
 # To-Do: Rewrite. - Done
 question: |
   Bitte vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen.

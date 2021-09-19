@@ -457,6 +457,8 @@ code: |
   output_file = pdf_concatenate(wohngeldantrag_pdf, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage if untervermietung else '', zuschuesse_anlage if zuschuesse else '', unterhaltsverpflichtungen if unterhaltszahlungen else '', filename="Wohngeldantrag.pdf")
 ---
 # Future To-Do: Liste von Adressen wo hingeschickt werden kann
+segment id: Interview Completed
+ga id: Interview Completed
 section: zusammenfassung
 question: Hier ist Ihr ausgefüllter Wohngeldantrag!
 #attachment code: wohngeldantrag_pdf
