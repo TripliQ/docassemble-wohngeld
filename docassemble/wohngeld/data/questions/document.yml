@@ -454,21 +454,27 @@ attachment:
          ${ yesno(any([person.sozialleistungen == 'Arbeitslosengeld I (SGB III)' for person in antragssteller if person.sozialleistungen_yesno])) }
 ---  
 code: |
-  output_file = pdf_concatenate(wohngeldantrag_pdf, unterhaltsverpflichtungen, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage, zuschuesse_anlage, filename="Wohngeldantrag_final.pdf")
+  output_file = pdf_concatenate(wohngeldantrag_pdf, wohnung_angaben_anlage, untervermietung_und_mitnutzung_anlage if untervermietung else '', zuschuesse_anlage if zuschuesse else '', unterhaltsverpflichtungen if unterhaltszahlungen else '', filename="Wohngeldantrag.pdf")
 ---
 # TO-DO: Hinweis und wo hinschicken
 # To-DO: Manche Variablen wurden nicht am Ende definiert?
 section: zusammenfassung
 question: Hier ist Ihr ausgefüllter Wohngeldantrag!
-attachment code: wohngeldantrag_pdf
-
+#attachment code: wohngeldantrag_pdf
+attachment code: output_file
 subquestion: |
   ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
-
+  <br>
+  <br>
+  **Klicken Sie auf die Vorsch um den Antrag herunterzuladen:**
+  <br>
+  ${ output_file }
+  <br>
+  <br>
   ### Ihre finalen Schritte zum Antrag:
   
-  1. Den Wohngeldantrag herunterladen, ausdrucken und auf der letzten Seite unterschreiben.
-  2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben.
+  1. Den Wohngeldantrag herunterladen, auf Fehler durchlesen, ausdrucken und auf der letzten Seite unterschreiben.
+  2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben sowie weitere Nachweise über Einkünfte anhängen.
   3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
   ${ static_image('versandoptionen.png', width='100%') }
 event: final_document

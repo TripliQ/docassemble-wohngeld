@@ -563,6 +563,9 @@ fields:
   - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
     datatype: yesnoradio
     default: True
+  - "Nachweise über ausgezahlte oder beantragte Zuschüsse": zuschuesse_anlage
+    datatype: file
+    show if: zuschuesse
 section: subsection_zuschüsse
 progress: 70
 ---
@@ -574,13 +577,6 @@ question: |
   - oder öffentliche Zuschüsse 
   zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
 yesno: zuschuesse_antrag
----
-# TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
-question: |
-  Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
-fields:
-  - Anlage: zuschuesse_anlage
-    datatype: file
 ---
 terms:
   Sozialleistungen: |
