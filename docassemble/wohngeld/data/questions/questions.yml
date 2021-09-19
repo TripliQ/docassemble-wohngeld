@@ -1,5 +1,3 @@
-# TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
-
 # TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 objects:
   - person: DAList.using(
@@ -43,7 +41,6 @@ fields:
 list collect: True
 section: subsection_bruttoeinkünfte
 ---
-# TO-DO: Achtung noch mehr hevorheben
 question: |
   Gibt es weitere Haushaltsmitglieder?
 subquestion: |
@@ -111,14 +108,17 @@ fields:
 section: subsection_nach_tod
 progress: 92
 ---
-# To-DO: Verlinkung zu den Zusatvordruck
+# Future To-DO: In Interview einfügen
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 fields:
   - no label: unterhaltszahlungen
     datatype: yesnoradio
   - note: |
-      Lesen Sie bitte die Hinweise zur Unterhaltsverpflichtung im Merkblatt sowie die weiteren Hinweise in dem Zusatzvordruck!
+      Lesen Sie bitte die [Hinweise zur Unterhaltsverpflichtung im Merkblatt](https://recht.nrw.de/lmi/owa/br_show_anlage?p_id=33324) sowie die weiteren Hinweise in dem [Zusatzvordruck](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf)!
+  - note: |
+      Das Formular können sie [hier downloaden](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf). 
+    show if: unterhaltszahlungen
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
     datatype: file  
     show if: unterhaltszahlungen
