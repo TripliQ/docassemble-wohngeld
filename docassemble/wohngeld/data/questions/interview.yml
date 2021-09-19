@@ -50,6 +50,8 @@ sections:
 features:
   navigation: True
   progress bar: True
+  javascript:
+    - https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js
 ---
 question: |
   Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.

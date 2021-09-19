@@ -465,6 +465,19 @@ subquestion: |
   ${ static_image('undraw_Done_re_oak4.svg', width='60%') }
   <br>
   <br>
+  %if get_language() == 'en':
+  <!-- TrustBox widget - Review Collector -->
+  <div id='trustbox' class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="5fd675847c75250001e69adc" data-style-height="52px" data-style-width="100%">
+  <a href="https://www.trustpilot.com/review/tripliq.com" target="_blank" rel="noopener">Trustpilot</a>
+  </div>
+  % else:
+  <div id='trustbox' class="trustpilot-widget" data-locale="de-DE" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="5fd675847c75250001e69adc" data-style-height="52px" data-style-width="100%">
+  <a href="https://de.trustpilot.com/review/tripliq.com" target="_blank" rel="noopener">Trustpilot</a>
+  </div>
+  <!-- End TrustBox widget -->
+  % endif
+  <br>
+  <br>
   **Klicken Sie auf die Vorsch um den Antrag herunterzuladen:**
   <br>
   <br>
@@ -478,4 +491,9 @@ subquestion: |
   3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
   ${ static_image('versandoptionen.png', width='100%') }
 event: final_document
+script: |
+  <script>
+    const trustbox = document.getElementById('trustbox');
+    window.Trustpilot.loadFromElement(trustbox);
+  </script>
 progress: 100
