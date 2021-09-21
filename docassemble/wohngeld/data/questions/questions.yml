@@ -1,6 +1,3 @@
-# TO-DO Generell: Sollen bestimmte Fragne als default ausgelegt werden, damit der User ggf. einfacher durchs interiew kommt, ggf. anpassen -> Anna Vorschlag
-
-# TO-DO Generell: Merging der Uplaods mit dem final Dokuemnt -> https://docassemble.org/docs/functions.html#pdf_concatenate
 objects:
   - person: DAList.using(
               object_type=Individual)
@@ -11,6 +8,11 @@ objects:
   - zahlungsempfaenger: Individual
   - vermieter: Individual
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Applicant
+    count: True
 question: |
   Geben Sie bitte **alle Bruttoeinkünfte** (auch aus geringfügiger Beschäftigung) **einzeln** von ${ antragssteller[i] } an
 subquestion: |
@@ -43,7 +45,11 @@ fields:
 list collect: True
 section: subsection_bruttoeinkünfte
 ---
-# TO-DO: Achtung noch mehr hevorheben
+segment:
+  id: Question Asked
+  arguments:
+    question: More Household
+    count: True
 question: |
   Gibt es weitere Haushaltsmitglieder?
 subquestion: |
@@ -63,7 +69,13 @@ subquestion: |
   % endfor  
 yesno: antragssteller.there_is_another
 section: section_antragssteller
+progress: 30
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Housing
+    count: True
 question: |
   Sie sind in Ihrer Wohnung...
 fields:
@@ -74,7 +86,13 @@ fields:
       - Bewohner(in) in einer Wohnung im eigenen Mehrfamilienhaus: Bewohner(in) Mehrfamilienhaus
       - Heimbewohner(in): Heimbewohner(in)
 section: subsection_wohnverhältnis
+progress: 40
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Deceased Household
+    count: True
 question: |
   Ist in den letzten 12 Monaten eine Person aus Ihrem Haushalt verstorben?
 fields:
@@ -89,7 +107,13 @@ fields:
     datatype: yesnoradio
     show if: verstorbener  
 section: subsection_angaben_todesfall
+progress: 90
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Deceased Name
+    count: True
 question: |
   Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
 fields:  
@@ -106,21 +130,33 @@ fields:
     datatype: date
     show if: weitere_person
 section: subsection_nach_tod
+progress: 92
 ---
-# To-DO: Verlinkung zu den Zusatvordruck
+segment:
+  id: Question Asked
+  arguments:
+    question: Child Support
+    count: True
+# Future To-DO: Dokument in Interview einfügen
 question:  |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 fields:
   - no label: unterhaltszahlungen
     datatype: yesnoradio
   - note: |
-      Lesen Sie bitte die Hinweise zur Unterhaltsverpflichtung im Merkblatt sowie die weiteren Hinweise in dem Zusatzvordruck!
+      Lesen Sie bitte die [Hinweise zur Unterhaltsverpflichtung im Merkblatt](https://recht.nrw.de/lmi/owa/br_show_anlage?p_id=33324) sowie die weiteren Hinweise in dem [Zusatzvordruck](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf)!
+  - note: |
+      Das Formular können sie [hier downloaden](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf). 
+    show if: unterhaltszahlungen
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
     datatype: file  
     show if: unterhaltszahlungen
 section: section_unterhaltszahlungen
+progress: 85
 ---
 mandatory: True
+segment id: Interview Started
+ga id: Interview Started
 question: |
   Willkommen beim digitalen Wohngeldantrag NRW.
 subquestion: |
@@ -129,6 +165,11 @@ subquestion: |
   ${ static_image('welcome_screen.svg') }
 field: sees_nav_bar
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Type Application
+    count: True
 question: |
   Um welche Art von Antrag handelt es sich?
 field: antragsart
@@ -138,7 +179,13 @@ choices:
   - Erhöhungsantrag (bei Änderungen im laufenden BWZR): Erhöhungsantrag
 default: Erstantrag
 section: subsection_art_antrag
+progress: 10
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Wohngeld Number
+    count: True
 question: |
   Falls bekannt, geben Sie bitte Ihre Wohngeldnummer an.
 subquestion: |
@@ -149,7 +196,13 @@ fields:
     default: 12345678901
     required: False
 section: subsection_wohngeldnummer
+progress: 12
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Social Benefits
+    count: True
 question: |
   % if len(antragssteller) <= 1:
   Welche Sozialleistung bezieht **${ antragssteller[i] } (Antragssteller/in)** bzw. welche Sozialleistungen hat **${ antragssteller[i] } (Antragssteller/in)** beantragt?
@@ -185,11 +238,22 @@ fields:
       is: bezieht
 section: section_sozialleistungen
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Requirements Met
+    count: True
 question: |
   Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt? 
 yesno: sozialleistungen
 section: section_anspruch
+progress: 5
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Applicant Details
+    count: True
 question: |
   % if len(antragssteller) <= 1:
   Geben Sie bitte die folgenden persönlichen Daten des **Antragsstellers** an:
@@ -216,6 +280,12 @@ fields:
     default: 12.08.1964
   - Geburtsort: antragssteller[i].geburtsort
     default: Berlin
+  - Adresse: antragssteller[i].address.address
+    default: ${ wohnung_addresse.address }
+  - PLZ: antragssteller[i].address.postal_code
+    default: ${ wohnung_addresse.postal_code }
+  - Ort: antragssteller[i].address.city
+    default: ${ wohnung_addresse.city }
   - Familienstand: antragssteller[i].familienstand
     choices:
       - ledig
@@ -318,7 +388,12 @@ fields:
     default: False
 section: section_antragssteller
 ---
-# TO-DO: Änderung von 1/2 wegen Review
+# Future TO-DO: Änderung von 1/2 wegen Review und Editieren von Listen von User
+segment:
+  id: Question Asked
+  arguments:
+    question: Income
+    count: True
 question: |
   Ergänzen Sie folgende Angaben zu den Einkünften von ${ antragssteller[i] }.
 fields:
@@ -357,6 +432,11 @@ fields:
     show if: antragssteller[i].einnahmen_yesno  
 section: subsection_einkunftsarten
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Expensable Costs
+    count: True
 question: |
   Geben Sie bitte alle {Werbungskosten} oder {Kinderbetreuungskosten} **einzeln** von ${ antragssteller[i] } an
 fields:
@@ -374,6 +454,11 @@ fields:
 list collect: True  
 section: subsection_wkkbkosten
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Address
+    count: True
 question: |
   Wie lautet die Anschrift der Wohnung, für die Sie Wohngeld beantragen möchten?
 fields:
@@ -388,8 +473,14 @@ fields:
   - Wohnungsnummer: wohnung_addresse.unit
     required: False
 section: section_adresse
+progress: 20
 ---
-# To-Do: Abändern von Nummern auf Values bei choices (Felix)
+# Future To-Do: Abändern von Nummern auf Values bei choices in PDF/Momentan durch if else im review block gelöst
+segment:
+  id: Question Asked
+  arguments:
+    question: Bank Account
+    count: True
 question: |
   Wie lautet die Bankverbindung, auf die das Wohngeld überwiesen werden soll?
 subquestion: |
@@ -413,21 +504,13 @@ fields:
     datatype: text
     default: 1234567890
 section: section_bankverbindung
+progress: 25
 ---
-question: |
-  Name und Anschrift des Kontoinhabers:
-fields:
-  - Vorname: zahlungsempfaenger.name.first
-    default: Max
-  - Nachname: zahlungsempfaenger.name.last
-    default: Mustermann
-  - Adressse: zahlungsempfaenger.address.address
-    default: Musterstraße 12
-  - Postleihzahl: zahlungsempfaenger.address.postal_code
-    default: 12345
-  - Ort: zahlungsempfaenger.address.city
-    default: Musterstadt
----
+segment:
+  id: Question Asked
+  arguments:
+    question: Center Living
+    count: True
 question: |
     Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
@@ -441,16 +524,38 @@ fields:
     choices:
       - antragssteller
 section: section_lebensverhältnisse
+progress: 35
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Account Owner
+    count: True
 question: |
   Auswahl des Kontoinhabers
 fields:
-  - Erwachsene Personen: zahlungsempfaenger
-    datatype: object_checkboxes
+  - no label: zahlungsempfaenger
+    datatype: object_radio
+    disable others: True
+    none of the above: andere Person
     choices:
       - antragssteller
+  - Vorname: zahlungsempfaenger.name.first
+    default: Max
+  - Nachname: zahlungsempfaenger.name.last
+    default: Mustermann
+  - Adressse: zahlungsempfaenger.address.address
+    default: Musterstraße 12
+  - Postleihzahl: zahlungsempfaenger.address.postal_code
+    default: 12345
+  - Ort: zahlungsempfaenger.address.city
+    default: Musterstadt
 ---
-# Frage 6
+segment:
+  id: Question Asked
+  arguments:
+    question: Landlord Details
+    count: True
 question: |
   Wie lauten die Kontaktdetails Ihres Vermieters oder Untervermieters?
 fields:
@@ -474,7 +579,13 @@ fields:
     default: 0123456789
     required: False
 section: subsection_vermieter
+progress: 45
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Rent
+    count: True
 question: |
   Wie hoch ist die monatliche Warmmiete Ihres Wohnraums in Euro?
 subquestion: |
@@ -487,8 +598,14 @@ fields:
   - Anlage zum Wohnraum/Untervermietung: wohnung_angaben_anlage
     datatype: file
 section: subsection_miethöhe
+progress: 55
 ---
 # Frage 7
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Use
+    count: True
 question: |
   Bitte machen Sie weitere Angaben zur Nutzung der Wohnung.
 fields:
@@ -512,7 +629,13 @@ fields:
         - sonstige Verwandte
         - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
 section: subsection_nutzung
+progress: 50
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Commercial usse
+    count: True
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
 fields:  
@@ -523,7 +646,13 @@ fields:
     datatype: number
     default: 123
 section: subsection_andere_nutzung
+progress: 65
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Rent Date
+    count: True
 question: |
   Seit wann bewohnen Sie bzw. die zu Ihrem Haushalt rechnenden Personen die Wohnung?
 fields:
@@ -531,7 +660,13 @@ fields:
     datatype: date
     default: 01.01.2000
 section: subsection_einzugsdatum
+progress: 60
 ---
+segment:
+  id: Question Asked
+  arguments:
+    question: Flat Subsidies
+    count: True
 # To-Do: Rewrite. - Done
 question: |
   Bitte vervollständigen Sie weitere Angaben zu privaten oder öffentlichen Zuschüssen.
@@ -543,23 +678,11 @@ fields:
   - "Oder wurde ein entsprechender Antrag gestellt?": zuschuesse_antrag
     datatype: yesnoradio
     default: True
-section: subsection_zuschüsse
----
-# To-Do: mehr nutzen von bullet points oder auch ggf. subquestions. Runterbrechen in kürzere Sätze ohne viele Nebensätze. (Erledigt, aber es sieht so aus als wäre die Question nicht mehr Teil des Interviews)
-question: |
-  Zur Zeit erhalten Sie keine Zuschüsse. Haben Sie oder eine zum Haushalt rechnende Person einen Antrag auf
-  - Wohngeld;
-  - andere private;
-  - oder öffentliche Zuschüsse 
-  zur Bezahlung der Miete (z.B. von Verwandten, vom Arbeitgeber) für diese oder eine andere Wohnung gestellt?
-yesno: zuschuesse_antrag
----
-# TO-DO: Ich glaube hier müssten wir vielleicht noch ein bisschen mehr Hilfestellung geben.
-question: |
-  Bitte fügen Sie die entsprechendesn Nachweise über zur Zeit ausgezahlte oder beantragte Zuschüsse bei.
-fields:
-  - Anlage: zuschuesse_anlage
+  - "Nachweise über ausgezahlte oder beantragte Zuschüsse": zuschuesse_anlage
     datatype: file
+    show if: zuschuesse
+section: subsection_zuschüsse
+progress: 70
 ---
 terms:
   Sozialleistungen: |

@@ -14,11 +14,6 @@ code: |
       final_document
 mandatory: True
 ---
----
-# TO-DO:
-# data types überprüen
-# input validation
-# terms und hints
 sections:
   - section_intro: Einführung
   - section_anspruch: Anspruch
@@ -54,9 +49,15 @@ sections:
 ---
 features:
   navigation: True
+  progress bar: True
+  javascript:
+    - https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js
 ---
-# siehe to-do unten
-# exit Link setzen zu XYZ -> Exit Button Docassemble Documentation
+segment:
+  id: Question Asked
+  arguments:
+    question: Assessment Outcome
+    count: True
 question: |
   Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
@@ -68,9 +69,13 @@ buttons:
   - Ja, ich möchte trotzdem fortfahren.
   - Nein, ich möchte das Interview beenden.
 section: zusammenfassung
+progress: 7
 ---
+segment id: Interview Completed
+ga id: Interview Completed
 question: |
   Vielen Dank für das Nutzen des digitalen Wohngeldantrags NRW.
 subquestion: |
   ${ static_image('undraw_Hello_re_3evm.svg') }
 event: end_interview
+progress: 100

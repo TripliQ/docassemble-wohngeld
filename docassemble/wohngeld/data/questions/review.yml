@@ -1,3 +1,4 @@
+# Future to-do: Add review screens for income of lists of lists
 event: subsection_art_antrag
 section: subsection_art_antrag
 question: |
@@ -63,8 +64,17 @@ question: |
 review:
   - Bearbeiten: antragsteller_kontoinhaber
     button: |
-      Kontoinhaber: ${ antragsteller_kontoinhaber }
-
+      Kontoinhaber: 
+      % if antragsteller_kontoinhaber == '1':
+      Antragsstellende Person
+      % elif antragsteller_kontoinhaber == '2':
+      Ehepartner(in) oder ein anderes Haushaltsmitglied
+      % elif antragsteller_kontoinhaber == '3':
+      Vermieter(in)
+      % else:
+      Bei Heimbewohnern - Sozialhilfeträger
+      % endif
+      
       Name des Kreditinstituts: ${ antragsteller_kreditinstitut_name } 
 
       Bankleitzahl: ${ antragsteller_bankleitzahl } 
