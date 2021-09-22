@@ -493,7 +493,7 @@ subquestion: |
   3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
   ${ static_image('versandoptionen.png', width='100%') }
 
-  **Wir übernehmen keine Gewähr für die Korrektheit, Aktualität und Vollständigkeit Ihrer Angaben. Bitte prüfen Sie den Antrag auf Wohngeld sowie die dazugehörigen Anlagen vor dem Unterschreiben auf etwaige Fehler.**
+  **Dieses Muster kann in vielen Punkten den Anforderungen des Benutzers gemäß angepasst werden. Es kann dem Benutzer gleichwohl nicht die eigene Verantwortung für seine Verträge abnehmen. Deshalb besteht keine Haftung des Verlages, des Herausgebers und der Verfasser.**
 
 event: final_document
 script: |
