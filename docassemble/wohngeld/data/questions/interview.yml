@@ -50,6 +50,7 @@ sections:
 features:
   navigation: True
   progress bar: True
+  show progress bar percentage: True
   javascript:
     - https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js
 ---
