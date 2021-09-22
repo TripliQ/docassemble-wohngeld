@@ -480,7 +480,7 @@ subquestion: |
   % endif
   <br>
   <br>
-  **Klicken Sie auf die Vorsch um den Antrag herunterzuladen:**
+  **Klicken Sie auf die Vorschau um den Antrag herunterzuladen:**
   <br>
   <br>
   ${ output_file }
@@ -488,10 +488,13 @@ subquestion: |
   <br>
   ### Ihre finalen Schritte zum Antrag:
   
-  1. Den Wohngeldantrag herunterladen, auf Fehler durchlesen, ausdrucken und auf der letzten Seite unterschreiben.
+  1. Den Wohngeldantrag herunterladen, auf Fehler prüfen, ausdrucken und auf der letzten Seite unterschreiben.
   2. Ggf. weitere Anhänge herunterladen, ausdrucken und unterschreiben sowie weitere Nachweise über Einkünfte anhängen.
   3. Unterlagen mit den passenden Porto und Briefumschlag versandfertig machen und an dein örtliches Wohngeldamt senden: 
   ${ static_image('versandoptionen.png', width='100%') }
+
+  **Wir übernehmen keine Gewähr für die Korrektheit, Aktualität und Vollständigkeit Ihrer Angaben. Bitte prüfen Sie den Antrag auf Wohngeld sowie die dazugehörigen Anlagen vor dem Unterschreiben auf etwaige Fehler.**
+
 event: final_document
 script: |
   <script>
