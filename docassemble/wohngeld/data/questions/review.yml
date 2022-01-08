@@ -6,7 +6,7 @@ question: |
 review:
   - Bearbeiten: antragsart
     button: |
-      Antragsart: ${ antragsart } 
+      Antragsart: ${ antragsart }
 ---
 event: subsection_wohngeldnummer
 section: subsection_wohngeldnummer
@@ -14,7 +14,7 @@ question: |
   Wohngeldnummer
 review:
   - Bearbeiten: antragsteller_wohngeldnummer
-    button: |  
+    button: |
       Wohngeldnummer: ${ antragsteller_wohngeldnummer }
     show if: |
       antragsart != 'Erstantrag'
@@ -27,10 +27,10 @@ question: |
   Antragssteller & Haushaltsmitglieder
 review:
   note: |
-  
-      ${ antragssteller.table }
-      
-      ${ antragssteller.add_action() }
+
+    ${ antragssteller.table }
+
+    ${ antragssteller.add_action() }
 ---
 table: antragssteller.table
 rows: antragssteller
@@ -74,7 +74,7 @@ review:
       % else:
       Bei Heimbewohnern - Sozialhilfeträger
       % endif
-      
+
       Name des Kreditinstituts: ${ antragsteller_kreditinstitut_name } 
 
       Bankleitzahl: ${ antragsteller_bankleitzahl } 
@@ -107,7 +107,7 @@ review:
   - Bearbeiten: vermieter.name.last
     button: |
       Nachname: ${ vermieter.name.last }
-      
+
       Vorname: ${ vermieter.name.first }
 
       Straße und Hausnummer: ${ vermieter.address.address } 
@@ -116,7 +116,7 @@ review:
 
       Ort: ${ vermieter.address.city }
 
-      Telefonnummer: ${ vermieter.phone } 
+      Telefonnummer: ${ vermieter.phone }
 ---
 section: subsection_nutzung
 event: subsection_nutzung
