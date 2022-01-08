@@ -26,7 +26,7 @@ sections:
   - section_bankverbindung: Bankverbindung
   - section_lebensverhältnisse: Mittelpunkt der Lebensbeziehungen
   - section_wohnsituation: Wohnsituation
-    subsections:  
+    subsections:
       - subsection_wohnverhältnis: Wohnverhältnis
       - subsection_vermieter: Vermieter
       - subsection_nutzung: Nutzung
@@ -35,13 +35,13 @@ sections:
       - subsection_andere_nutzung: Andere Nutzung
       - subsection_zuschüsse: Zuschüsse
   - section_einkünfte: Einkünfte
-    subsections:  
+    subsections:
       - subsection_einkunftsarten: Einkunftsarten
       - subsection_bruttoeinkünfte: Bruttoeinkünfte
       - subsection_wkkbkosten: Werbungs- & Betreungskosten
   - section_unterhaltszahlungen: Unterhaltszahlungen
   - section_verstorben: Verstorbenes Haushaltsmitglied
-    subsections:  
+    subsections:
       - subsection_angaben_todesfall: Angaben zum Todesfall
       - subsection_nach_tod: Situation nach dem Todesfall
   - section_sozialleistungen: Sozialleistungen
@@ -62,7 +62,7 @@ question: |
   Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
   **Das ermittelte Ergebnis ist unverbindlich. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
-  
+
   Möchten Sie trotzdem mit dem digitalen Wohngeldantrag NRW fortfahren?
 field: entscheidung
 buttons:
@@ -76,6 +76,7 @@ ga id: Interview Completed
 question: |
   Vielen Dank für das Nutzen des digitalen Wohngeldantrags NRW.
 subquestion: |
-  ${ static_image('undraw_Hello_re_3evm.svg') }
+  ${ static_image('undraw_Hello_re_3evm.svg', width='100%') }
 event: end_interview
+section: section_zusammenfassung
 progress: 100

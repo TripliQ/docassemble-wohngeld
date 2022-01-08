@@ -1,6 +1,6 @@
 objects:
   - person: DAList.using(
-              object_type=Individual)
+      object_type=Individual)
   - antragssteller: DAList.using(object_type=Individual, there_are_any=True)
   - antragssteller[i].einkuenfte: DAList.using(object_type=Thing, there_are_any=True)
   - antragssteller[i].wkkosten: DAList.using(object_type=Thing)
@@ -18,7 +18,7 @@ question: |
 subquestion: |
   Entsprechende Nachweise sind dem Antrag beizufügen).
   Zu den Einkünften zählen z.B. 
-  
+
   - Gehalt/Lohn - auch Abfindungen/Einmalzahlungen
   - Renten aller Art
   - Einkünfte aus selbstständiger Arbeit/Gewerbe
@@ -61,12 +61,12 @@ subquestion: |
   - Kinder (auch Pflege- und Adoptivkinder)
   - sonstige Verwandte
   - nicht Verwandte, die aber mit dem Antragsteller in [Verantwortungs- und  Einstehensgemeinschaft](https://www.wohngeld.org/haushaltsmitglieder.html#1-bedeutung-der-haushaltsmitglieder-f%C3%BCr-das-wohngeld) leben
-  
+
   #### Angegebene Haushaltsmitglieder:
-  
+
   % for person in antragssteller:
   * ${ person }
-  % endfor  
+  % endfor
 yesno: antragssteller.there_is_another
 section: section_antragssteller
 progress: 30
@@ -105,7 +105,7 @@ fields:
     datatype: date
   - "Hat die verstorbene Person {Sozialleistungen} erhalten?": verstorbener_transferleistungen
     datatype: yesnoradio
-    show if: verstorbener  
+    show if: verstorbener
 section: subsection_angaben_todesfall
 progress: 90
 ---
@@ -116,7 +116,7 @@ segment:
     count: True
 question: |
   Bitte machen Sie weitere Angaben zu der Situation nach dem Tod von **${ verstorbener_name }**
-fields:  
+fields:
   - "Haben Sie nach dem Tod  die Wohnung gewechselt?": wohnungswechsel
     datatype: yesnoradio
   - "Datum des Wohnungswechsels": wohnungswechsel_datum
@@ -138,7 +138,7 @@ segment:
     question: Child Support
     count: True
 # Future To-DO: Dokument in Interview einfügen
-question:  |
+question: |
   Werden von den zu Ihrem Haushalt angehörigen Personen Unterhaltszahlungen geleistet?
 fields:
   - no label: unterhaltszahlungen
@@ -146,10 +146,10 @@ fields:
   - note: |
       Lesen Sie bitte die [Hinweise zur Unterhaltsverpflichtung im Merkblatt](https://recht.nrw.de/lmi/owa/br_show_anlage?p_id=33324) sowie die weiteren Hinweise in dem [Zusatzvordruck](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf)!
   - note: |
-      Das Formular können sie [hier downloaden](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf). 
+      Das Formular können sie [hier downloaden](https://fm.rlp.de/fileadmin/fm/PDF-Datei/Service/Vordrucke/wohngeld_unterhaltsverpflichtungen.pdf).
     show if: unterhaltszahlungen
   - Anlage "Unterhaltsverpflichtungen": unterhaltsverpflichtungen
-    datatype: file  
+    datatype: file
     show if: unterhaltszahlungen
 section: section_unterhaltszahlungen
 progress: 85
@@ -162,7 +162,7 @@ question: |
 subquestion: |
   Wir leiten Dich in drei Schritten einfach und schnell zu Deinem Wohngeldantrag.
   <br>
-  ${ static_image('welcome_screen.svg') }
+  ${ static_image('welcome_screen.svg', width='80%') }
 field: sees_nav_bar
 ---
 segment:
@@ -228,7 +228,7 @@ fields:
     datatype: dropdown
     choices:
       - beantragt
-      - bezieht 
+      - bezieht
   - Antragsdatum/Beginn Bezugszeitraum: antragssteller[i].sozialleistungen_start_date
     datatype: date
   - Ende Bezugszeitraum: antragssteller[i].sozialleistungen_end_date
@@ -244,7 +244,7 @@ segment:
     question: Requirements Met
     count: True
 question: |
-  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt? 
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt?
 yesno: sozialleistungen
 section: section_anspruch
 progress: 5
@@ -357,14 +357,14 @@ fields:
       - Adoptivkind
     show if:
       code: |
-        len(antragssteller) > 1 
+        len(antragssteller) > 1
     default: Kind
   - Wird für die Person Kindergeld gewährt: antragssteller[i].kindergeld_berechtigt
     default: no
     datatype: yesnoradio
     show if:
       code: |
-        len(antragssteller) > 1 
+        len(antragssteller) > 1
   - Schwerbehinderung: antragssteller[i].beeintraechtigungen
     datatype: yesnoradio
     default: False
@@ -402,19 +402,19 @@ fields:
     default: Ja
     choices:
       - Ja: 1
-      - Nein: 2  
+      - Nein: 2
   - Beitragszahlungen zur Kranken- oder Pflegeversicherung: antragssteller[i].kpversicherung
     datatype: radio
     default: Ja
     choices:
       - Ja: 1
-      - Nein: 2 
+      - Nein: 2
   - Beitragszahlungen zur Renten- oder Lebensversicherung: antragssteller[i].rlversicherung
     datatype: radio
     default: Ja
     choices:
       - Ja: 1
-      - Nein: 2 
+      - Nein: 2
   - Bezug von {Sozialleistungen}/Antrag auf {Sozialleistungen} gestellt: antragssteller[i].sozialleistungen_yesno
     datatype: yesnoradio
     default: True
@@ -426,10 +426,10 @@ fields:
     default: True
   - Ab wann?: antragssteller[i].einnahmen_datum
     datatype: date
-    show if: antragssteller[i].einnahmen_yesno  
+    show if: antragssteller[i].einnahmen_yesno
   - Grund der Veränderung: antragssteller[i].einnahmen_grund
     default: z.B. Jobwechsel, wegfallende Mieteinnahmen
-    show if: antragssteller[i].einnahmen_yesno  
+    show if: antragssteller[i].einnahmen_yesno
 section: subsection_einkunftsarten
 ---
 segment:
@@ -451,7 +451,7 @@ fields:
   - Höhe: antragssteller[i].wkkosten[j].betrag
     datatype: currency
     default: 1000
-list collect: True  
+list collect: True
 section: subsection_wkkbkosten
 ---
 segment:
@@ -512,11 +512,11 @@ segment:
     question: Center Living
     count: True
 question: |
-    Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
+  Für welche Person(en) ist der Wohnraum **nicht** Mittelpunkt der Lebensbeziehungen?
 subquestion: |
   - Hat eine Person nur einen Wohnsitz haben, dann ist dieser in der Regel der Mittelpunkt der Lebensbeziehungen.
   - Hat eine Person mehrere Wohnsitze oder an mehreren Orten Mittelpunkte verschiedener Lebensbeziehungen, ist entscheidend, zu welchem Ort die Person ein größeres Näheverhältnis hat.
-  
+
   Weitere Informationen zur Bestimmung des Mittelpunkts der Lebensbeziehungen finden Sie [hier](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjEmMfNr57yAhWF7aQKHZOXByoQFnoECAIQAw&url=https%3A%2F%2Fwww.landkreis-osterholz.de%2Fformulare%2Ffs.php%3Fid%3D21000-900010172-21000&usg=AOvVaw0YclRktx2oMIxZTRUUFiO-).
 fields:
   - no label: person_nicht_lebensmittelpunkt
@@ -638,7 +638,7 @@ segment:
     count: True
 question: |
   Wird ein Teil der Wohnung ausschließlich gewerblich oder beruflich genutzt?
-fields:  
+fields:
   - no label: gewerbliche_nutzung
     datatype: yesnoradio
   - Anzahl der genutzten Quadratmeter: gewerbliche_nutzung_qm
@@ -692,13 +692,13 @@ terms:
   Kinderbetreuungskosten: |
     **Kinderbetreuungskosten** sind Kosten, die in Zusammenhang mit der Betreuung von Kindern entstehen. Beispiele sind Kosten für die Tagesmutter, für den Platz in einer Kindertagesstätte oder einem Kindergarten, für einen Babysitter oder für einen Nanny.
   Unterstützung: |
-   Dazu zählen: Wohngeld sowie andere private oder öffentliche Zuschüsse zur Bezahlung der      Miete (z.B. von Verwandten, vom Arbeitgeber)
+    Dazu zählen: Wohngeld sowie andere private oder öffentliche Zuschüsse zur Bezahlung der      Miete (z.B. von Verwandten, vom Arbeitgeber)
   Haushalt angehörige: |
-   Zu den Haushaltsmitgliedern zählen:
-   der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
+    Zu den Haushaltsmitgliedern zählen:
+    der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
   Haushalt angehörigen: |
-   Zu den Haushaltsmitgliedern zählen:
-   der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
+    Zu den Haushaltsmitgliedern zählen:
+    der Antragsteller selbst, Ehegatte/ eingetragener Lebenspartner/ Lebensgefährte, Eltern (auch Stief-, Pflege- und Schwiegereltern, Kinder (auch Pflege- und Adoptivkinder), sonstige Verwandte, nicht Verwandte, die aber mit dem Antragsteller in Verantwortungs- und Einstehensgemeinschaft leben
 ---
 code: |
   untervermietung_und_mitnutzung = untervermietung or mitnutzung
