@@ -2,6 +2,7 @@ include:
   - questions.yml
   - document.yml
   - review.yml
+  - metadata.yml
 ---
 # main interview logik für Antragskriterien
 code: |
