@@ -4,11 +4,11 @@ metadata:
   price: 0
   originalPrice: 0
   cta:
-    de: "Jetzt erstellen"
-    en: "Start Wohngeldantrag"
+    de: 'Jetzt erstellen'
+    en: 'Start Wohngeldantrag'
   detailTitle:
-    de: Dein fertiger NRW Wohngeldantrag in ca. 15 Minuten
-    en: Your finished NRW housing subsidy application in approx. 15 minutes
+    de: NRW Wohngeldantrag Formular 2022 Online Ausfüllen (Kostenlos)
+    en: NRW Housing Allowance Application Form 2022 Fill Out Online (Free)
   title:
     de: Wohngeldantrag NRW
     en: Wohngeldantrag NRW
@@ -16,14 +16,14 @@ metadata:
     de: Wohngeldantrag NRW
     en: Wohngeldantrag NRW
   tab title:
-    en: "TripliQ | Wohngeldantrag NRW"
-    de: "TripliQ | Wohngeldantrag NRW"
+    en: 'TripliQ | Wohngeldantrag NRW'
+    de: 'TripliQ | Wohngeldantrag NRW'
   description:
-    de: "Spare dir den Papierberg und erhalte deinen fertigen Wohngeldantrag direkt verfügbar als kostenlosen Download."
-    en: "Save yourself the pile of paper and get your completed housing subsidy application directly available as a free download."
+    de: 'Nutze unser kostenloses online Tool um in weniger als 15 Minuten schnell und einfach deinen NRW Wohngeldantrag Formular 2022 online auszufüllen.'
+    en: 'Use our free online tool to quickly and easily complete your NRW Housing Allowance Application Form 2022 online in less than 15 minutes.'
   subtitle:
-    en: "TripliQ | Wohngeldantrag NRW"
-    de: "TripliQ | Wohngeldantrag NRW"
+    en: 'TripliQ | Wohngeldantrag NRW'
+    de: 'TripliQ | Wohngeldantrag NRW'
   authors:
     - name: Felix Vemmer
       organization: TripliQ
@@ -41,23 +41,23 @@ metadata:
   social:
     image: docassemble.wohngeld:data/static/welcome_screen.svg
     description:
-      de: "Spare dir den Papierberg und erhalte deinen fertigen Wohngeldantrag direkt verfügbar als kostenlosen Download."
-      en: "Save yourself the pile of paper and get your completed housing subsidy application directly available as a free download."
+      de: 'Nutze unser kostenloses online Tool um in weniger als 15 Minuten schnell und einfach deinen NRW Wohngeldantrag Formular 2022 online auszufüllen.'
+      en: 'Use our free online tool to quickly and easily complete your NRW Housing Allowance Application Form 2022 online in less than 15 minutes.'
   features:
     de:
       - safe:
-        title: "Kompromisslos sicher"
-        description: "Wir verhelfen dir zu deinem korrekt ausgefüllten Wohngeldantrag. Dabei werden deine Daten ausschließlich zum Ausfüllen deines Antrags genutzt und nicht gespeichert."
+        title: 'Kompromisslos sicher'
+        description: 'Wir verhelfen dir zu deinem korrekt ausgefüllten Wohngeldantrag. Dabei werden deine Daten ausschließlich zum Ausfüllen deines Antrags genutzt und nicht gespeichert.'
       - easy:
         title: Einfach
-        description: "Komplizierte Anträge – Nein, Danke! Wir erklären alle Begriffe im Interview und du beantwortest nur die Fragen, die relevant für deine Situation sind."
+        description: 'Komplizierte Anträge – Nein, Danke! Wir erklären alle Begriffe im Interview und du beantwortest nur die Fragen, die relevant für deine Situation sind.'
       - fast:
         title: Schnell
-        description: "Während des Interviews erfährst du innerhalb weniger Minuten, ob du Chancen auf einen erfolgreichen Wohngeldantrag hast. Du musst nur noch das fertige PDF an deine zuständige Behörde schicken."
+        description: 'Während des Interviews erfährst du innerhalb weniger Minuten, ob du Chancen auf einen erfolgreichen Wohngeldantrag hast. Du musst nur noch das fertige PDF an deine zuständige Behörde schicken.'
     en:
       - safe:
         title: Uncompromisingly safe
-        description: "We will help you to complete your housing subsidy application correctly. Your data will only be used to fill out your application and will not be stored."
+        description: 'We will help you to complete your housing subsidy application correctly. Your data will only be used to fill out your application and will not be stored.'
       - easy:
         title: Easy
         description: Complicated applications - No, thank you! We explain all the terms in the interview and you answer only the questions that are relevant to your situation.
