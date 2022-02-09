@@ -244,8 +244,19 @@ segment:
     question: Requirements Met
     count: True
 question: |
-  Beziehen Sie oder eine dem {Haushalt angehörige} Person {Sozialleistungen} oder haben Sie kürzlich einen Antrag auf {Sozialleistungen} gestellt?
-yesno: sozialleistungen
+  Beziehen Sie oder eine dem {Haushalt angehörige} Person gegenwärtig {Sozialleistungen}?
+yesno: sozialleistungen_01
+section: section_anspruch
+progress: 5
+---
+segment:
+  id: Question Asked
+  arguments:
+    question: Requirements Met
+    count: True
+question: |
+  Haben Sie oder eine dem {Haushalt angehörige} Person kürzlich einen Antrag auf {Sozialleistungen} gestellt?
+yesno: sozialleistungen_02
 section: section_anspruch
 progress: 5
 ---
