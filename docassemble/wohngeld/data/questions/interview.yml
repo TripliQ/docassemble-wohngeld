@@ -6,12 +6,17 @@ include:
 ---
 # main interview logik für Antragskriterien
 code: |
-  if sozialleistungen:
-    if entscheidung == 'Ja, ich möchte trotzdem fortfahren.':
+  if sozialleistungen_01:
+    if entscheidung_01 == 'Ja, ich möchte trotzdem fortfahren.':
       final_document
     else:
       end_interview
-  elif sozialleistungen == False:
+  elif sozialleistungen_01 == False and sozialleistungen_02:
+    if entscheidung_02 == 'Ja, ich möchte trotzdem fortfahren.':
+      final_document
+    else:
+      end_interview
+  elif sozialleistungen_01 == False and sozialleistungen_02 == False:
       final_document
 mandatory: True
 ---
@@ -60,12 +65,30 @@ segment:
     question: Assessment Outcome
     count: True
 question: |
-  Da Sie bereits Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
+  Da Sie bereits andere Sozialleistungen beziehen, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
 subquestion: |
   **Das ermittelte Ergebnis ist unverbindlich. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
 
   Möchten Sie trotzdem mit dem digitalen Wohngeldantrag NRW fortfahren?
-field: entscheidung
+field: entscheidung_01
+buttons:
+  - Ja, ich möchte trotzdem fortfahren.
+  - Nein, ich möchte das Interview beenden.
+section: zusammenfassung
+progress: 7
+---
+segment:
+  id: Question Asked
+  arguments:
+    question: Assessment Outcome
+    count: True
+question: |
+  Da Sie bereits kürzlich einen Antrag auf andere Sozialleistungen gestellt haben, hat ein Antrag auf Wohngeld leider schlechte Erfolgsaussichten.
+subquestion: |
+  **Das ermittelte Ergebnis ist unverbindlich. Ihren endgültigen Wohngeldanspruch kann für Sie die zuständige Wohngeldstelle nach Vorlage aller erforderlichen Unterlagen ermitteln.**
+
+  Möchten Sie trotzdem mit dem digitalen Wohngeldantrag NRW fortfahren?
+field: entscheidung_02
 buttons:
   - Ja, ich möchte trotzdem fortfahren.
   - Nein, ich möchte das Interview beenden.
